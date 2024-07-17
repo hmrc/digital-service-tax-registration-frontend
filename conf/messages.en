@@ -47,3 +47,9 @@ signedOut.guidance = We did not save your answers.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+globalRevenues.title = globalRevenues
+globalRevenues.heading = globalRevenues
+globalRevenues.checkYourAnswersLabel = globalRevenues
+globalRevenues.error.required = Select yes if globalRevenues
+globalRevenues.change.hidden = GlobalRevenues

@@ -19,3 +19,8 @@ GET         /account/sign-out                            controllers.auth.AuthCo
 GET         /account/signed-out                          controllers.auth.SignedOutController.onPageLoad()
 
 GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad()
+
+GET        /globalRevenues                        controllers.GlobalRevenuesController.onPageLoad(mode: Mode = NormalMode)
+POST       /globalRevenues                        controllers.GlobalRevenuesController.onSubmit(mode: Mode = NormalMode)
+GET        /changeGlobalRevenues                  controllers.GlobalRevenuesController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeGlobalRevenues                  controllers.GlobalRevenuesController.onSubmit(mode: Mode = CheckMode)
