@@ -18,7 +18,8 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        <h1 class="govuk-heading-xl">@messages("$className;format="decap"$.heading")</h1>
+        <h1 class="govuk-heading-l">@messages("$className;format="decap"$.heading")</h1>
+        <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("service.caption")</h2>
 
         @govukInput(
             InputViewModel(
