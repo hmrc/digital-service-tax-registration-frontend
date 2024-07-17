@@ -17,6 +17,8 @@
 package controllers
 
 import controllers.actions.IdentifierAction
+import models.NormalMode
+
 import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,6 +32,6 @@ class IndexController @Inject()(
                                ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = identify { implicit request =>
-    Ok(view())
+    Redirect(routes.GlobalRevenuesController.onPageLoad(NormalMode))
   }
 }

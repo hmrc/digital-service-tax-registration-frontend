@@ -20,7 +20,7 @@ GET         /account/signed-out                          controllers.auth.Signed
 
 GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad()
 
-GET        /global-revenues                              controllers.GlobalRevenuesController.onPageLoad(mode: Mode = NormalMode)
-POST       /global-revenues                              controllers.GlobalRevenuesController.onSubmit(mode: Mode = NormalMode)
-GET        /edit/global-revenues                         controllers.GlobalRevenuesController.onPageLoad(mode: Mode = CheckMode)
-POST       /edit/global-revenues                         controllers.GlobalRevenuesController.onSubmit(mode: Mode = CheckMode)
+GET         /global-revenues                             controllers.GlobalRevenuesController.onPageLoad(mode: Mode = NormalMode)
+POST        /global-revenues                             controllers.GlobalRevenuesController.onSubmit(mode: Mode = NormalMode)
+GET         /edit/global-revenues                        controllers.GlobalRevenuesController.onPageLoad(mode: Mode = CheckMode)
+POST        /edit/global-revenues                        controllers.GlobalRevenuesController.onSubmit(mode: Mode = CheckMode)
