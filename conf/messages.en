@@ -48,8 +48,8 @@ signedOut.guidance = We did not save your answers.
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
-globalRevenues.title = globalRevenues
-globalRevenues.heading = globalRevenues
+globalRevenues.title = Does the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million?
+globalRevenues.heading = Does the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million?
 globalRevenues.checkYourAnswersLabel = globalRevenues
-globalRevenues.error.required = Select yes if globalRevenues
+globalRevenues.error.required = Select yes if the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million
 globalRevenues.change.hidden = GlobalRevenues

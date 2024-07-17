@@ -18,8 +18,9 @@ package controllers
 
 import controllers.actions._
 import forms.GlobalRevenuesFormProvider
+
 import javax.inject.Inject
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.GlobalRevenuesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -44,10 +45,10 @@ class GlobalRevenuesController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(GlobalRevenuesPage) match {
+      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(GlobalRevenuesPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -55,7 +56,7 @@ class GlobalRevenuesController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -64,7 +65,7 @@ class GlobalRevenuesController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(GlobalRevenuesPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.userId)).set(GlobalRevenuesPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(GlobalRevenuesPage, mode, updatedAnswers))
       )
