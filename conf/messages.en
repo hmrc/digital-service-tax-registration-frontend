@@ -27,13 +27,10 @@ error.title.prefix = Error:
 error.prefix = Error
 error.summary.title = There is a problem
 
-index.title = digital-service-tax-registration-frontend
-index.heading = digital-service-tax-registration-frontend
-index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
-
 checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
-
+service.caption = Check if you must register
+label.thisSection = This section is:
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
 journeyRecovery.continue.guidance = [Add content to explain how to proceed.]
@@ -47,3 +44,9 @@ signedOut.guidance = We did not save your answers.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+globalRevenues.title = Does the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million?
+globalRevenues.heading = Does the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million?
+globalRevenues.checkYourAnswersLabel = globalRevenues
+globalRevenues.error.required = Select yes if the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million
+globalRevenues.change.hidden = GlobalRevenues
