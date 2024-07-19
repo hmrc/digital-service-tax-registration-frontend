@@ -24,3 +24,5 @@ GET         /global-revenues                             controllers.GlobalReven
 POST        /global-revenues                             controllers.GlobalRevenuesController.onSubmit(mode: Mode = NormalMode)
 GET         /edit/global-revenues                        controllers.GlobalRevenuesController.onPageLoad(mode: Mode = CheckMode)
 POST        /edit/global-revenues                        controllers.GlobalRevenuesController.onSubmit(mode: Mode = CheckMode)
+
+GET        /globalRevenuesNotEligible                       controllers.GlobalRevenuesNotEligibleController.onPageLoad()
