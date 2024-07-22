@@ -41,6 +41,7 @@ journeyRecovery.startAgain.guidance = [Add content to explain why the user needs
 signedOut.title = For your security, we signed you out
 signedOut.heading = For your security, we signed you out
 signedOut.guidance = We did not save your answers.
+signedOut.finish-and-sign-out=Finish and sign out
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
@@ -51,5 +52,24 @@ globalRevenues.checkYourAnswersLabel = globalRevenues
 globalRevenues.error.required = Select yes if the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million
 globalRevenues.change.hidden = GlobalRevenues
 
-globalRevenuesNotEligible.title = globalRevenuesNotEligible
-globalRevenuesNotEligible.heading = globalRevenuesNotEligible
+globalRevenuesNotEligible.title = Global revenues not eligible
+globalRevenuesNotEligible.heading = You do not need to register
+globalRevenuesNotEligible.p1=This is because your annual global revenues from search engines, \
+  social media platforms or online marketplaces are not more than £500 million.
+globalRevenuesNotEligible.change-answers=If this is not correct, \
+  <a class="govuk-link" href="{0}">\
+  go back and change your answers\
+  </a>.
+globalRevenuesNotEligible.when-to-register=Find out about <a class="govuk-link" href="{0}">when to register for Digital Services Tax</a>.
+globalRevenuesNotEligible.tax-return.heading=If you need to file a Self Assessment tax return
+globalRevenuesNotEligible.tax-return.p1=You need to use a different service.
+globalRevenuesNotEligible.tax-return.p2=Find out how to \
+  <a class="govuk-link" href="{0}">\
+  file your Self Assessment tax return online\
+  </a>.
+globalRevenuesNotEligible.other-services-links.heading=Other services
+globalRevenuesNotEligible.other-services-links.link.1=Register for Self Assessment
+globalRevenuesNotEligible.other-services-links.link.2=File your Self Assessment tax return online
+globalRevenuesNotEligible.other-services-links.link.3=Update your personal details
+globalRevenuesNotEligible.other-services-links.link.4=Contact us about VAT
+globalRevenuesNotEligible.other-services-links.link.5=Contact us about Income Tax
