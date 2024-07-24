@@ -50,3 +50,6 @@ globalRevenues.heading = Does the group you are registering have annual global r
 globalRevenues.checkYourAnswersLabel = globalRevenues
 globalRevenues.error.required = Select yes if the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million
 globalRevenues.change.hidden = GlobalRevenues
+
+ukRevenues.title = Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?
+ukRevenues.heading = Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?

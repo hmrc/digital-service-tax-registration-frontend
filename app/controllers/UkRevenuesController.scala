@@ -16,39 +16,38 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.GlobalRevenuesFormProvider
-
-import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{GlobalRevenuesPage, UkRevenuesPage}
+import pages.UkRevenuesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.GlobalRevenuesView
+import views.html.UkRevenuesView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class GlobalRevenuesController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         navigator: Navigator,
-                                         identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: GlobalRevenuesFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: GlobalRevenuesView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class UkRevenuesController @Inject()(
+                                      override val messagesApi: MessagesApi,
+                                      sessionRepository: SessionRepository,
+                                      navigator: Navigator,
+                                      identify: IdentifierAction,
+                                      getData: DataRetrievalAction,
+                                      requireData: DataRequiredAction,
+                                      formProvider: GlobalRevenuesFormProvider,
+                                      val controllerComponents: MessagesControllerComponents,
+                                      view: UkRevenuesView
+                                    ) (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(GlobalRevenuesPage) match {
+      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(UkRevenuesPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -56,7 +55,7 @@ class GlobalRevenuesController @Inject()(
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async {
+  def onSubmit(mode: Mode):Action[AnyContent] = (identify andThen getData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -65,8 +64,8 @@ class GlobalRevenuesController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.userId)).set(GlobalRevenuesPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.userId)).set(UkRevenuesPage, value))
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(UkRevenuesPage, mode, updatedAnswers))
       )
   }
