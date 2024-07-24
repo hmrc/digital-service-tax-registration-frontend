@@ -34,6 +34,17 @@ class NavigatorSpec extends SpecBase {
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id")) mustBe routes.IndexController.onPageLoad()
       }
+
+      "must go from a GlobalRevenuesPage with option `false` to GlobalRevenuesNotEligible page" in {
+        navigator.nextPage(
+          GlobalRevenuesPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(GlobalRevenuesPage, false)
+            .success
+            .value
+        ) mustBe routes.GlobalRevenuesNotEligibleController.onPageLoad()
+      }
     }
 
     "in Check mode" - {

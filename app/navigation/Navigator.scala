@@ -24,10 +24,11 @@ import pages._
 import models._
 
 @Singleton
-class Navigator @Inject()() {
+class Navigator @Inject() extends NavigationUtils {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad()
+  private val normalRoutes: Page => UserAnswers => Option[Call] = {
+    case GlobalRevenuesPage => ua => globalRevenues(ua)
+    case _ => _ => Some(routes.IndexController.onPageLoad())
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
@@ -36,7 +37,7 @@ class Navigator @Inject()() {
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
-      normalRoutes(page)(userAnswers)
+      normalRoutes(page)(userAnswers).getOrElse(routes.JourneyRecoveryController.onPageLoad())
     case CheckMode =>
       checkRouteMap(page)(userAnswers)
   }
