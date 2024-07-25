@@ -44,7 +44,11 @@ class AuthenticatedIdentifierAction @Inject()(
 
     authorised().retrieve(Retrievals.internalId) {
       _.map {
-        internalId => block(IdentifierRequest(request, internalId))
+        internalId => if(config.dstNewRegistrationFrontendEnableFlag) {
+          block(IdentifierRequest(request, internalId))
+        } else {
+          Future.successful(Redirect(config.dstFrontendRegistrationUrl))
+        } ;
       }.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
     } recover {
       case _: NoActiveSession =>
