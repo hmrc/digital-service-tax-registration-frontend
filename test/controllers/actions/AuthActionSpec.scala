@@ -193,7 +193,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "Able to land on new regisration with feat flag true" - {
+    "Able to land on new regisration with feature flag true" - {
 
       "must create an IdentifierRequest and allow to proceed when dstNewRegistrationFrontendEnableFlag is true" in {
 
@@ -230,9 +230,9 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "Unable to land on new regisration with feat flag false" - {
+    "Unable to land on new regisration with feature flag false" - {
 
-      "must create an IdentifierRequest and should not allow to new registration with dstNewRegistrationFrontendEnableFlag  false" in {
+      "must create an IdentifierRequest and should not allow to new registration with dstNewRegistrationFrontendEnableFlag false" in {
 
         type AuthRetrievals = Option[String]
 
