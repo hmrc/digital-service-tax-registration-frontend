@@ -28,6 +28,7 @@ class Navigator @Inject() extends NavigationUtils {
 
   private val normalRoutes: Page => UserAnswers => Option[Call] = {
     case GlobalRevenuesPage => ua => globalRevenues(ua)
+    case UkRevenuesPage => ua => ukRevenues(ua)
     case _ => _ => Some(routes.IndexController.onPageLoad())
   }
 

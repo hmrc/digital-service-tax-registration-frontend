@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.GlobalRevenuesFormProvider
+import forms.UkRevenuesFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.UkRevenuesPage
@@ -37,7 +37,7 @@ class UkRevenuesController @Inject()(
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
-                                      formProvider: GlobalRevenuesFormProvider,
+                                      formProvider: UkRevenuesFormProvider,
                                       val controllerComponents: MessagesControllerComponents,
                                       view: UkRevenuesView
                                     ) (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {

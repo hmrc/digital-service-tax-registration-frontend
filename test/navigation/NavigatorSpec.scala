@@ -45,6 +45,30 @@ class NavigatorSpec extends SpecBase {
             .value
         ) mustBe routes.GlobalRevenuesNotEligibleController.onPageLoad()
       }
+
+      "must go from a GlobalRevenuesPage with option `true` to UkRevenuesPage" in {
+        navigator.nextPage(
+          GlobalRevenuesPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(GlobalRevenuesPage, true)
+            .success
+            .value
+        ) mustBe routes.UkRevenuesController.onPageLoad(NormalMode)
+      }
+
+      "must go from a UkRevenuesPage with option `false` to GlobalRevenuesNotEligible page" in {
+        navigator.nextPage(
+          UkRevenuesPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(UkRevenuesPage, false)
+            .success
+            .value
+        ) mustBe routes.GlobalRevenuesNotEligibleController.onPageLoad()
+      }
+
+      "must go from a UkRevenuesPage with option `true` to GlobalRevenuesNotEligible page" in pending
     }
 
     "in Check mode" - {

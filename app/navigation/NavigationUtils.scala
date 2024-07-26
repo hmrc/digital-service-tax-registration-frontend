@@ -17,14 +17,21 @@
 package navigation
 
 import controllers.routes
-import models.UserAnswers
-import pages.GlobalRevenuesPage
+import models.{NormalMode, UserAnswers}
+import pages.{GlobalRevenuesPage, UkRevenuesPage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
   def globalRevenues(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(GlobalRevenuesPage).map {
-      case true => ??? //TODO UKRevenuesPage
+      case true => routes.UkRevenuesController.onPageLoad(NormalMode)
+      case false => routes.GlobalRevenuesNotEligibleController.onPageLoad()
+    }
+  }
+
+  def ukRevenues(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(UkRevenuesPage).map {
+      case true => routes.UkRevenuesController.onPageLoad(NormalMode)
       case false => routes.GlobalRevenuesNotEligibleController.onPageLoad()
     }
   }

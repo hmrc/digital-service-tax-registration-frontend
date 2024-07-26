@@ -67,7 +67,7 @@ class GlobalRevenuesController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.userId)).set(GlobalRevenuesPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkRevenuesPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(GlobalRevenuesPage, mode, updatedAnswers))
       )
   }
 }
