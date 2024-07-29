@@ -73,3 +73,9 @@ globalRevenuesNotEligible.other-services-links.link.2=File your Self Assessment 
 globalRevenuesNotEligible.other-services-links.link.3=Update your personal details
 globalRevenuesNotEligible.other-services-links.link.4=Contact us about VAT
 globalRevenuesNotEligible.other-services-links.link.5=Contact us about Income Tax
+
+ukRevenues.title = Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?
+ukRevenues.heading = Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?
+ukRevenues.error.required = Select yes if the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million
+ukRevenues.checkYourAnswersLabel = ukRevenues
+ukRevenues.change.hidden = UkRevenues

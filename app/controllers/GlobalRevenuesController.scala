@@ -22,7 +22,7 @@ import forms.GlobalRevenuesFormProvider
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.GlobalRevenuesPage
+import pages.{GlobalRevenuesPage, UkRevenuesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
