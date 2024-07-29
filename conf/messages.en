@@ -80,8 +80,9 @@ ukRevenues.error.required = Select yes if the group you are registering have ann
 ukRevenues.checkYourAnswersLabel = ukRevenues
 ukRevenues.change.hidden = UkRevenues
 
-checkCompanyRegisteredOfficeAddress.title = checkCompanyRegisteredOfficeAddress
-checkCompanyRegisteredOfficeAddress.heading = checkCompanyRegisteredOfficeAddress
+checkCompanyRegisteredOfficeAddress.title = Is the company’s registered office address in the UK?
+checkCompanyRegisteredOfficeAddress.heading = Is the company’s registered office address in the UK?
+checkCompanyRegisteredOfficeAddress.heading.hint= Your company details
 checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel = checkCompanyRegisteredOfficeAddress
-checkCompanyRegisteredOfficeAddress.error.required = Select yes if checkCompanyRegisteredOfficeAddress
+checkCompanyRegisteredOfficeAddress.error.required = Select yes if the registered office address of the company is in the UK
 checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOfficeAddress
