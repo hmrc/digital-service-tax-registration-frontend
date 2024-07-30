@@ -32,7 +32,7 @@ trait NavigationUtils {
   def ukRevenues(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UkRevenuesPage).map {
       case true => routes.UkRevenuesController.onPageLoad(NormalMode)
-      case false => routes.GlobalRevenuesNotEligibleController.onPageLoad()
+      case false => routes.UkRevenueNotEligibleController.onPageLoad()
     }
   }
 }

@@ -65,7 +65,7 @@ class NavigatorSpec extends SpecBase {
             .set(UkRevenuesPage, false)
             .success
             .value
-        ) mustBe routes.GlobalRevenuesNotEligibleController.onPageLoad()
+        ) mustBe routes.UkRevenueNotEligibleController.onPageLoad()
       }
 
       "must go from a UkRevenuesPage with option `true` to GlobalRevenuesNotEligible page" in pending
