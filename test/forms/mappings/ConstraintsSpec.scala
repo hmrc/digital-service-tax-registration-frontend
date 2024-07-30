@@ -17,7 +17,6 @@
 package forms.mappings
 
 import java.time.LocalDate
-
 import generators.Generators
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -186,6 +185,28 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
           val result = minDate(min, "error.past", "foo")(date)
           result mustEqual Invalid("error.past", "foo")
       }
+    }
+  }
+
+  "postcode" - {
+
+    "must return invalid for null string" in {
+      postcode("company.registeredOffice.postcode.required")(null) mustEqual Invalid("company.registeredOffice.postcode.required")
+    }
+
+    "must return invalid for empty string" in {
+      postcode("company.registeredOffice.postcode.required")("") mustEqual Invalid("company.registeredOffice.postcode.required")
+    }
+
+    "must return invalid for invalid postcode" in {
+      forAll(Gen.alphaNumStr) { pc =>
+        postcode("error.invalid.postcode")(pc) mustEqual Invalid("error.invalid.postcode")
+      }
+    }
+
+    "must return valid for valid postcode" in {
+      List("NG17 8NX", "IG3 8DJ", "WF15 7JZ", "GU34 1LH", "RM1 1ER", "TQ4 5DD", "SY7 0JG", "PE22 0RU", "ST20 0HF", "SW2 3HS")
+        .foreach(pc => postcode("n/a")(pc) mustEqual Valid)
     }
   }
 }

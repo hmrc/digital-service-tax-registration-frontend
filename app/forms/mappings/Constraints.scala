@@ -17,10 +17,11 @@
 package forms.mappings
 
 import java.time.LocalDate
-
-import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 trait Constraints {
+
+  private val postcodeRegex = """^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$""".r
 
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
     Constraint {
@@ -108,5 +109,21 @@ trait Constraints {
         Valid
       case _ =>
         Invalid(errorKey)
+    }
+
+  protected def postcode(errorKey: String): Constraint[String] =
+    Constraint { p =>
+      if (p == null) {
+        Invalid(ValidationError(errorKey))
+      }
+      else if (p.trim.isEmpty) {
+        Invalid(ValidationError(errorKey))
+      }
+      else {
+        postcodeRegex
+          .findFirstMatchIn(p)
+          .map(_ => Valid)
+          .getOrElse(Invalid(ValidationError("error.invalid.postcode")))
+      }
     }
 }

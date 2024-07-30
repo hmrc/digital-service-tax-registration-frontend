@@ -79,3 +79,9 @@ ukRevenues.heading = Does the group you are registering have annual revenues fro
 ukRevenues.error.required = Select yes if the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million
 ukRevenues.checkYourAnswersLabel = ukRevenues
 ukRevenues.change.hidden = UkRevenues
+
+companyRegisteredOfficeAddress.title = What is the postcode of the company's Registered Office address?
+companyRegisteredOfficeAddress.heading = What is the postcode of the company's Registered Office address?
+companyRegisteredOfficeAddress.subheading = Your company details
+company.registeredOffice.postcode.required = Enter the postcode of the registered company's office address
+error.invalid.postcode = Enter a real postcode
