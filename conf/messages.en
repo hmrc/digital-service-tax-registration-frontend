@@ -79,3 +79,10 @@ ukRevenues.heading = Does the group you are registering have annual revenues fro
 ukRevenues.error.required = Select yes if the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million
 ukRevenues.checkYourAnswersLabel = ukRevenues
 ukRevenues.change.hidden = UkRevenues
+
+checkCompanyRegisteredOfficeAddress.title = Is the company’s registered office address in the UK?
+checkCompanyRegisteredOfficeAddress.heading = Is the company’s registered office address in the UK?
+checkCompanyRegisteredOfficeAddress.heading.hint= Your company details
+checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel = checkCompanyRegisteredOfficeAddress
+checkCompanyRegisteredOfficeAddress.error.required = Select yes if the registered office address of the company is in the UK
+checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOfficeAddress
