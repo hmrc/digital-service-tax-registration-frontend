@@ -38,3 +38,4 @@ bin
 .vscode
 .bsp
 project/metals.sbt
+project/.bloop/digital-service-tax-registration-frontend-build.json
