@@ -32,3 +32,8 @@ POST        /uk-revenues                                 controllers.UkRevenuesC
 GET         /edit/uk-revenues                            controllers.UkRevenuesController.onPageLoad(mode: Mode = CheckMode)
 POST        /edit/uk-revenues                            controllers.UkRevenuesController.onSubmit(mode: Mode = CheckMode)
 GET        /uk-revenues-not-eligible                     controllers.UkRevenueNotEligibleController.onPageLoad()
+
+GET         /check-company-registered-office-address      controllers.CheckCompanyRegisteredOfficeAddressController.onPageLoad(mode: Mode = NormalMode)
+POST        /check-company-registered-office-address      controllers.CheckCompanyRegisteredOfficeAddressController.onSubmit(mode: Mode = NormalMode)
+GET         /edit/check-company-registered-office-address controllers.CheckCompanyRegisteredOfficeAddressController.onPageLoad(mode: Mode = CheckMode)
+POST        /edit/check-company-registered-office-address controllers.CheckCompanyRegisteredOfficeAddressController.onSubmit(mode: Mode = CheckMode)

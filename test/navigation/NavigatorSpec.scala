@@ -68,7 +68,21 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.UkRevenueNotEligibleController.onPageLoad()
       }
 
-      "must go from a UkRevenuesPage with option `true` to GlobalRevenuesNotEligible page" in pending
+      "must go from a UkRevenuesPage with option `true` to CheckCompanyRegisteredOfficeAddressPage" in {
+        navigator.nextPage(
+          UkRevenuesPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(UkRevenuesPage, true)
+            .success
+            .value
+        ) mustBe routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckCompanyRegisteredOfficeAddressPage with option `true` to TODO page" in pending
+
+      "must go from a CheckCompanyRegisteredOfficeAddressPage with option `false` to TODO page" in pending
+
     }
 
     "in Check mode" - {
