@@ -96,6 +96,14 @@ companyRegisteredOfficePostcode.checkYourAnswersLabel = checkCompanyRegisteredOf
 companyRegisteredOfficePostcode.change.hidden = CheckCompanyRegisteredOfficePostcode
 error.invalid.postcode = Enter a real postcode
 
+companyName.title = companyName
+companyName.heading = What is the name of the company you want to register?
+companyName.hint = This is the name registered with an official company register, such as Companies House
+companyName.caption = Your company details
+companyName.checkYourAnswersLabel = companyName
+companyName.error.required = Enter the name of the company you want to register
+companyName.error.length = Company name must be 100 characters or less
+companyName.change.hidden = CompanyName
 
 checkUtr.title = Your company details
 checkUtr.heading = Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
