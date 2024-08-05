@@ -31,8 +31,14 @@ trait NavigationUtils {
 
   def ukRevenues(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UkRevenuesPage).map {
-      case true => routes.UkRevenuesController.onPageLoad(NormalMode)
-      case false => routes.GlobalRevenuesNotEligibleController.onPageLoad()
+          case true => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
+          case false => routes.UkRevenueNotEligibleController.onPageLoad()
+    }
+  }
+  def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(UkRevenuesPage).map {
+      case true => routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      case false => routes.GlobalRevenuesController.onPageLoad(NormalMode)
     }
   }
 }
