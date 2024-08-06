@@ -87,3 +87,9 @@ checkCompanyRegisteredOfficeAddress.heading.hint= Your company details
 checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel = checkCompanyRegisteredOfficeAddress
 checkCompanyRegisteredOfficeAddress.error.required = Select yes if the registered office address of the company is in the UK
 checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOfficeAddress
+
+checkUtr.title = Your company details
+checkUtr.heading = Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
+checkUtr.checkYourAnswersLabel = checkUtr
+checkUtr.error.required = Select Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
+checkUtr.change.hidden = CheckUtr
