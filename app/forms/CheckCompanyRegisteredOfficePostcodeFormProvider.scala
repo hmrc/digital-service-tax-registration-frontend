@@ -21,10 +21,11 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class CompanyRegisteredOfficePostcodeFormProvider @Inject() extends Mappings {
+class CheckCompanyRegisteredOfficePostcodeFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("company.registeredOffice.postcode.required").verifying(postcode("company.registeredOffice.postcode.required"))
+      "company-registered-office-postcode" -> text("company.registeredOffice.postcode.required")
+        .verifying(postcode("company.registeredOffice.postcode.required"))
     )
 }

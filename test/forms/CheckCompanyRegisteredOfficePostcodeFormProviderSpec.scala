@@ -18,7 +18,19 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 
-class CompanyRegisteredOfficePostcodeFormProviderSpec extends StringFieldBehaviours {
+class CheckCompanyRegisteredOfficePostcodeFormProviderSpec extends StringFieldBehaviours {
 
+  val form = new CheckCompanyRegisteredOfficePostcodeFormProvider()()
+
+  ".company-registered-office-postcode" - {
+
+    val fieldName = "company-registered-office-postcode"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      genPostcode
+    )
+  }
 
 }

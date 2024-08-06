@@ -79,10 +79,32 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
       }
 
-      "must go from a CheckCompanyRegisteredOfficeAddressPage with option `true` to TODO page" in pending
-      
+      "must go from a CheckCompanyRegisteredOfficeAddressPage with option `true` to CheckCompanyRegisteredOfficePostcodePage" in {
+        navigator.nextPage(
+          CheckCompanyRegisteredOfficeAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckCompanyRegisteredOfficeAddressPage, true)
+            .success
+            .value
+        ) mustBe routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)
+      }
+
+      /**
+       * TODO the /company-name page needs to be done
+        */
       "must go from a CheckCompanyRegisteredOfficeAddressPage with option `false` to TODO page" in pending
 
+      "must go from a CheckCompanyRegisteredOfficePostcodePage with valid postcode to CheckUtr page" in {
+        navigator.nextPage(
+          CheckCompanyRegisteredOfficePostcodePage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckCompanyRegisteredOfficePostcodePage, "SW3 5DA")
+            .success
+            .value
+        ) mustBe routes.CheckUtrController.onPageLoad(NormalMode)
+      }
 
       "must go from a checkUTR with option `true` to TODO page" in pending
       

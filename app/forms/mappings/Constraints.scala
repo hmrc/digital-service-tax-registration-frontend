@@ -16,12 +16,14 @@
 
 package forms.mappings
 
+import forms.mappings.Constraints.postcodeRegex
+
 import java.time.LocalDate
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
-trait Constraints {
+import scala.util.matching.Regex
 
-  private val postcodeRegex = """^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$""".r
+trait Constraints {
 
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
     Constraint {
@@ -111,19 +113,24 @@ trait Constraints {
         Invalid(errorKey)
     }
 
-  protected def postcode(errorKey: String): Constraint[String] =
+  protected def postcode(emptyPostcodeErrorKey: String): Constraint[String] =
     Constraint { p =>
       if (p == null) {
-        Invalid(ValidationError(errorKey))
+        Invalid(ValidationError(emptyPostcodeErrorKey))
       }
       else if (p.trim.isEmpty) {
-        Invalid(ValidationError(errorKey))
+        Invalid(ValidationError(emptyPostcodeErrorKey))
       }
       else {
         postcodeRegex
-          .findFirstMatchIn(p)
+          .findFirstMatchIn(p.trim.replaceAll("[ \\t]+", " "))
           .map(_ => Valid)
           .getOrElse(Invalid(ValidationError("error.invalid.postcode")))
       }
     }
+}
+
+object Constraints {
+  val postcodeRegex: Regex = """^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$""".r
+
 }

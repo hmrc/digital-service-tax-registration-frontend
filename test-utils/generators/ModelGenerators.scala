@@ -16,9 +16,9 @@
 
 package generators
 
-import models._
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+import forms.mappings.Constraints
+import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
+  val genPostcode = RegexpGen.from(Constraints.postcodeRegex.regex)
 }

@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.CompanyRegisteredOfficePostcodeFormProvider
+import forms.CheckCompanyRegisteredOfficePostcodeFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.CheckCompanyRegisteredOfficePostcodePage
@@ -30,23 +30,23 @@ import views.html.CheckCompanyRegisteredOfficePostcodeView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CompanyOfficeRegisteredPostcodeController @Inject()(override val messagesApi: MessagesApi,
-                                                          sessionRepository: SessionRepository,
-                                                          navigator: Navigator,
-                                                          identify: IdentifierAction,
-                                                          getData: DataRetrievalAction,
-                                                          requireData: DataRequiredAction,
-                                                          val controllerComponents: MessagesControllerComponents,
-                                                          formProvider: CompanyRegisteredOfficePostcodeFormProvider,
-                                                          view: CheckCompanyRegisteredOfficePostcodeView)(implicit ec: ExecutionContext)
+class CheckCompanyOfficeRegisteredPostcodeController @Inject()(override val messagesApi: MessagesApi,
+                                                               sessionRepository: SessionRepository,
+                                                               navigator: Navigator,
+                                                               identify: IdentifierAction,
+                                                               getData: DataRetrievalAction,
+                                                               requireData: DataRequiredAction,
+                                                               val controllerComponents: MessagesControllerComponents,
+                                                               formProvider: CheckCompanyRegisteredOfficePostcodeFormProvider,
+                                                               view: CheckCompanyRegisteredOfficePostcodeView)(implicit ec: ExecutionContext)
   extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(CheckCompanyRegisteredOfficePostcodePage) match {
+      val preparedForm = request.userAnswers.get(CheckCompanyRegisteredOfficePostcodePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -54,7 +54,7 @@ class CompanyOfficeRegisteredPostcodeController @Inject()(override val messagesA
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
@@ -63,8 +63,8 @@ class CompanyOfficeRegisteredPostcodeController @Inject()(override val messagesA
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.userId)).set(CheckCompanyRegisteredOfficePostcodePage, value))
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CheckCompanyRegisteredOfficePostcodePage, value))
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CheckCompanyRegisteredOfficePostcodePage, mode, updatedAnswers))
       )
   }

@@ -23,6 +23,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.data.validation.{Invalid, Valid}
+import wolfendale.scalacheck.regexp.RegexpGen
 
 class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators  with Constraints {
 
@@ -205,8 +206,9 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
     }
 
     "must return valid for valid postcode" in {
-      List("NG17 8NX", "IG3 8DJ", "WF15 7JZ", "GU34 1LH", "RM1 1ER", "TQ4 5DD", "SY7 0JG", "PE22 0RU", "ST20 0HF", "SW2 3HS")
-        .foreach(pc => postcode("n/a")(pc) mustEqual Valid)
+      forAll(genPostcode) { pc =>
+        postcode("n/a")(pc) mustEqual Valid
+      }
     }
   }
 }
