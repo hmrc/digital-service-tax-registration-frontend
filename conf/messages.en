@@ -102,3 +102,10 @@ checkUtr.heading = Does the company you are registering have a Corporation Tax U
 checkUtr.checkYourAnswersLabel = checkUtr
 checkUtr.error.required = Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
 checkUtr.change.hidden = CheckUtr
+
+corporationTaxEnterUtr.title = corporationTaxEnterUtr
+corporationTaxEnterUtr.heading = corporationTaxEnterUtr
+corporationTaxEnterUtr.checkYourAnswersLabel = corporationTaxEnterUtr
+corporationTaxEnterUtr.error.required = Enter corporationTaxEnterUtr
+corporationTaxEnterUtr.error.length = CorporationTaxEnterUtr must be 100 characters or less
+corporationTaxEnterUtr.change.hidden = CorporationTaxEnterUtr
