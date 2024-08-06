@@ -31,7 +31,7 @@
         @govukErrorSummary(ErrorSummaryViewModel(form))
     }
 
-    <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("service.caption")</h2>
+    <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("checkUtr.title")</h2>
     @formHelper(action = routes.CheckUtrController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
 

@@ -91,5 +91,5 @@ checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOffice
 checkUtr.title = Your company details
 checkUtr.heading = Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
 checkUtr.checkYourAnswersLabel = checkUtr
-checkUtr.error.required = Select Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
+checkUtr.error.required = Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
 checkUtr.change.hidden = CheckUtr
