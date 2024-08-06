@@ -93,3 +93,9 @@ companyRegisteredOfficeAddressPostcode.heading = What is the postcode of the com
 companyRegisteredOfficeAddressPostcode.subheading = Your company details
 company.registeredOffice.postcode.required = Enter the postcode of the registered company's office address
 error.invalid.postcode = Enter a real postcode
+
+checkUtr.title = Your company details
+checkUtr.heading = Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
+checkUtr.checkYourAnswersLabel = checkUtr
+checkUtr.error.required = Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
+checkUtr.change.hidden = CheckUtr

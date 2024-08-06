@@ -42,3 +42,8 @@ GET         /check-company-registered-office-postcode      controllers.CompanyOf
 POST        /check-company-registered-office-postcode      controllers.CompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = NormalMode)
 GET         /edit/check-company-registered-office-postcode controllers.CompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = CheckMode)
 POST        /edit/check-company-registered-office-postcode controllers.CompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = CheckMode)
+
+GET        /check-unique-taxpayer-reference                        controllers.CheckUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-unique-taxpayer-reference                        controllers.CheckUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-unique-taxpayer-reference                   controllers.CheckUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-unique-taxpayer-reference                   controllers.CheckUtrController.onSubmit(mode: Mode = CheckMode)

@@ -80,8 +80,13 @@ class NavigatorSpec extends SpecBase {
       }
 
       "must go from a CheckCompanyRegisteredOfficeAddressPage with option `true` to TODO page" in pending
-
+      
       "must go from a CheckCompanyRegisteredOfficeAddressPage with option `false` to TODO page" in pending
+
+
+      "must go from a checkUTR with option `true` to TODO page" in pending
+      
+      "must go from a checkUTR with option `false` to TODO page" in pending
 
     }
 
