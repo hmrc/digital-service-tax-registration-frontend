@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import forms.behaviours.StringFieldBehaviours
+import play.api.libs.json.JsPath
 
-class CompanyRegisteredOfficePostcodeFormProviderSpec extends StringFieldBehaviours {
+case object CheckCompanyRegisteredOfficePostcodePage extends QuestionPage[String] {
 
+  override def path: JsPath = JsPath \ toString
 
+  override def toString: String = "checkCompanyRegisteredOfficePostcode"
 }

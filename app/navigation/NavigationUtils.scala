@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{GlobalRevenuesPage, UkRevenuesPage}
+import pages.{CheckCompanyRegisteredOfficePostcodePage, GlobalRevenuesPage, UkRevenuesPage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -31,14 +31,19 @@ trait NavigationUtils {
 
   def ukRevenues(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UkRevenuesPage).map {
-          case true => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
-          case false => routes.UkRevenueNotEligibleController.onPageLoad()
+      case true => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
+      case false => routes.UkRevenueNotEligibleController.onPageLoad()
     }
   }
+
   def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UkRevenuesPage).map {
-      case true => routes.GlobalRevenuesController.onPageLoad(NormalMode)
-      case false => routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      case true => routes.GlobalRevenuesController.onPageLoad(NormalMode) // registered postcode
+      case false => routes.GlobalRevenuesController.onPageLoad(NormalMode) // what is the name of the company you want to register? url: company-name
     }
+  }
+
+  def checkCompanyRegisteredOfficePostcode(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(CheckCompanyRegisteredOfficePostcodePage).map(_ => routes.CompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode))
   }
 }

@@ -88,8 +88,8 @@ checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel = checkCompanyRegister
 checkCompanyRegisteredOfficeAddress.error.required = Select yes if the registered office address of the company is in the UK
 checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOfficeAddress
 
-companyRegisteredOfficeAddress.title = What is the postcode of the company's Registered Office address?
-companyRegisteredOfficeAddress.heading = What is the postcode of the company's Registered Office address?
-companyRegisteredOfficeAddress.subheading = Your company details
+companyRegisteredOfficeAddressPostcode.title = What is the postcode of the company's Registered Office address?
+companyRegisteredOfficeAddressPostcode.heading = What is the postcode of the company's Registered Office address?
+companyRegisteredOfficeAddressPostcode.subheading = Your company details
 company.registeredOffice.postcode.required = Enter the postcode of the registered company's office address
 error.invalid.postcode = Enter a real postcode
