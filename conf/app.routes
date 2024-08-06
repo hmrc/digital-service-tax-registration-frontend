@@ -48,7 +48,7 @@ POST       /check-unique-taxpayer-reference                        controllers.C
 GET        /edit/check-unique-taxpayer-reference                   controllers.CheckUtrController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/check-unique-taxpayer-reference                   controllers.CheckUtrController.onSubmit(mode: Mode = CheckMode)
 
-GET        /corporationTaxEnterUtr                        controllers.CorporationTaxEnterUtrController.onPageLoad(mode: Mode = NormalMode)
-POST       /corporationTaxEnterUtr                        controllers.CorporationTaxEnterUtrController.onSubmit(mode: Mode = NormalMode)
-GET        /changeCorporationTaxEnterUtr                  controllers.CorporationTaxEnterUtrController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeCorporationTaxEnterUtr                  controllers.CorporationTaxEnterUtrController.onSubmit(mode: Mode = CheckMode)
+GET        /enter-utr                                     controllers.CorporationTaxEnterUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /enter-utr                                     controllers.CorporationTaxEnterUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/enter-utr                                controllers.CorporationTaxEnterUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/enter-utr                                controllers.CorporationTaxEnterUtrController.onSubmit(mode: Mode = CheckMode)

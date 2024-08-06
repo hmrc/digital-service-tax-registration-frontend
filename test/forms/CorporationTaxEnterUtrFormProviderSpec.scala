@@ -18,30 +18,45 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
+import wolfendale.scalacheck.regexp.RegexpGen
 
 class CorporationTaxEnterUtrFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "corporationTaxEnterUtr.error.required"
-  val lengthKey = "corporationTaxEnterUtr.error.length"
-  val maxLength = 100
+  val fieldName                   = "value"
+  val requiredKey                 = "corporationTaxEnterUtr.error.required"
+  val invalidKey                  = "corporationTaxEnterUtr.error.invalid"
+  val uniqueTaxReferenceMaxRegex  = "^[0-9]{10}$"
+  val utrRegexWithWhitespace      = """^\s*(\d\s*){10}$"""
+  val maxLength                   = 10
 
   val form = new CorporationTaxEnterUtrFormProvider()()
 
   ".value" - {
 
-    val fieldName = "value"
-
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      RegexpGen.from(uniqueTaxReferenceMaxRegex)
+    )
+
+    fieldThatBindsValidDataWithWhitespace(
+      form,
+      fieldName,
+      RegexpGen.from(utrRegexWithWhitespace)
+    )
+
+    behave like fieldWithInValidData(
+      form,
+      fieldName,
+      RegexpGen.from(s"[!£^*(){}_+=:;|`~,±üçñèé@]{105}"),
+      invalidDataError = FormError(fieldName, invalidKey, Seq(uniqueTaxReferenceMaxRegex))
     )
 
     behave like fieldWithMaxLength(
       form,
       fieldName,
       maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      lengthError = FormError(fieldName, invalidKey, Seq(uniqueTaxReferenceMaxRegex))
     )
 
     behave like mandatoryField(

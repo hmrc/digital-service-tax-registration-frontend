@@ -17,15 +17,26 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 class CorporationTaxEnterUtrFormProvider @Inject() extends Mappings {
 
+  val uniqueTaxReferenceMaxRegex = "^[0-9]{10}$"
+  val errorRequired = "corporationTaxEnterUtr.error.required"
+  val errorInvalid = "corporationTaxEnterUtr.error.invalid"
+
+  private def validUTR: Constraint[String] =
+    Constraint("constraints.utr") { utr =>
+      utr.filterNot(_.isWhitespace) match {
+        case s if s.trim.isEmpty             => Invalid(ValidationError(errorRequired))
+        case s if !s.matches(uniqueTaxReferenceMaxRegex) => Invalid(ValidationError(errorInvalid, uniqueTaxReferenceMaxRegex))
+        case _                               => Valid
+      }}
+
   def apply(): Form[String] =
     Form(
-      "value" -> text("corporationTaxEnterUtr.error.required")
-        .verifying(maxLength(100, "corporationTaxEnterUtr.error.length"))
+      "value" -> text(errorRequired).verifying(validUTR)
     )
 }

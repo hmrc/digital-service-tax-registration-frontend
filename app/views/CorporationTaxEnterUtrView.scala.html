@@ -16,19 +16,22 @@
 
 @import viewmodels.InputWidth._
 @import viewmodels.LabelSize
+@import config.FrontendAppConfig
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukInput: GovukInput,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails : GovukDetails,
+    appConfig: FrontendAppConfig
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("corporationTaxEnterUtr.title"))) {
-    <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("service.caption")</h2>
+    <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("corporationTaxEnterUtr.heading.hint")</h2>
 
     @formHelper(action = routes.CorporationTaxEnterUtrController.onSubmit(mode)) {
 
@@ -41,7 +44,8 @@
                 field = form("value"),
                 label = LabelViewModel(messages("corporationTaxEnterUtr.heading")).asPageHeading(LabelSize.Large)
             )
-            .withWidth(Full)
+            .withHint(HintViewModel(HtmlContent(messages("corporationTaxEnterUtr.hint", appConfig.findLostUtr))))
+            .withWidth(ThreeQuarters)
         )
 
         @govukButton(

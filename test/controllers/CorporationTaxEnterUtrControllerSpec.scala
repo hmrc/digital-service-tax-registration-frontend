@@ -81,7 +81,7 @@ class CorporationTaxEnterUtrControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
-
+      val validUtr = "1234567890"
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
@@ -95,7 +95,7 @@ class CorporationTaxEnterUtrControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, corporationTaxEnterUtrRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", validUtr))
 
         val result = route(application, request).value
 

@@ -106,10 +106,20 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CheckUtrController.onPageLoad(NormalMode)
       }
 
-      "must go from a checkUTR with option `true` to TODO page" in pending
+      "must go from a checkUTR with option `true` to CorporationTaxEnterUtr page" in {
+        navigator.nextPage(
+          CheckUtrPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckUtrPage, true)
+            .success
+            .value
+        ) mustBe routes.CorporationTaxEnterUtrController.onPageLoad(NormalMode)
+      }
       
       "must go from a checkUTR with option `false` to TODO page" in pending
 
+      "must go from a CorporationTaxEnterUtrPage to TODO page" in pending
     }
 
     "in Check mode" - {
