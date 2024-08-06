@@ -38,7 +38,7 @@ POST        /check-company-registered-office-address      controllers.CheckCompa
 GET         /edit/check-company-registered-office-address controllers.CheckCompanyRegisteredOfficeAddressController.onPageLoad(mode: Mode = CheckMode)
 POST        /edit/check-company-registered-office-address controllers.CheckCompanyRegisteredOfficeAddressController.onSubmit(mode: Mode = CheckMode)
 
-GET        /checkUtr                        controllers.CheckUtrController.onPageLoad(mode: Mode = NormalMode)
-POST       /checkUtr                        controllers.CheckUtrController.onSubmit(mode: Mode = NormalMode)
-GET        /changeCheckUtr                  controllers.CheckUtrController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeCheckUtr                  controllers.CheckUtrController.onSubmit(mode: Mode = CheckMode)
+GET        /check-utr                        controllers.CheckUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-utr                        controllers.CheckUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/utr                         controllers.CheckUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/utr                         controllers.CheckUtrController.onSubmit(mode: Mode = CheckMode)
