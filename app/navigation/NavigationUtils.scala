@@ -54,4 +54,10 @@ trait NavigationUtils {
       case false => routes.GlobalRevenuesController.onPageLoad(NormalMode)
     }
   }
+  def checkCompanyName(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(UkRevenuesPage).map {
+      _ => routes.CompanyNameController.onPageLoad(NormalMode)
+    }
+  }
+
 }
