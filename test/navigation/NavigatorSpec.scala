@@ -113,10 +113,10 @@ class NavigatorSpec extends SpecBase {
       }
 
       "must go from a checkUTR with option `true` to TODO page" in pending
-      
+
       "must go from a checkUTR with option `false` to CompanyNamePage" in {
         navigator.nextPage(
-          checkUTRPage,
+          CheckUtrPage,
           NormalMode,
           UserAnswers("id")
             .set(CompanyNamePage, "")
@@ -135,5 +135,6 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad()
       }
     }
+
   }
 }

@@ -40,7 +40,7 @@ trait NavigationUtils {
   def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
       case true => routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)
-      case false => ??? // TODO name of the company you want to register? /company-name
+      case false =>
     }
   }
 
@@ -51,7 +51,7 @@ trait NavigationUtils {
   def checkUtr(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CheckUtrPage).map {
       case true => routes.GlobalRevenuesController.onPageLoad(NormalMode)
-      case false => routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      case false => routes.CompanyNameController.onPageLoad(NormalMode)
     }
   }
   def checkCompanyName(userAnswers: UserAnswers): Option[Call] = {
