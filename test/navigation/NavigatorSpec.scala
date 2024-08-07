@@ -90,10 +90,16 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)
       }
 
-      /**
-       * TODO the /company-name page needs to be done
-        */
-      "must go from a CheckCompanyRegisteredOfficeAddressPage with option `false` to TODO page" in pending
+      "must go from a CheckCompanyRegisteredOfficeAddressPage with option `false` to CompanyNamePage" in {
+        navigator.nextPage(
+          CheckCompanyRegisteredOfficeAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CompanyNamePage, "")
+            .success
+            .value
+        ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
+      }
 
       "must go from a CheckCompanyRegisteredOfficePostcodePage with valid postcode to CheckUtr page" in {
         navigator.nextPage(
@@ -117,7 +123,16 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CorporationTaxEnterUtrController.onPageLoad(NormalMode)
       }
       
-      "must go from a checkUTR with option `false` to TODO page" in pending
+      "must go from a checkUTR with option `false` to CompanyNamePage" in {
+        navigator.nextPage(
+          checkUTRPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CompanyNamePage, "")
+            .success
+            .value
+        ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
+      }
 
       "must go from a CorporationTaxEnterUtrPage to TODO page" in pending
     }
