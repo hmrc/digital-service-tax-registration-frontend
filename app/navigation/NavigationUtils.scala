@@ -51,7 +51,7 @@ trait NavigationUtils {
     def checkUtr(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CheckUtrPage).map {
       case true => routes.CorporationTaxEnterUtrController.onPageLoad(NormalMode)
-      case false => routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      case false => routes.CompanyNameController.onPageLoad(NormalMode)
     }
   }
 

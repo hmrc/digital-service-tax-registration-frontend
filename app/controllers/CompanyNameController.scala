@@ -48,7 +48,7 @@ class CompanyNameController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(CompanyNamePage) match {
+      val preparedForm = request.userAnswers.get(CompanyNamePage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,7 +65,7 @@ class CompanyNameController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.userId)).set(CompanyNamePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CompanyNamePage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CompanyNamePage, mode, updatedAnswers))
       )
