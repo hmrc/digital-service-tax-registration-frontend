@@ -114,7 +114,7 @@ class NavigatorSpec extends SpecBase {
 
       "must go from a checkUTR with option `true` to TODO page" in pending
 
-      "must go from a checkUTR with option `false` to CompanyNamePage" in {
+      "must go from a checkUTR with option 'false' to CompanyNamePage" in {
         navigator.nextPage(
           CheckUtrPage,
           NormalMode,
