@@ -18,8 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{GlobalRevenuesPage, UkRevenuesPage, CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckUtrPage, CorporationTaxEnterUtrPage}
-
+import pages.{GlobalRevenuesPage, UkRevenuesPage, CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckUtrPage, CorporationTaxEnterUtrPage, CompanyNamePage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -48,7 +47,7 @@ trait NavigationUtils {
     userAnswers.get(CheckCompanyRegisteredOfficePostcodePage).map(_ => routes.CheckUtrController.onPageLoad(NormalMode))
   }
 
-    def checkUtr(userAnswers: UserAnswers): Option[Call] = {
+  def checkUtr(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CheckUtrPage).map {
       case true => routes.CorporationTaxEnterUtrController.onPageLoad(NormalMode)
       case false => routes.CompanyNameController.onPageLoad(NormalMode)
@@ -58,6 +57,7 @@ trait NavigationUtils {
   def corporationTaxEnterUtr(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CorporationTaxEnterUtrPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
   }
+
   def checkCompanyName(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UkRevenuesPage).map {
       _ => routes.CompanyNameController.onPageLoad(NormalMode)

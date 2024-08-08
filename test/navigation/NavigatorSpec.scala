@@ -123,7 +123,7 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CorporationTaxEnterUtrController.onPageLoad(NormalMode)
       }
 
-      "must go from a checkUTR with option `false` to CompanyNamePage" in {
+      "must go from a checkUTR with option 'false' to CompanyNamePage" in {
         navigator.nextPage(
           CheckUtrPage,
           NormalMode,
