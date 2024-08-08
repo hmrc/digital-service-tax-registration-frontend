@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import forms.mappings.Constraints
-import wolfendale.scalacheck.regexp.RegexpGen
+import forms.mappings.Mappings
+import play.api.data.Form
 
-trait ModelGenerators {
-  val genPostcode = RegexpGen.from(Constraints.postcodeRegex.regex)
+import javax.inject.Inject
+
+class CheckCompanyRegisteredOfficePostcodeFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[String] =
+    Form(
+      "company-registered-office-postcode" -> text("company.registeredOffice.postcode.required")
+        .verifying(postcode("company.registeredOffice.postcode.required"))
+    )
 }

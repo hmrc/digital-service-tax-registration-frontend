@@ -17,13 +17,13 @@
 package forms.mappings
 
 import java.time.LocalDate
-
 import generators.Generators
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.data.validation.{Invalid, Valid}
+import wolfendale.scalacheck.regexp.RegexpGen
 
 class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators  with Constraints {
 
@@ -185,6 +185,29 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
 
           val result = minDate(min, "error.past", "foo")(date)
           result mustEqual Invalid("error.past", "foo")
+      }
+    }
+  }
+
+  "postcode" - {
+
+    "must return invalid for null string" in {
+      postcode("company.registeredOffice.postcode.required")(null) mustEqual Invalid("company.registeredOffice.postcode.required")
+    }
+
+    "must return invalid for empty string" in {
+      postcode("company.registeredOffice.postcode.required")("") mustEqual Invalid("company.registeredOffice.postcode.required")
+    }
+
+    "must return invalid for invalid postcode" in {
+      forAll(Gen.alphaNumStr) { pc =>
+        postcode("error.invalid.postcode")(pc) mustEqual Invalid("error.invalid.postcode")
+      }
+    }
+
+    "must return valid for valid postcode" in {
+      forAll(genPostcode) { pc =>
+        postcode("n/a")(pc) mustEqual Valid
       }
     }
   }

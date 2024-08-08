@@ -18,7 +18,8 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{GlobalRevenuesPage, UkRevenuesPage, CheckCompanyRegisteredOfficeAddressPage, CheckUtrPage}
+import pages.{GlobalRevenuesPage, UkRevenuesPage, CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckUtrPage}
+
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -31,18 +32,23 @@ trait NavigationUtils {
 
   def ukRevenues(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UkRevenuesPage).map {
-          case true => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
-          case false => routes.UkRevenueNotEligibleController.onPageLoad()
-    }
-  }
-  def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
-      case true => routes.GlobalRevenuesController.onPageLoad(NormalMode)
-      case false => routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      case true => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
+      case false => routes.UkRevenueNotEligibleController.onPageLoad()
     }
   }
 
-    def checkUtr(userAnswers: UserAnswers): Option[Call] = {
+  def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
+      case true => routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)
+      case false => ??? // TODO name of the company you want to register? /company-name
+    }
+  }
+
+  def checkCompanyRegisteredOfficePostcode(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(CheckCompanyRegisteredOfficePostcodePage).map(_ => routes.CheckUtrController.onPageLoad(NormalMode))
+  }
+
+  def checkUtr(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CheckUtrPage).map {
       case true => routes.GlobalRevenuesController.onPageLoad(NormalMode)
       case false => routes.GlobalRevenuesController.onPageLoad(NormalMode)

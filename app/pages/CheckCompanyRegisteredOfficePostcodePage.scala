@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import forms.mappings.Constraints
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.libs.json.JsPath
 
-trait ModelGenerators {
-  val genPostcode = RegexpGen.from(Constraints.postcodeRegex.regex)
+case object CheckCompanyRegisteredOfficePostcodePage extends QuestionPage[String] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "checkCompanyRegisteredOfficePostcode"
 }

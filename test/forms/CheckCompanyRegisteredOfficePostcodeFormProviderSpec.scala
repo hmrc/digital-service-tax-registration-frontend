@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import forms.mappings.Constraints
-import wolfendale.scalacheck.regexp.RegexpGen
+import forms.behaviours.StringFieldBehaviours
 
-trait ModelGenerators {
-  val genPostcode = RegexpGen.from(Constraints.postcodeRegex.regex)
+class CheckCompanyRegisteredOfficePostcodeFormProviderSpec extends StringFieldBehaviours {
+
+  val form = new CheckCompanyRegisteredOfficePostcodeFormProvider()()
+
+  ".company-registered-office-postcode" - {
+
+    val fieldName = "company-registered-office-postcode"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      genPostcode
+    )
+  }
+
 }

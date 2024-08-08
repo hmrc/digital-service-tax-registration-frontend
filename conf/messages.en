@@ -88,6 +88,15 @@ checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel = checkCompanyRegister
 checkCompanyRegisteredOfficeAddress.error.required = Select yes if the registered office address of the company is in the UK
 checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOfficeAddress
 
+companyRegisteredOfficeAddressPostcode.title = What is the postcode of the company’s Registered Office address?
+companyRegisteredOfficeAddressPostcode.heading = What is the postcode of the company’s Registered Office address?
+companyRegisteredOfficeAddressPostcode.heading.hint = Your company details
+company.registeredOffice.postcode.required = Enter the postcode of the company's registered office address
+companyRegisteredOfficePostcode.checkYourAnswersLabel = checkCompanyRegisteredOfficePostcode
+companyRegisteredOfficePostcode.change.hidden = CheckCompanyRegisteredOfficePostcode
+error.invalid.postcode = Enter a real postcode
+
+
 checkUtr.title = Your company details
 checkUtr.heading = Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
 checkUtr.checkYourAnswersLabel = checkUtr
