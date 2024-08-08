@@ -95,7 +95,7 @@ class NavigatorSpec extends SpecBase {
           CheckCompanyRegisteredOfficeAddressPage,
           NormalMode,
           UserAnswers("id")
-            .set(CompanyNamePage, "")
+            .set(CheckCompanyRegisteredOfficeAddressPage, false)
             .success
             .value
         ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
