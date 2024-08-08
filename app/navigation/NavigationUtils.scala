@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{GlobalRevenuesPage, UkRevenuesPage, CheckCompanyRegisteredOfficeAddressPage, CheckUtrPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckUtrPage, GlobalRevenuesPage, UkRevenuesPage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -55,7 +55,7 @@ trait NavigationUtils {
   }
   def checkCompanyName(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UkRevenuesPage).map {
-      _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      _ => ??? //TODO CONNECT TO NEXT PAGE
     }
   }
 

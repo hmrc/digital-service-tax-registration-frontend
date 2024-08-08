@@ -95,7 +95,7 @@ class NavigatorSpec extends SpecBase {
           CheckCompanyRegisteredOfficeAddressPage,
           NormalMode,
           UserAnswers("id")
-            .set(CompanyNamePage, "")
+            .set(CheckCompanyRegisteredOfficeAddressPage, false)
             .success
             .value
         ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
@@ -119,7 +119,7 @@ class NavigatorSpec extends SpecBase {
           CheckUtrPage,
           NormalMode,
           UserAnswers("id")
-            .set(CompanyNamePage, "")
+            .set(CheckUtrPage, false)
             .success
             .value
         ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
