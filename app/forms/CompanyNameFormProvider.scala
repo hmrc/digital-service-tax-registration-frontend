@@ -17,15 +17,19 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
 import play.api.data.Form
 
+import scala.util.matching.Regex
+
 class CompanyNameFormProvider @Inject() extends Mappings {
+
+  val companyNameRegex: Regex = "^[a-zA-Z0-9 '&.-]$".r
 
   def apply(): Form[String] =
     Form(
       "value" -> text("companyName.error.required")
-        .verifying(maxLength(100, "companyName.error.length"))
+        .verifying(maxLength(105, "companyName.error.length"))
+        .verifying(regexp(companyNameRegex.regex, "companyName.error.invalid"))
     )
 }
