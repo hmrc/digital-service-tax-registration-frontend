@@ -135,6 +135,9 @@ class NavigatorSpec extends SpecBase {
       }
 
       "must go from a CorporationTaxEnterUtrPage to TODO page" in pending
+
+      "must go from a CompanyNamePage with Company Name to TODO page" in pending
+
     }
 
     "in Check mode" - {
