@@ -125,6 +125,8 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
       }
 
+      "must go from a CompanyNamePage with Company Name to TODO page" in pending
+
     }
 
     "in Check mode" - {
