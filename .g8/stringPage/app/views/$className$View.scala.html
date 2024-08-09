@@ -1,5 +1,5 @@
 @import viewmodels.InputWidth._
-@import viewmodels.LegendSize
+@import viewmodels.LabelSize
 
 @this(
     layout: templates.Layout,
@@ -23,7 +23,7 @@
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("$className;format="decap"$.heading")).asPageHeading(LegendSize.Large)
+                label = LabelViewModel(messages("$className;format="decap"$.heading")).asPageHeading(LabelSize.Large)
             )
             .withWidth(Full)
         )

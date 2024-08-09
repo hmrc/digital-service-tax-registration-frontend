@@ -39,6 +39,21 @@ trait FieldBehaviours extends FormSpec with ScalaCheckPropertyChecks with Genera
     }
   }
 
+  def fieldThatBindsValidDataWithWhitespace(form: Form[_],
+                              fieldName: String,
+                              validDataGenerator: Gen[String]): Unit = {
+
+    "bind valid data with whitespace" in {
+
+      forAll(validDataGenerator -> "validDataItem") {
+        (dataItem: String) =>
+          val result = form.bind(Map(fieldName -> dataItem)).apply(fieldName)
+          result.value.value.trim.replaceAll(" ", "").replaceAll("\t", "") mustBe dataItem.trim.replaceAll(" ", "").replaceAll("\t", "")
+          result.errors mustBe empty
+      }
+    }
+  }
+
   def mandatoryField(form: Form[_],
                      fieldName: String,
                      requiredError: FormError): Unit = {

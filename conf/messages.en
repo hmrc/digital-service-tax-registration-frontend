@@ -102,3 +102,19 @@ checkUtr.heading = Does the company you are registering have a Corporation Tax U
 checkUtr.checkYourAnswersLabel = checkUtr
 checkUtr.error.required = Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
 checkUtr.change.hidden = CheckUtr
+
+corporationTaxEnterUtr.title = What is your Corporation Tax Unique Taxpayer Reference (UTR)?
+corporationTaxEnterUtr.heading = What is your Corporation Tax Unique Taxpayer Reference (UTR)?
+corporationTaxEnterUtr.heading.hint= Your company details
+corporationTaxEnterUtr.checkYourAnswersLabel = corporationTaxEnterUtr
+corporationTaxEnterUtr.error.required = Enter the company’s Corporation Tax Unique Taxpayer Reference
+corporationTaxEnterUtr.error.invalid = Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
+corporationTaxEnterUtr.change.hidden = CorporationTaxEnterUtr
+corporationTaxEnterUtr.hint = <p>A Unique Taxpayer Reference (UTR) is ten numbers long, for example 12345 67890.</p>\
+    <p>It will be on:\
+    <ul>\
+      <li>notices to file a return</li>\
+      <li>payment reminders</li>\
+    </ul>\
+    </p>\
+    <a target=_blank class="govuk-link" href="{0}">You can find a lost UTR number online (opens in a new tab)</a>
