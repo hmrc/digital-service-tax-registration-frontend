@@ -96,7 +96,6 @@ companyRegisteredOfficePostcode.checkYourAnswersLabel = checkCompanyRegisteredOf
 companyRegisteredOfficePostcode.change.hidden = CheckCompanyRegisteredOfficePostcode
 error.invalid.postcode = Enter a real postcode
 
-
 checkUtr.title = Your company details
 checkUtr.heading = Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
 checkUtr.checkYourAnswersLabel = checkUtr
@@ -118,3 +117,10 @@ corporationTaxEnterUtr.hint = <p>A Unique Taxpayer Reference (UTR) is ten number
     </ul>\
     </p>\
     <a target=_blank class="govuk-link" href="{0}">You can find a lost UTR number online (opens in a new tab)</a>
+
+checkContactAddress.error.required = Select yes if your contact address is in the UK
+checkContactAddress.title = Is your contact address in the UK?
+checkContactAddress.heading = Is your contact address in the UK?
+checkContactAddress.checkYourAnswersLabel = checkContactAddress
+checkContactAddress.change.hidden = CheckContactAddress
+checkContactAddress.heading.hint = Your company details

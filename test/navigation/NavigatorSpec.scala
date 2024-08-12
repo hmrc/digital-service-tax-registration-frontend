@@ -120,6 +120,10 @@ class NavigatorSpec extends SpecBase {
       "must go from a checkUTR with option `false` to TODO page" in pending
 
       "must go from a CorporationTaxEnterUtrPage to TODO page" in pending
+
+      "must go from a CheckContactAddressPage to a TODO-contact-uk-address page" in pending
+
+      "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
     }
 
     "in Check mode" - {
