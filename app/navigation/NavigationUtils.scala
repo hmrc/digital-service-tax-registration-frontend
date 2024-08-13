@@ -54,7 +54,7 @@ trait NavigationUtils {
     }
   }
   def corporationTaxEnterUtr(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CorporationTaxEnterUtrPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
+    userAnswers.get(CorporationTaxEnterUtrPage).map { _ => routes.CompanyNameController.onPageLoad(NormalMode)}
   }
 
   def companyNamePage(userAnswers: UserAnswers): Option[Call] = {
