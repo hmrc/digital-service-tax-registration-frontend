@@ -37,6 +37,7 @@ class Navigator @Inject() extends NavigationUtils {
     case CheckContactAddressPage => ua => checkContactAddress(ua)
     case ContactUkAddressPage => ua => contactUkAddress(ua)
     case CheckIfGroupPage => ua => checkIfGroup(ua)
+    case UltimateParentCompanyNamePage => ua => ultimateParentCompanyNamePage(ua)
     case _ => _ => Some(routes.IndexController.onPageLoad())
   }
 

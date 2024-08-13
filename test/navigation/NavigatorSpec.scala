@@ -162,9 +162,20 @@ class NavigatorSpec extends SpecBase {
 
       "must go from a CompanyContactAddressPage to a TODO-company-contact-address page" in pending
 
-      "must go from CheckIfGroupPage to a TODO ultimate-parent-company-name page" in pending
+      "must go from CheckIfGroupPage to ultimate-parent-company-name page" in {
+        navigator.nextPage(
+          CheckIfGroupPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckIfGroupPage, true)
+            .success
+            .value
+        ) mustBe routes.UltimateParentCompanyNameController.onPageLoad(NormalMode)
+      }
 
       "must go from CheckIfGroupPage to a TODO contact-details page" in pending
+
+      "must go from a UltimateParentCompanyNamePage to a TODO-register/check-ultimate-parent-company-address page" in pending
     }
 
     "in Check mode" - {

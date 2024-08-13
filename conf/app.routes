@@ -77,7 +77,7 @@ POST       /contact-international-address                  controllers.Internati
 GET        /edit/contact-international-address             controllers.InternationalContactAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/contact-international-address             controllers.InternationalContactAddressController.onSubmit(mode: Mode = CheckMode)
 
-GET        /ultimateParentCompanyName                        controllers.UltimateParentCompanyNameController.onPageLoad(mode: Mode = NormalMode)
-POST       /ultimateParentCompanyName                        controllers.UltimateParentCompanyNameController.onSubmit(mode: Mode = NormalMode)
-GET        /changeUltimateParentCompanyName                  controllers.UltimateParentCompanyNameController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeUltimateParentCompanyName                  controllers.UltimateParentCompanyNameController.onSubmit(mode: Mode = CheckMode)
+GET        /ultimate-parent-company-name                   controllers.UltimateParentCompanyNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /ultimate-parent-company-name                   controllers.UltimateParentCompanyNameController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/ultimate-parent-company-name              controllers.UltimateParentCompanyNameController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/ultimate-parent-company-name              controllers.UltimateParentCompanyNameController.onSubmit(mode: Mode = CheckMode)

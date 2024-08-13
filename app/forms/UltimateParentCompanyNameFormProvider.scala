@@ -17,15 +17,29 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 class UltimateParentCompanyNameFormProvider @Inject() extends Mappings {
+
+  val maxLength = 105
+  val companyNameRegex = """^[a-zA-Z0-9 '&.-]{1,105}$"""
+
+  private def validCompanyName: Constraint[String] =
+    Constraint("constraints.companyName") { str =>
+      if (str.length > maxLength) {
+        Invalid(ValidationError("ultimateParentCompanyName.error.length", maxLength))
+      } else if (!str.matches(companyNameRegex)) {
+        Invalid(ValidationError("ultimateParentCompanyName.error.invalid", companyNameRegex))
+      } else {
+        Valid
+      }
+    }
 
   def apply(): Form[String] =
     Form(
       "value" -> text("ultimateParentCompanyName.error.required")
-        .verifying(maxLength(105, "ultimateParentCompanyName.error.length"))
+        .verifying(validCompanyName)
     )
 }
