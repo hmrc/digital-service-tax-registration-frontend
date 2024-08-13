@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package generators
+package models
 
-import forms.mappings.Constraints
-import models._
-import org.scalacheck.{Arbitrary, Gen}
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.libs.json._
 
-trait ModelGenerators {
+case class InternationalContactAddress (line1: String, line2: String)
 
-  implicit lazy val arbitraryInternationalContactAddress: Arbitrary[InternationalContactAddress] =
-    Arbitrary {
-      for {
-        line1 <- Arbitrary.arbitrary[String]
-        line2 <- Arbitrary.arbitrary[String]
-      } yield InternationalContactAddress(line1, line2)
-    }
-  val genPostcode: Gen[String] = RegexpGen.from(Constraints.postcodeRegex.regex)
+object InternationalContactAddress {
+
+  implicit val format: OFormat[InternationalContactAddress] = Json.format
 }

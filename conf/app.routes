@@ -57,3 +57,7 @@ GET        /check-contact-address                          controllers.CheckCont
 POST       /check-contact-address                          controllers.CheckContactAddressController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/check-contact-address                     controllers.CheckContactAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/check-contact-address                     controllers.CheckContactAddressController.onSubmit(mode: Mode = CheckMode)
+GET        /internationalContactAddress                        controllers.InternationalContactAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /internationalContactAddress                        controllers.InternationalContactAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /changeInternationalContactAddress                  controllers.InternationalContactAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeInternationalContactAddress                  controllers.InternationalContactAddressController.onSubmit(mode: Mode = CheckMode)
