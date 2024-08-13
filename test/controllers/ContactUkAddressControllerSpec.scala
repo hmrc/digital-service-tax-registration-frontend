@@ -18,12 +18,13 @@ package controllers
 
 import base.SpecBase
 import forms.ContactUkAddressFormProvider
-import models.{NormalMode, ContactUkAddress, UserAnswers}
+import models.{ContactUkAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.ContactUkAddressPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -36,22 +37,17 @@ import scala.concurrent.Future
 
 class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new ContactUkAddressFormProvider()
-  val form = formProvider()
+  val form: Form[ContactUkAddress] = formProvider()
 
-  lazy val contactUkAddressRoute = routes.ContactUkAddressController.onPageLoad(NormalMode).url
+  lazy val contactUkAddressRoute: String = routes.ContactUkAddressController.onPageLoad(NormalMode).url
 
-  val userAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      ContactUkAddressPage.toString -> Json.obj(
-        "Building or street" -> "value 1",
-        "Postcode" -> "BT15GB"
-      )
-    )
-  )
+  val userAnswers: UserAnswers = emptyUserAnswers
+    .set(ContactUkAddressPage, ContactUkAddress("Street 1", None, None, None, "BT15GB"))
+    .success
+    .value
 
   "ContactUkAddress Controller" - {
 
@@ -83,7 +79,8 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(ContactUkAddress(buildingOrStreet = "value 1", postcode = "BT15GB")), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.
+          fill(ContactUkAddress("Street 1", None, None, None, "BT15GB")), NormalMode)(request, messages(application)).toString()
       }
     }
 
