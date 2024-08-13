@@ -188,4 +188,9 @@ internationalContactAddress.error.line2.invalid=Address Line 2 must only include
 internationalContactAddress.error.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 internationalContactAddress.error.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 
-
+ultimateParentCompanyName.title = ultimateParentCompanyName
+ultimateParentCompanyName.heading = ultimateParentCompanyName
+ultimateParentCompanyName.checkYourAnswersLabel = ultimateParentCompanyName
+ultimateParentCompanyName.error.required = Enter ultimateParentCompanyName
+ultimateParentCompanyName.error.length = UltimateParentCompanyName must be 105 characters or less
+ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
