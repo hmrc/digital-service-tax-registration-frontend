@@ -33,6 +33,7 @@ class Navigator @Inject() extends NavigationUtils {
     case CheckCompanyRegisteredOfficePostcodePage => ua => checkCompanyRegisteredOfficePostcode(ua)
     case CheckUtrPage => ua => checkUtr(ua)
     case CorporationTaxEnterUtrPage => ua => corporationTaxEnterUtr(ua)
+    case CheckContactAddressPage => ua => checkContactAddress(ua)
     case _ => _ => Some(routes.IndexController.onPageLoad())
   }
 
