@@ -21,4 +21,5 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
   val genPostcode = RegexpGen.from(Constraints.postcodeRegex.regex)
+  val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
 }

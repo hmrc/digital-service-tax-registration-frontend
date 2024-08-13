@@ -102,7 +102,7 @@ companyName.hint = This is the name registered with an official company register
 companyName.caption = Your company details
 companyName.checkYourAnswersLabel = companyName
 companyName.error.required = Enter the name of the company you want to register
-companyName.error.length = Company name must be 105 characters or less
+companyName.error.length = The name of the company must be 105 characters or fewer
 companyName.error.invalid = The name of the company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
 companyName.change.hidden = CompanyName
 

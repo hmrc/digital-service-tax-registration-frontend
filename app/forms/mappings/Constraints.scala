@@ -133,4 +133,9 @@ trait Constraints {
 object Constraints {
   val postcodeRegex: Regex = """^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$""".r
 
+  object CompanyName {
+    val companyNameRegex: Regex = """^[a-zA-Z0-9 '&.-]{1,105}$""".r
+    val maxLength = 105
+  }
+
 }

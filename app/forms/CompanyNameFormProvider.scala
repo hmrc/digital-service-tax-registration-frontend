@@ -16,20 +16,26 @@
 
 package forms
 
-import javax.inject.Inject
-import forms.mappings.Mappings
-import play.api.data.Form
+import forms.mappings.Constraints.CompanyName
 
-import scala.util.matching.Regex
+import javax.inject.Inject
+import forms.mappings.{Constraints, Mappings}
+import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 class CompanyNameFormProvider @Inject() extends Mappings {
 
-  val companyNameRegex: Regex = "^[a-zA-Z0-9 '&.-]$".r
+  def apply(): Form[String] = {
+    Form("value" -> text("companyName.error.required").verifying(validCompanyName()))
+  }
 
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("companyName.error.required")
-        .verifying(maxLength(105, "companyName.error.length"))
-        .verifying(regexp(companyNameRegex.regex, "companyName.error.invalid"))
-    )
+  private def validCompanyName(): Constraint[String] = {
+    Constraint {
+      case companyName if companyName.length > CompanyName.maxLength => Invalid(ValidationError("companyName.error.length"))
+      case companyName if !companyName.matches(CompanyName.companyNameRegex.regex) => Invalid(ValidationError("companyName.error.invalid"))
+      case companyName if companyName.trim.isEmpty => Invalid(ValidationError("companyName.error.required"))
+      case _ => Valid
+    }
+  }
+
 }

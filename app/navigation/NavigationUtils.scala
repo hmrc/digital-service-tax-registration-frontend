@@ -53,15 +53,12 @@ trait NavigationUtils {
       case false => routes.CompanyNameController.onPageLoad(NormalMode)
     }
   }
-  def companyNamePage(userAnswers: UserAnswers): Option[Call] = {
-
   def corporationTaxEnterUtr(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CorporationTaxEnterUtrPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
   }
 
-  def checkCompanyName(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(UkRevenuesPage).map {
-      _ => ??? //TODO CONNECT TO NEXT PAGE
+  def companyNamePage(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(CompanyNamePage).map { _ => ??? //TODO CONNECT TO NEXT PAGE
     }
   }
 
