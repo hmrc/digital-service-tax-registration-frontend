@@ -25,7 +25,6 @@ import models.ContactUkAddress
 class ContactUkAddressFormProvider @Inject() extends Mappings {
 
   private val maximumLength = 35
-  private val postcodeMaximumLength = 8
   private val buildingOrStreetRequired = "contactUkAddress.error.buildingOrStreet.required"
   private val postcodeRequired = "contactUkAddress.error.postcode.required"
 
