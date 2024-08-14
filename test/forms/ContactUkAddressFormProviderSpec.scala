@@ -17,18 +17,20 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import forms.mappings.Constraints
 import play.api.data.FormError
+import org.scalacheck.Arbitrary.arbitrary
 
 class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   val form = new ContactUkAddressFormProvider()()
+  val maxLength = 35
 
   ".Building or street" - {
 
     val fieldName = "Building or street"
-    val requiredKey = "contactUkAddress.error.BuildingOrStreet.required"
-    val lengthKey = "contactUkAddress.error.BuildingOrStreet.length"
-    val maxLength = 35
+    val requiredKey = "contactUkAddress.error.buildingOrStreet.required"
+    val lengthKey = "contactUkAddress.error.buildingOrStreet.length"
 
     behave like fieldThatBindsValidData(
       form,
@@ -50,17 +52,15 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".Postcode" - {
+  ".Building or street line 2" - {
 
-    val fieldName = "Postcode"
-    val requiredKey = "contactUkAddress.error.Postcode.required"
-    val lengthKey = "contactUkAddress.error.Postcode.length"
-    val maxLength = 8
+    val fieldName = "Building or street line 2"
+    val lengthKey = "contactUkAddress.error.buildingOrStreetLine2.length"
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      genPostcode
+      stringsWithMaxLength(maxLength)
     )
 
     behave like fieldWithMaxLength(
@@ -69,11 +69,70 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
       maxLength = maxLength,
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
+  }
+
+  ".Twon or City" - {
+
+    val fieldName = "Town or city"
+    val lengthKey = "contactUkAddress.error.townOrCity.length"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+  }
+
+  ".County" - {
+
+    val fieldName = "County"
+    val lengthKey = "contactUkAddress.error.county.length"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+  }
+
+  ".Postcode" - {
+
+    val fieldName = "Postcode"
+    val requiredKey = "contactUkAddress.error.postcode.required"
+    val invalidKey = "error.invalid.postcode"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      genPostcode
+    )
 
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like fieldWithRegexpWithGenerator(
+      form,
+      fieldName,
+      regexp = Constraints.postcodeRegex.toString(),
+      generator = arbitrary[String],
+      error = FormError(fieldName, invalidKey, Seq(Constraints.postcodeRegex.toString()))
     )
   }
 }

@@ -26,8 +26,8 @@ class ContactUkAddressFormProvider @Inject() extends Mappings {
 
   private val maximumLength = 35
   private val postcodeMaximumLength = 8
-  private val buildingOrStreetRequired = "contactUkAddress.error.BuildingOrStreet.required"
-  private val postcodeRequired = "contactUkAddress.error.Postcode.required"
+  private val buildingOrStreetRequired = "contactUkAddress.error.buildingOrStreet.required"
+  private val postcodeRequired = "contactUkAddress.error.postcode.required"
 
   def apply(): Form[ContactUkAddress] = {
     Form(
@@ -36,21 +36,20 @@ class ContactUkAddressFormProvider @Inject() extends Mappings {
           .verifying(
             firstError(
               isNotEmpty("Building or street", buildingOrStreetRequired),
-              maxLength(maximumLength, "contactUkAddress.error.BuildingOrStreet.length"))),
+              maxLength(maximumLength, "contactUkAddress.error.buildingOrStreet.length"))),
         "Building or street line 2" -> optional(
           text()
-            .verifying(maxLength(maximumLength, "contactUkAddress.error.BuildingOrStreet.length"))),
+            .verifying(maxLength(maximumLength, "contactUkAddress.error.buildingOrStreetLine2.length"))),
         "Town or city" -> optional(
           text()
-            .verifying(maxLength(maximumLength, "contactUkAddress.error.BuildingOrStreet.length"))),
+            .verifying(maxLength(maximumLength, "contactUkAddress.error.townOrCity.length"))),
         "County" -> optional(
           text()
-            .verifying(maxLength(maximumLength, "contactUkAddress.error.BuildingOrStreet.length"))),
+            .verifying(maxLength(maximumLength, "contactUkAddress.error.county.length"))),
         "Postcode" -> text(postcodeRequired)
           .verifying(
             firstError(
               isNotEmpty("Postcode", postcodeRequired),
-              maxLength(postcodeMaximumLength, "contactUkAddress.error.Postcode.length"),
               regexp(Constraints.postcodeRegex.toString(), "error.invalid.postcode")))
       )(ContactUkAddress.apply)(x => Some((x.buildingOrStreet, x.buildingOrStreetLine2, x.townOrCity, x.county, x.postcode)))
     )
