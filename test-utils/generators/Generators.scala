@@ -17,10 +17,10 @@
 package generators
 
 import java.time.{Instant, LocalDate, ZoneOffset}
-
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
 import org.scalacheck.{Gen, Shrink}
+import wolfendale.scalacheck.regexp.RegexpGen
 
 trait Generators extends ModelGenerators {
 
@@ -94,6 +94,12 @@ trait Generators extends ModelGenerators {
     maxLength <- (minLength * 2).max(100)
     length    <- Gen.chooseNum(minLength + 1, maxLength)
     chars     <- listOfN(length, arbitrary[Char])
+  } yield chars.mkString
+
+  def stringsLongerThanGivenRegex(minLength: Int, regex: String): Gen[String] = for {
+    maxLength <- (minLength * 2).max(100)
+    length <- Gen.chooseNum(minLength + 1, maxLength)
+    chars <- listOfN(length, RegexpGen.from(regex))
   } yield chars.mkString
 
   def stringsExceptSpecificValues(excluded: Seq[String]): Gen[String] =

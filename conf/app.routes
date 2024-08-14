@@ -38,10 +38,15 @@ POST        /check-company-registered-office-address      controllers.CheckCompa
 GET         /edit/check-company-registered-office-address controllers.CheckCompanyRegisteredOfficeAddressController.onPageLoad(mode: Mode = CheckMode)
 POST        /edit/check-company-registered-office-address controllers.CheckCompanyRegisteredOfficeAddressController.onSubmit(mode: Mode = CheckMode)
 
-GET         /check-company-registered-office-postcode      controllers.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = NormalMode)
-POST        /check-company-registered-office-postcode      controllers.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = NormalMode)
-GET         /edit/check-company-registered-office-postcode controllers.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = CheckMode)
-POST        /edit/check-company-registered-office-postcode controllers.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = CheckMode)
+GET         /company-name                                  controllers.CompanyNameController.onPageLoad(mode: Mode = NormalMode)
+POST        /company-name                                  controllers.CompanyNameController.onSubmit(mode: Mode = NormalMode)
+GET         /edit/company-name                             controllers.CompanyNameController.onPageLoad(mode: Mode = CheckMode)
+POST        /edit/company-name                             controllers.CompanyNameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /check-company-registered-office-postcode      controllers.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-company-registered-office-postcode      controllers.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-company-registered-office-postcode controllers.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-company-registered-office-postcode controllers.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = CheckMode)
 
 GET        /check-unique-taxpayer-reference                controllers.CheckUtrController.onPageLoad(mode: Mode = NormalMode)
 POST       /check-unique-taxpayer-reference                controllers.CheckUtrController.onSubmit(mode: Mode = NormalMode)
