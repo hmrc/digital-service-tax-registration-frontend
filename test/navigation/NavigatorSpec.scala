@@ -136,11 +136,30 @@ class NavigatorSpec extends SpecBase {
 
       "must go from a CorporationTaxEnterUtrPage to TODO page" in pending
 
-      "must go from a CompanyNamePage with valid Company Name to TODO page" in pending
+      "must go from a CompanyNamePage with valid Company Name and UK address selected to contact-uk-address page" in {
+        navigator.nextPage(
+          CompanyNamePage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckCompanyRegisteredOfficeAddressPage, true).success.value
+            .set(CompanyNamePage, "Company1").success.value
+        ) mustBe routes.ContactUkAddressController.onPageLoad(NormalMode)
+      }
 
-      "must go from a CheckContactAddressPage to a TODO-contact-uk-address page" in pending
+      "must go from a CheckContactAddressPage to contact-uk-address page" in {
+        navigator.nextPage(
+          CheckContactAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckContactAddressPage, true)
+            .success
+            .value
+        ) mustBe routes.ContactUkAddressController.onPageLoad(NormalMode)
+      }
 
       "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
+
+      "must go from a CompanyContactAddressPage to a TODO-company-contact-address page" in pending
     }
 
     "in Check mode" - {
