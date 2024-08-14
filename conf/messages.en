@@ -127,3 +127,10 @@ corporationTaxEnterUtr.hint = <p>A Unique Taxpayer Reference (UTR) is ten number
     </ul>\
     </p>\
     <a target=_blank class="govuk-link" href="{0}">You can find a lost UTR number online (opens in a new tab)</a>
+
+checkContactAddress.error.required = Select yes if your contact address is in the UK
+checkContactAddress.title = Is your contact address in the UK?
+checkContactAddress.heading = Is your contact address in the UK?
+checkContactAddress.checkYourAnswersLabel = checkContactAddress
+checkContactAddress.change.hidden = CheckContactAddress
+checkContactAddress.heading.hint = Your company details

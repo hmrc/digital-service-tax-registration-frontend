@@ -138,6 +138,9 @@ class NavigatorSpec extends SpecBase {
 
       "must go from a CompanyNamePage with valid Company Name to TODO page" in pending
 
+      "must go from a CheckContactAddressPage to a TODO-contact-uk-address page" in pending
+
+      "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
     }
 
     "in Check mode" - {
@@ -148,6 +151,5 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad()
       }
     }
-
   }
 }

@@ -2,62 +2,63 @@
 
 ->          /hmrc-frontend                               hmrcfrontend.Routes
 
-GET         /                                            controllers.IndexController.onPageLoad()
+GET         /                                             controllers.IndexController.onPageLoad()
 
-GET         /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                                 controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
+GET         /language/:lang                               controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET         /refresh-session                             controllers.KeepAliveController.keepAlive()
+GET         /refresh-session                              controllers.KeepAliveController.keepAlive()
 
-GET         /there-is-a-problem                          controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None)
+GET         /there-is-a-problem                           controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None)
 
-GET         /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad()
+GET         /check-your-answers                           controllers.CheckYourAnswersController.onPageLoad()
 
-GET         /account/sign-out-survey                     controllers.auth.AuthController.signOut()
-GET         /account/sign-out                            controllers.auth.AuthController.signOutNoSurvey()
-GET         /account/signed-out                          controllers.auth.SignedOutController.onPageLoad()
+GET         /account/sign-out-survey                      controllers.auth.AuthController.signOut()
+GET         /account/sign-out                             controllers.auth.AuthController.signOutNoSurvey()
+GET         /account/signed-out                           controllers.auth.SignedOutController.onPageLoad()
 
-GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad()
+GET         /unauthorised                                 controllers.UnauthorisedController.onPageLoad()
 
-GET         /global-revenues                             controllers.GlobalRevenuesController.onPageLoad(mode: Mode = NormalMode)
-POST        /global-revenues                             controllers.GlobalRevenuesController.onSubmit(mode: Mode = NormalMode)
-GET         /edit/global-revenues                        controllers.GlobalRevenuesController.onPageLoad(mode: Mode = CheckMode)
-POST        /edit/global-revenues                        controllers.GlobalRevenuesController.onSubmit(mode: Mode = CheckMode)
+GET         /global-revenues                              controllers.GlobalRevenuesController.onPageLoad(mode: Mode = NormalMode)
+POST        /global-revenues                              controllers.GlobalRevenuesController.onSubmit(mode: Mode = NormalMode)
+GET         /edit/global-revenues                         controllers.GlobalRevenuesController.onPageLoad(mode: Mode = CheckMode)
+POST        /edit/global-revenues                         controllers.GlobalRevenuesController.onSubmit(mode: Mode = CheckMode)
 
-GET         /global-revenues-not-eligible                controllers.GlobalRevenuesNotEligibleController.onPageLoad()
+GET         /global-revenues-not-eligible                 controllers.GlobalRevenuesNotEligibleController.onPageLoad()
 
-GET         /uk-revenues                                 controllers.UkRevenuesController.onPageLoad(mode: Mode = NormalMode)
-POST        /uk-revenues                                 controllers.UkRevenuesController.onSubmit(mode: Mode = NormalMode)
-GET         /edit/uk-revenues                            controllers.UkRevenuesController.onPageLoad(mode: Mode = CheckMode)
-POST        /edit/uk-revenues                            controllers.UkRevenuesController.onSubmit(mode: Mode = CheckMode)
-
-GET        /uk-revenues-not-eligible                     controllers.UkRevenueNotEligibleController.onPageLoad()
+GET         /uk-revenues                                  controllers.UkRevenuesController.onPageLoad(mode: Mode = NormalMode)
+POST        /uk-revenues                                  controllers.UkRevenuesController.onSubmit(mode: Mode = NormalMode)
+GET         /edit/uk-revenues                             controllers.UkRevenuesController.onPageLoad(mode: Mode = CheckMode)
+POST        /edit/uk-revenues                             controllers.UkRevenuesController.onSubmit(mode: Mode = CheckMode)
+GET         /uk-revenues-not-eligible                     controllers.UkRevenueNotEligibleController.onPageLoad()
 
 GET         /check-company-registered-office-address      controllers.CheckCompanyRegisteredOfficeAddressController.onPageLoad(mode: Mode = NormalMode)
 POST        /check-company-registered-office-address      controllers.CheckCompanyRegisteredOfficeAddressController.onSubmit(mode: Mode = NormalMode)
 GET         /edit/check-company-registered-office-address controllers.CheckCompanyRegisteredOfficeAddressController.onPageLoad(mode: Mode = CheckMode)
 POST        /edit/check-company-registered-office-address controllers.CheckCompanyRegisteredOfficeAddressController.onSubmit(mode: Mode = CheckMode)
 
+GET         /company-name                                  controllers.CompanyNameController.onPageLoad(mode: Mode = NormalMode)
+POST        /company-name                                  controllers.CompanyNameController.onSubmit(mode: Mode = NormalMode)
+GET         /edit/company-name                             controllers.CompanyNameController.onPageLoad(mode: Mode = CheckMode)
+POST        /edit/company-name                             controllers.CompanyNameController.onSubmit(mode: Mode = CheckMode)
 
-GET        /company-name                                  controllers.CompanyNameController.onPageLoad(mode: Mode = NormalMode)
-POST       /company-name                                  controllers.CompanyNameController.onSubmit(mode: Mode = NormalMode)
-GET        /edit/company-name                             controllers.CompanyNameController.onPageLoad(mode: Mode = CheckMode)
-POST       /edit/company-name                             controllers.CompanyNameController.onSubmit(mode: Mode = CheckMode)
+GET        /check-company-registered-office-postcode      controllers.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-company-registered-office-postcode      controllers.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-company-registered-office-postcode controllers.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-company-registered-office-postcode controllers.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = CheckMode)
 
+GET        /check-unique-taxpayer-reference                controllers.CheckUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-unique-taxpayer-reference                controllers.CheckUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-unique-taxpayer-reference           controllers.CheckUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-unique-taxpayer-reference           controllers.CheckUtrController.onSubmit(mode: Mode = CheckMode)
 
-GET         /check-company-registered-office-postcode      controllers.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = NormalMode)
-POST        /check-company-registered-office-postcode      controllers.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = NormalMode)
-GET         /edit/check-company-registered-office-postcode controllers.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(mode: Mode = CheckMode)
-POST        /edit/check-company-registered-office-postcode controllers.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode: Mode = CheckMode)
+GET        /enter-utr                                      controllers.CorporationTaxEnterUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /enter-utr                                      controllers.CorporationTaxEnterUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/enter-utr                                 controllers.CorporationTaxEnterUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/enter-utr                                 controllers.CorporationTaxEnterUtrController.onSubmit(mode: Mode = CheckMode)
 
-
-GET        /check-unique-taxpayer-reference                        controllers.CheckUtrController.onPageLoad(mode: Mode = NormalMode)
-POST       /check-unique-taxpayer-reference                        controllers.CheckUtrController.onSubmit(mode: Mode = NormalMode)
-GET        /edit/check-unique-taxpayer-reference                   controllers.CheckUtrController.onPageLoad(mode: Mode = CheckMode)
-POST       /edit/check-unique-taxpayer-reference                   controllers.CheckUtrController.onSubmit(mode: Mode = CheckMode)
-
-GET        /enter-utr                                     controllers.CorporationTaxEnterUtrController.onPageLoad(mode: Mode = NormalMode)
-POST       /enter-utr                                     controllers.CorporationTaxEnterUtrController.onSubmit(mode: Mode = NormalMode)
-GET        /edit/enter-utr                                controllers.CorporationTaxEnterUtrController.onPageLoad(mode: Mode = CheckMode)
-POST       /edit/enter-utr                                controllers.CorporationTaxEnterUtrController.onSubmit(mode: Mode = CheckMode)
+GET        /check-contact-address                          controllers.CheckContactAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-contact-address                          controllers.CheckContactAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-contact-address                     controllers.CheckContactAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-contact-address                     controllers.CheckContactAddressController.onSubmit(mode: Mode = CheckMode)
