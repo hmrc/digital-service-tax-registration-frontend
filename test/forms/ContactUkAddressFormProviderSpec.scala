@@ -28,7 +28,7 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".Building or street" - {
 
-    val fieldName = "Building or street"
+    val fieldName = "building-or-street"
     val requiredKey = "contactUkAddress.error.buildingOrStreet.required"
     val lengthKey = "contactUkAddress.error.buildingOrStreet.length"
 
@@ -54,7 +54,7 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".Building or street line 2" - {
 
-    val fieldName = "Building or street line 2"
+    val fieldName = "building-or-street-line-2"
     val lengthKey = "contactUkAddress.error.buildingOrStreetLine2.length"
 
     behave like fieldThatBindsValidData(
@@ -73,7 +73,7 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".Twon or City" - {
 
-    val fieldName = "Town or city"
+    val fieldName = "town-or-city"
     val lengthKey = "contactUkAddress.error.townOrCity.length"
 
     behave like fieldThatBindsValidData(
@@ -92,7 +92,7 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".County" - {
 
-    val fieldName = "County"
+    val fieldName = "county"
     val lengthKey = "contactUkAddress.error.county.length"
 
     behave like fieldThatBindsValidData(
@@ -111,7 +111,7 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".Postcode" - {
 
-    val fieldName = "Postcode"
+    val fieldName = "postcode"
     val requiredKey = "contactUkAddress.error.postcode.required"
     val invalidKey = "error.invalid.postcode"
 

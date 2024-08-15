@@ -101,7 +101,7 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, contactUkAddressRoute)
-            .withFormUrlEncodedBody(("Building or street", "value 1"), ("Postcode", "BT15GB"))
+            .withFormUrlEncodedBody(("building-or-street", "value 1"), ("postcode", "BT15GB"))
 
         val result = route(application, request).value
 

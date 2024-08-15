@@ -14,13 +14,13 @@
  * limitations under the License.
  *@
 
-@import viewmodels.InputWidth._
+@import views.html.components.UkAddress
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
-    govukInput: GovukInput,
+    ukAddress: UkAddress,
     govukButton: GovukButton
 )
 
@@ -37,44 +37,8 @@
         <span class="govuk-caption-l">Contact person's details</span>
         <h1 class="govuk-heading-l">@messages("contactUkAddress.heading")</h1>
 
-        @govukInput(
-            InputViewModel(
-                field = form("Building or street"),
-                label = LabelViewModel(messages("contactUkAddress.buildingOrStreet"))
-            )
-            .withWidth(Full)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("Building or street line 2"),
-                label = LabelViewModel(messages("contactUkAddress.buildingOrStreetLine2"))
-            )
-            .withWidth(Full)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("Town or city"),
-                label = LabelViewModel(messages("contactUkAddress.townOrCity"))
-            )
-            .withWidth(TwoThirds)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("County"),
-                label = LabelViewModel(messages("contactUkAddress.county"))
-            )
-            .withWidth(TwoThirds)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("Postcode"),
-                label = LabelViewModel(messages("contactUkAddress.postcode"))
-            )
-            .withWidth(Fixed10)
+        @ukAddress(
+            form = form
         )
 
         @govukButton(
