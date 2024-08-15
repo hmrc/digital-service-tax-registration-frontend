@@ -25,8 +25,6 @@ import scala.util.matching.Regex
 
 trait Constraints {
 
-protected val postcodeReg: String = "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$";
-
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
     Constraint {
       input =>
