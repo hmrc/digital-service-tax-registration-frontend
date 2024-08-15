@@ -38,9 +38,10 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CheckCompanyRegisteredOfficePostcodeFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
-  lazy val checkCompanyRegisteredOfficePostcodeRoute = routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode).url
+  lazy val checkCompanyRegisteredOfficePostcodeRoute =
+    routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode).url
 
   "CheckCompanyOfficeRegisteredPostcode Controller" - {
 
@@ -62,7 +63,8 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CheckCompanyRegisteredOfficePostcodePage, "SW3 5DA").success.value
+      val userAnswers =
+        UserAnswers(userAnswersId).set(CheckCompanyRegisteredOfficePostcodePage, "SW3 5DA").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -74,7 +76,10 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("SW3 5DA"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("SW3 5DA"), NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 

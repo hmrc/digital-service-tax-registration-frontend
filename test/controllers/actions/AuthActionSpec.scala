@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthActionSpec extends SpecBase with MockitoSugar {
 
   class Harness(authAction: IdentifierAction) {
-    def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
+    def onPageLoad(): Action[AnyContent] = authAction(_ => Results.Ok)
   }
 
   "Auth Action" - {
@@ -49,7 +49,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
           val authAction = new AuthenticatedIdentifierAction(
             new FakeFailingAuthConnector(new MissingBearerToken),
@@ -57,7 +57,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             bodyParsers
           )
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value must startWith(appConfig.loginUrl)
@@ -73,7 +73,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
           val authAction = new AuthenticatedIdentifierAction(
             new FakeFailingAuthConnector(new BearerTokenExpired),
@@ -81,7 +81,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             bodyParsers
           )
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value must startWith(appConfig.loginUrl)
@@ -97,7 +97,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
           val authAction = new AuthenticatedIdentifierAction(
             new FakeFailingAuthConnector(new InsufficientEnrolments),
@@ -105,7 +105,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             bodyParsers
           )
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value mustBe routes.UnauthorisedController
@@ -123,7 +123,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
           val authAction = new AuthenticatedIdentifierAction(
             new FakeFailingAuthConnector(new InsufficientConfidenceLevel),
@@ -131,7 +131,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             bodyParsers
           )
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value mustBe routes.UnauthorisedController
@@ -149,7 +149,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
           val authAction = new AuthenticatedIdentifierAction(
             new FakeFailingAuthConnector(new UnsupportedAuthProvider),
@@ -157,7 +157,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             bodyParsers
           )
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value mustBe routes.UnauthorisedController
@@ -175,7 +175,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
           val authAction = new AuthenticatedIdentifierAction(
             new FakeFailingAuthConnector(new UnsupportedAffinityGroup),
@@ -183,7 +183,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             bodyParsers
           )
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result) mustBe Some(
@@ -203,10 +203,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = mock[FrontendAppConfig]
+          val appConfig   = mock[FrontendAppConfig]
 
           val mockAuthConnector: AuthConnector = mock[AuthConnector]
-          val retrieval: AuthRetrievals = Some("Int-7e341-48319ddb53")
+          val retrieval: AuthRetrievals        = Some("Int-7e341-48319ddb53")
 
           when(appConfig.dstNewRegistrationFrontendEnableFlag) thenReturn true
 
@@ -217,13 +217,13 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             retrieval
           )
 
-          val action = new AuthenticatedIdentifierAction(
+          val action     = new AuthenticatedIdentifierAction(
             mockAuthConnector,
             appConfig,
             bodyParsers
           )
           val controller = new Harness(action)
-          val result = controller.onPageLoad()(FakeRequest("", ""))
+          val result     = controller.onPageLoad()(FakeRequest("", ""))
           status(result) mustBe OK
 
         }
@@ -240,10 +240,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = mock[FrontendAppConfig]
+          val appConfig   = mock[FrontendAppConfig]
 
           val mockAuthConnector: AuthConnector = mock[AuthConnector]
-          val retrieval: AuthRetrievals = Some("Int-7e341-48319ddb53")
+          val retrieval: AuthRetrievals        = Some("Int-7e341-48319ddb53")
 
           when(appConfig.dstNewRegistrationFrontendEnableFlag) thenReturn false
           when(
@@ -257,13 +257,13 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             retrieval
           )
 
-          val action = new AuthenticatedIdentifierAction(
+          val action     = new AuthenticatedIdentifierAction(
             mockAuthConnector,
             appConfig,
             bodyParsers
           )
           val controller = new Harness(action)
-          val result = controller.onPageLoad()(FakeRequest("", ""))
+          val result     = controller.onPageLoad()(FakeRequest("", ""))
           status(result) mustBe SEE_OTHER
           redirectLocation(result) mustBe Some(
             appConfig.dstFrontendRegistrationUrl
@@ -281,7 +281,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
           val authAction = new AuthenticatedIdentifierAction(
             new FakeFailingAuthConnector(new UnsupportedCredentialRole),
@@ -289,7 +289,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             bodyParsers
           )
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result) mustBe Some(
@@ -301,13 +301,12 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
   }
 }
 
-class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable)
-    extends AuthConnector {
+class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable) extends AuthConnector {
   val serviceUrl: String = ""
 
   override def authorise[A](
-      predicate: Predicate,
-      retrieval: Retrieval[A]
+    predicate: Predicate,
+    retrieval: Retrieval[A]
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
     Future.failed(exceptionToReturn)
 }

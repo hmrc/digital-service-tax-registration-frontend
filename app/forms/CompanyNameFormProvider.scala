@@ -25,17 +25,17 @@ import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 class CompanyNameFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] = {
+  def apply(): Form[String] =
     Form("value" -> text("companyName.error.required").verifying(validCompanyName()))
-  }
 
-  private def validCompanyName(): Constraint[String] = {
+  private def validCompanyName(): Constraint[String] =
     Constraint {
-      case companyName if companyName.length > CompanyName.maxLength => Invalid(ValidationError("companyName.error.length"))
-      case companyName if !companyName.matches(CompanyName.companyNameRegex.regex) => Invalid(ValidationError("companyName.error.invalid"))
-      case companyName if companyName.trim.isEmpty => Invalid(ValidationError("companyName.error.required"))
-      case _ => Valid
+      case companyName if companyName.length > CompanyName.maxLength               =>
+        Invalid(ValidationError("companyName.error.length"))
+      case companyName if !companyName.matches(CompanyName.companyNameRegex.regex) =>
+        Invalid(ValidationError("companyName.error.invalid"))
+      case companyName if companyName.trim.isEmpty                                 => Invalid(ValidationError("companyName.error.required"))
+      case _                                                                       => Valid
     }
-  }
 
 }

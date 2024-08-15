@@ -25,19 +25,17 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CorporationTaxEnterUtrSummary  {
+object CorporationTaxEnterUtrSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CorporationTaxEnterUtrPage).map {
-      answer =>
-
-        SummaryListRowViewModel(
-          key     = "corporationTaxEnterUtr.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlFormat.escape(answer).toString),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CorporationTaxEnterUtrController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("corporationTaxEnterUtr.change.hidden"))
-          )
+    answers.get(CorporationTaxEnterUtrPage).map { answer =>
+      SummaryListRowViewModel(
+        key = "corporationTaxEnterUtr.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer).toString),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.CorporationTaxEnterUtrController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("corporationTaxEnterUtr.change.hidden"))
         )
+      )
     }
 }

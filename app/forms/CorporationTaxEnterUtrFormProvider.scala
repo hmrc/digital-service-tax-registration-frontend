@@ -24,16 +24,18 @@ import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 class CorporationTaxEnterUtrFormProvider @Inject() extends Mappings {
 
   val uniqueTaxReferenceMaxRegex = "^[0-9]{10}$"
-  val errorRequired = "corporationTaxEnterUtr.error.required"
-  val errorInvalid = "corporationTaxEnterUtr.error.invalid"
+  val errorRequired              = "corporationTaxEnterUtr.error.required"
+  val errorInvalid               = "corporationTaxEnterUtr.error.invalid"
 
   private def validUTR: Constraint[String] =
     Constraint("constraints.utr") { utr =>
       utr.filterNot(_.isWhitespace) match {
-        case s if s.trim.isEmpty             => Invalid(ValidationError(errorRequired))
-        case s if !s.matches(uniqueTaxReferenceMaxRegex) => Invalid(ValidationError(errorInvalid, uniqueTaxReferenceMaxRegex))
-        case _                               => Valid
-      }}
+        case s if s.trim.isEmpty                         => Invalid(ValidationError(errorRequired))
+        case s if !s.matches(uniqueTaxReferenceMaxRegex) =>
+          Invalid(ValidationError(errorInvalid, uniqueTaxReferenceMaxRegex))
+        case _                                           => Valid
+      }
+    }
 
   def apply(): Form[String] =
     Form(

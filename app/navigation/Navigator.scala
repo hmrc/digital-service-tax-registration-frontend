@@ -27,25 +27,25 @@ import models._
 class Navigator @Inject() extends NavigationUtils {
 
   private val normalRoutes: Page => UserAnswers => Option[Call] = {
-    case GlobalRevenuesPage => ua => globalRevenues(ua)
-    case UkRevenuesPage => ua => ukRevenues(ua)
-    case CheckCompanyRegisteredOfficeAddressPage => ua => checkCompanyRegisteredOfficeAddress(ua)
+    case GlobalRevenuesPage                       => ua => globalRevenues(ua)
+    case UkRevenuesPage                           => ua => ukRevenues(ua)
+    case CheckCompanyRegisteredOfficeAddressPage  => ua => checkCompanyRegisteredOfficeAddress(ua)
     case CheckCompanyRegisteredOfficePostcodePage => ua => checkCompanyRegisteredOfficePostcode(ua)
-    case CheckUtrPage => ua => checkUtr(ua)
-    case CompanyNamePage => ua => companyNamePage(ua)
-    case CorporationTaxEnterUtrPage => ua => corporationTaxEnterUtr(ua)
-    case CheckContactAddressPage => ua => checkContactAddress(ua)
-    case _ => _ => Some(routes.IndexController.onPageLoad())
+    case CheckUtrPage                             => ua => checkUtr(ua)
+    case CompanyNamePage                          => ua => companyNamePage(ua)
+    case CorporationTaxEnterUtrPage               => ua => corporationTaxEnterUtr(ua)
+    case CheckContactAddressPage                  => ua => checkContactAddress(ua)
+    case _                                        => _ => Some(routes.IndexController.onPageLoad())
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = {
-    case _ => _ => routes.CheckYourAnswersController.onPageLoad()
+  private val checkRouteMap: Page => UserAnswers => Call = { case _ =>
+    _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
       normalRoutes(page)(userAnswers).getOrElse(routes.JourneyRecoveryController.onPageLoad())
-    case CheckMode =>
+    case CheckMode  =>
       checkRouteMap(page)(userAnswers)
   }
 }
