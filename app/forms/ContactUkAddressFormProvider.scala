@@ -31,21 +31,21 @@ class ContactUkAddressFormProvider @Inject() extends Mappings {
   def apply(): Form[ContactUkAddress] = {
     Form(
       mapping(
-        "Building or street" -> text(buildingOrStreetRequired)
+        "building-or-street" -> text(buildingOrStreetRequired)
           .verifying(
             firstError(
               isNotEmpty("Building or street", buildingOrStreetRequired),
               maxLength(maximumLength, "contactUkAddress.error.buildingOrStreet.length"))),
-        "Building or street line 2" -> optional(
+        "building-or-street-line-2" -> optional(
           text()
             .verifying(maxLength(maximumLength, "contactUkAddress.error.buildingOrStreetLine2.length"))),
-        "Town or city" -> optional(
+        "town-or-city" -> optional(
           text()
             .verifying(maxLength(maximumLength, "contactUkAddress.error.townOrCity.length"))),
-        "County" -> optional(
+        "county" -> optional(
           text()
             .verifying(maxLength(maximumLength, "contactUkAddress.error.county.length"))),
-        "Postcode" -> text(postcodeRequired)
+        "postcode" -> text(postcodeRequired)
           .verifying(
             firstError(
               isNotEmpty("Postcode", postcodeRequired),
