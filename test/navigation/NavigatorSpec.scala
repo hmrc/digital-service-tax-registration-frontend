@@ -136,15 +136,7 @@ class NavigatorSpec extends SpecBase {
 
       "must go from a CorporationTaxEnterUtrPage to TODO page" in pending
 
-      "must go from a CompanyNamePage with valid Company Name and UK address selected to contact-uk-address page" in {
-        navigator.nextPage(
-          CompanyNamePage,
-          NormalMode,
-          UserAnswers("id")
-            .set(CheckCompanyRegisteredOfficeAddressPage, true).success.value
-            .set(CompanyNamePage, "Company1").success.value
-        ) mustBe routes.ContactUkAddressController.onPageLoad(NormalMode)
-      }
+      "must go from a CompanyNamePage with valid Company Name to TODO page" in pending
 
       "must go from a CheckContactAddressPage to contact-uk-address page" in {
         navigator.nextPage(

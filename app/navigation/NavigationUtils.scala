@@ -59,10 +59,7 @@ trait NavigationUtils {
   }
 
   def companyNamePage(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
-      case true => routes.ContactUkAddressController.onPageLoad(NormalMode)
-      case false => routes.GlobalRevenuesController.onPageLoad(NormalMode) // TODO page needs to be implemented contact-international-address
-    }
+    userAnswers.get(CompanyNamePage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode) }
   }
 
   def contactUkAddress(userAnswers: UserAnswers): Option[Call] = {
