@@ -36,6 +36,7 @@ class Navigator @Inject() extends NavigationUtils {
     case CorporationTaxEnterUtrPage => ua => corporationTaxEnterUtr(ua)
     case CheckContactAddressPage => ua => checkContactAddress(ua)
     case ContactUkAddressPage => ua => contactUkAddress(ua)
+    case CompanyRegisteredOfficeUkAddressPage => ua => companyRegisteredOfficeUkAddress(ua)
     case _ => _ => Some(routes.IndexController.onPageLoad())
   }
 

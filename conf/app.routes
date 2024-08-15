@@ -66,3 +66,12 @@ GET        /contact-uk-address                         controllers.ContactUkAddr
 POST       /contact-uk-address                         controllers.ContactUkAddressController.onSubmit(mode: Mode = NormalMode)
 GET        /change-contact-uk-address                  controllers.ContactUkAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-contact-uk-address                  controllers.ContactUkAddressController.onSubmit(mode: Mode = CheckMode)
+GET        /check-unique-taxpayer-reference                        controllers.CheckUtrController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-unique-taxpayer-reference                        controllers.CheckUtrController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-unique-taxpayer-reference                   controllers.CheckUtrController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-unique-taxpayer-reference                   controllers.CheckUtrController.onSubmit(mode: Mode = CheckMode)
+
+GET        /company-registered-office-uk-address                        controllers.CompanyRegisteredOfficeUkAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /company-registered-office-uk-address                        controllers.CompanyRegisteredOfficeUkAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/company-registered-office-uk-address                  controllers.CompanyRegisteredOfficeUkAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/company-registered-office-uk-address                  controllers.CompanyRegisteredOfficeUkAddressController.onSubmit(mode: Mode = CheckMode)

@@ -25,6 +25,8 @@ import scala.util.matching.Regex
 
 trait Constraints {
 
+protected val postcodeReg: String = "^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\\s?[0-9][A-Za-z]{2}$";
+
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
     Constraint {
       input =>
@@ -58,14 +60,6 @@ trait Constraints {
         } else {
           Invalid(errorKey, maximum)
         }
-    }
-
-  protected def isNotEmpty(value: String, errorKey: String): Constraint[String] =
-    Constraint {
-      case str if str.trim.nonEmpty =>
-        Valid
-      case _ =>
-        Invalid(errorKey, value)
     }
 
   protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
@@ -121,6 +115,14 @@ trait Constraints {
         Invalid(errorKey)
     }
 
+  protected def isNotEmpty(value: String, errorKey: String): Constraint[String] =
+    Constraint {
+      case str if str.trim.nonEmpty =>
+        Valid
+      case _ =>
+        Invalid(errorKey, value)
+    }
+
   protected def postcode(emptyPostcodeErrorKey: String): Constraint[String] =
     Constraint { p =>
       if (p == null) {
@@ -142,7 +144,7 @@ object Constraints {
   val postcodeRegex: Regex = """^[a-zA-Z]{1,2}[0-9][0-9a-zA-Z]?\s?[0-9][a-zA-Z]{2}$""".r
 
   object CompanyName {
-    val companyNameRegex: Regex = """^[a-zA-Z0-9 '&.-]{1,105}$""".r
+    val companyNameRegex: Regex = """^[a-zA-Z0-9'&.-]{1,105}$""".r
     val maxLength = 105
   }
 

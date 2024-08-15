@@ -59,11 +59,15 @@ trait NavigationUtils {
   }
 
   def companyNamePage(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CompanyNamePage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode) }
+    userAnswers.get(CompanyNamePage).map { _ => routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode) }
   }
 
   def contactUkAddress(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(ContactUkAddressPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode) }
+  }
+
+  def companyRegisteredOfficeUkAddress(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode) }
   }
 
   def checkContactAddress(userAnswers: UserAnswers): Option[Call] = {

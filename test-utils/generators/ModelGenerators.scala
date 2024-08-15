@@ -18,9 +18,10 @@ package generators
 
 import forms.mappings.Constraints
 import models.ContactUkAddress
+import models.CompanyRegisteredOfficeUkAddress
 import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
 import wolfendale.scalacheck.regexp.RegexpGen
+import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
 
@@ -33,4 +34,12 @@ trait ModelGenerators {
     }
   val genPostcode = RegexpGen.from(Constraints.postcodeRegex.regex)
   val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
+
+  implicit lazy val arbitraryCompanyRegisteredOfficeUkAddress: Arbitrary[CompanyRegisteredOfficeUkAddress] =
+    Arbitrary {
+      for {
+        buildingorstreet <- arbitrary[String]
+        postcode <- arbitrary[String]
+      } yield CompanyRegisteredOfficeUkAddress(buildingorstreet, None, None, None, postcode)
+    }
 }
