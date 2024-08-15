@@ -69,4 +69,9 @@ trait NavigationUtils {
     }
   }
 
+  def checkIfGroup(userAnswers: UserAnswers): Option[Call] = {
+    case true => ??? // todo page needs to be implemented ultimate-parent-company-name
+    case false => ??? // todo page needs to be implemented contact-details
+  }
+
 }

@@ -62,3 +62,8 @@ GET        /check-contact-address                          controllers.CheckCont
 POST       /check-contact-address                          controllers.CheckContactAddressController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/check-contact-address                     controllers.CheckContactAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/check-contact-address                     controllers.CheckContactAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET        /check-if-group                                 controllers.CheckIfGroupController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-if-group                                 controllers.CheckIfGroupController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-if-group                            controllers.CheckIfGroupController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-if-group                            controllers.CheckIfGroupController.onSubmit(mode: Mode = CheckMode)

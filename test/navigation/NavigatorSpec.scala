@@ -141,6 +141,8 @@ class NavigatorSpec extends SpecBase {
       "must go from a CheckContactAddressPage to a TODO-contact-uk-address page" in pending
 
       "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
+
+      // TODO Check If Group Page
     }
 
     "in Check mode" - {
