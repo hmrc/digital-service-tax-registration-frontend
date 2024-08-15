@@ -23,12 +23,24 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryLocation: Arbitrary[Country] =
+    Arbitrary {
+      for {
+        name <- Arbitrary.arbitrary[String]
+        code <- Gen.pick(2, 'A' to 'Z')
+        type1 <- Gen.oneOf(Seq("country"))
+      } yield Country(name, code.mkString, type1)
+    }
+
   implicit lazy val arbitraryInternationalContactAddress: Arbitrary[InternationalContactAddress] =
     Arbitrary {
       for {
         line1 <- Arbitrary.arbitrary[String]
-        line2 <- Arbitrary.arbitrary[String]
-      } yield InternationalContactAddress(line1, line2)
+        line2 <- Arbitrary.arbitrary[Option[String]]
+        line3 <- Arbitrary.arbitrary[Option[String]]
+        line4 <- Arbitrary.arbitrary[Option[String]]
+        countryCode <- Arbitrary.arbitrary[Country]
+      } yield InternationalContactAddress(line1, line2, line3, line4, countryCode)
     }
   val genPostcode: Gen[String] = RegexpGen.from(Constraints.postcodeRegex.regex)
 }

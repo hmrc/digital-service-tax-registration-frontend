@@ -32,7 +32,11 @@ object InternationalContactAddressSummary  {
     answers.get(InternationalContactAddressPage).map {
       answer =>
 
-      val value = HtmlFormat.escape(answer.line1).toString + "<br/>" + HtmlFormat.escape(answer.line2).toString
+      val value = HtmlFormat.escape(answer.line1).toString +
+        answer.line2.map(x => "<br/>" + HtmlFormat.escape(x)) +
+        answer.line3.map(x => "<br/>" + HtmlFormat.escape(x)) +
+        answer.line4.map(x => "<br/>" + HtmlFormat.escape(x)) +
+        answer.country
 
         SummaryListRowViewModel(
           key     = "internationalContactAddress.checkYourAnswersLabel",

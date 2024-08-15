@@ -49,14 +49,16 @@ class FrontendAppConfig @Inject() (configuration: Configuration,servicesConfig: 
     configuration.get[Boolean]("features.welsh-translation")
 
   def languageMap: Map[String, Lang] = Map(
-    "en" -> Lang("en"),
-    "cy" -> Lang("cy")
+    "en" -> Lang("en")
   )
 
   val timeout: Int   = configuration.get[Int]("timeout-dialog.timeout")
   val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
 
   val cacheTtl: Long = configuration.get[Int]("mongodb.timeToLiveInSeconds")
+
+  val canonicalList: String = configuration.get[String]("location.canonical.list")
+
   lazy val dstNewRegistrationFrontendEnableFlag: Boolean =
     configuration.getOptional[Boolean]("features.dstNewRegistrationFrontendEnable").getOrElse(false)
 
