@@ -18,37 +18,50 @@ package controllers
 
 import base.SpecBase
 import forms.InternationalContactAddressFormProvider
-import models.{NormalMode, InternationalContactAddress, UserAnswers}
+import models.{Country, InternationalContactAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.InternationalContactAddressPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 import views.html.InternationalContactAddressView
 
 import scala.concurrent.Future
 
 class InternationalContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new InternationalContactAddressFormProvider()
-  val form = formProvider()
+  private val country: Country = Country("Andorra", "AD", "country")
+  private val locations: Seq[Country] = Seq(country)
+  private val formProvider = new InternationalContactAddressFormProvider()
+  private val form: Form[InternationalContactAddress] = formProvider(locations)
 
-  lazy val internationalContactAddressRoute = routes.InternationalContactAddressController.onPageLoad(NormalMode).url
+  private val selectOptions: Seq[SelectItem] = Seq(SelectItem(Some(""), ""),
+    SelectItem(value = Some("AL"), text = "Albania"),
+    SelectItem(value = Some("DZ"), text = "Algeria"),
+    SelectItem(value = Some("AD"), text = "Andorra", selected = true))
 
-  val userAnswers = UserAnswers(
+
+  lazy val internationalContactAddressRoute: String = routes.InternationalContactAddressController.onPageLoad(NormalMode).url
+
+  val userAnswers: UserAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
       InternationalContactAddressPage.toString -> Json.obj(
         "line1" -> "value 1",
-        "line2" -> "value 2"
+        "line2" -> "value 2",
+        "line3" -> "value 3",
+        "line4" -> "value 4",
+        "country" -> Json.toJson(country)
       )
     )
   )
@@ -67,7 +80,7 @@ class InternationalContactAddressControllerSpec extends SpecBase with MockitoSug
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, selectOptions, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -83,7 +96,10 @@ class InternationalContactAddressControllerSpec extends SpecBase with MockitoSug
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(InternationalContactAddress("value 1", "value 2")), NormalMode)(request, messages(application)).toString
+
+        contentAsString(result) mustEqual
+          view(form.fill(InternationalContactAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
+            selectOptions, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -104,7 +120,8 @@ class InternationalContactAddressControllerSpec extends SpecBase with MockitoSug
       running(application) {
         val request =
           FakeRequest(POST, internationalContactAddressRoute)
-            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
+            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "AD"))
+
 
         val result = route(application, request).value
 
@@ -129,7 +146,7 @@ class InternationalContactAddressControllerSpec extends SpecBase with MockitoSug
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, selectOptions, NormalMode)(request, messages(application)).toString
       }
     }
 

@@ -18,10 +18,12 @@ package controllers
 
 import controllers.actions._
 import forms.InternationalContactAddressFormProvider
+
 import javax.inject.Inject
-import models.Mode
+import models.{InternationalContactAddress, Location, Mode}
 import navigation.Navigator
 import pages.InternationalContactAddressPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -37,12 +39,13 @@ class InternationalContactAddressController @Inject()(
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
+                                      location: Location,
                                       formProvider: InternationalContactAddressFormProvider,
                                       val controllerComponents: MessagesControllerComponents,
                                       view: InternationalContactAddressView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[InternationalContactAddress] = formProvider(location.countryListWithoutGB)
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -52,7 +55,7 @@ class InternationalContactAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      Ok(view(preparedForm, location.countrySelectList(form.data, location.countryListWithoutGB),  mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -60,7 +63,7 @@ class InternationalContactAddressController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+          Future.successful(BadRequest(view(formWithErrors,location.countrySelectList(form.data, location.countryListWithoutGB), mode))),
 
         value =>
           for {

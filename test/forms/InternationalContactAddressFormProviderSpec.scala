@@ -17,23 +17,35 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import models.Country
 import play.api.data.FormError
+import wolfendale.scalacheck.regexp.RegexpGen
 
 class InternationalContactAddressFormProviderSpec extends StringFieldBehaviours {
-
-  val form = new InternationalContactAddressFormProvider()()
+  val locations: Seq[Country] = Seq(Country("Andorra", "AD", "country"))
+  val form = new InternationalContactAddressFormProvider()(locations)
+  val addressLineRegex = """^[A-Za-z0-9 \-,.&']*$"""
+  val validData = """^[A-Za-z0-9-,.&']{1, 35}*$"""
 
   ".line1" - {
 
     val fieldName = "line1"
     val requiredKey = "internationalContactAddress.error.line1.required"
     val lengthKey = "internationalContactAddress.error.line1.length"
-    val maxLength = 100
+    val invalidKey = "internationalContactAddress.error.line1.invalid"
+    val maxLength = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      RegexpGen.from(validData)
+    )
+
+    behave like fieldWithInValidData(
+      form,
+      fieldName,
+      RegexpGen.from(s"[!£^*()]"),
+      invalidDataError = FormError(fieldName, invalidKey, Seq(addressLineRegex))
     )
 
     behave like fieldWithMaxLength(
@@ -48,19 +60,21 @@ class InternationalContactAddressFormProviderSpec extends StringFieldBehaviours 
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+
   }
 
   ".line2" - {
 
     val fieldName = "line2"
-    val requiredKey = "internationalContactAddress.error.line2.required"
     val lengthKey = "internationalContactAddress.error.line2.length"
-    val maxLength = 100
+    val invalidKey = "internationalContactAddress.error.line2.invalid"
+    val maxLength = 35
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      RegexpGen.from(validData)
     )
 
     behave like fieldWithMaxLength(
@@ -70,10 +84,86 @@ class InternationalContactAddressFormProviderSpec extends StringFieldBehaviours 
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
+    behave like fieldWithInValidData(
+      form,
+      fieldName,
+      RegexpGen.from(s"[!£^*()]"),
+      invalidDataError = FormError(fieldName, invalidKey, Seq(addressLineRegex))
+    )
+  }
+
+  ".line3" - {
+
+    val fieldName = "line3"
+    val lengthKey = "internationalContactAddress.error.line3.length"
+    val invalidKey = "internationalContactAddress.error.line3.invalid"
+    val maxLength = 35
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      RegexpGen.from(validData)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like fieldWithInValidData(
+      form,
+      fieldName,
+      RegexpGen.from(s"[!£^*()]"),
+      invalidDataError = FormError(fieldName, invalidKey, Seq(addressLineRegex))
+    )
+  }
+
+  ".line4" - {
+
+    val fieldName = "line4"
+    val lengthKey = "internationalContactAddress.error.line4.length"
+    val invalidKey = "internationalContactAddress.error.line4.invalid"
+    val maxLength = 35
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      RegexpGen.from(validData)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like fieldWithInValidData(
+      form,
+      fieldName,
+      RegexpGen.from(s"[!£^*()]"),
+      invalidDataError = FormError(fieldName, invalidKey, Seq(addressLineRegex))
+    )
+  }
+
+  ".country" - {
+
+    val fieldName = "country"
+    val requiredKey = "internationalContactAddress.error.countryCode.required"
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      "AD"
+    )
+
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
   }
 }
