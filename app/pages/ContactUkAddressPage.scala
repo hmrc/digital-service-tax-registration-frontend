@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import forms.mappings.Constraints
 import models.ContactUkAddress
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
-import wolfendale.scalacheck.regexp.RegexpGen
+import play.api.libs.json.JsPath
 
-trait ModelGenerators {
+case object ContactUkAddressPage extends QuestionPage[ContactUkAddress] {
 
-  implicit lazy val arbitraryContactUkAddress: Arbitrary[ContactUkAddress] =
-    Arbitrary {
-      for {
-        buildingOrStreet <- arbitrary[String]
-        postcode <- arbitrary[String]
-      } yield ContactUkAddress(buildingOrStreet, None, None, None, postcode)
-    }
-  val genPostcode = RegexpGen.from(Constraints.postcodeRegex.regex)
-  val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "contactUkAddress"
 }
