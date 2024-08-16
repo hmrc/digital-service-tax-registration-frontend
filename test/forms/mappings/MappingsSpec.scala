@@ -96,12 +96,12 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
 
     "must not bind an invalid string" in {
       val result = testForm.bind(Map("value" -> "12345"))
-      result.errors must contain(FormError("value", "error.invalid"))
+      result.errors must contain(FormError("value", "error.invalid", Seq(regex)))
     }
 
     "must not bind an string that exceeds max length" in {
       val result = testForm.bind(Map("value" -> "foobarfoobar"))
-      result.errors must contain(FormError("value", "error.length"))
+      result.errors must contain(FormError("value", "error.length", Seq(maxSize)))
     }
 
     "must bind an empty string" in {
