@@ -22,6 +22,8 @@ import org.scalatest.matchers.must.Matchers
 import play.api.data.{Form, FormError}
 import models.Enumerable
 
+import scala.collection.immutable
+
 object MappingsSpec {
 
   sealed trait Foo
@@ -79,6 +81,58 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       result.apply("value").value.value mustEqual "foobar"
     }
   }
+
+  "optionalText" - {
+    val regex = """^[a-z]*$"""
+    val maxSize = 6
+
+    val testForm: Form[Option[String]] =
+      Form(
+        "value" -> optionalText(regex = regex, size = maxSize)
+      )
+
+    "must bind a valid string" in {
+      val result = testForm.bind(Map("value" -> "foobar"))
+      result.get mustBe Some("foobar")
+    }
+
+    "must not bind an invalid string" in {
+      val result = testForm.bind(Map("value" -> "12345"))
+      result.errors must contain(FormError("value", "error.invalid"))
+    }
+
+    "must not bind an string that exceeds max length" in {
+      val result = testForm.bind(Map("value" -> "foobarfoobar"))
+      result.errors must contain(FormError("value", "error.length"))
+    }
+
+    "must bind an empty string" in {
+      val result = testForm.bind(Map("value" -> ""))
+      result.errors mustBe List()
+    }
+
+    "must bind a string of whitespace only" in {
+      val result = testForm.bind(Map("value" -> " \t"))
+      result.errors mustBe List()
+    }
+
+    "must bind an empty map" in {
+      val result = testForm.bind(Map.empty[String, String])
+      result.errors mustBe List()
+    }
+
+    "must return a custom error message" in {
+      val form = Form("value" -> text("custom.error"))
+      val result = form.bind(Map("value" -> ""))
+      result.errors must contain(FormError("value", "custom.error"))
+    }
+
+    "must unbind a valid value" in {
+      val result = testForm.fill(Some("foobar"))
+      result.apply("value").value.value mustEqual "foobar"
+    }
+  }
+
 
   "boolean" - {
 

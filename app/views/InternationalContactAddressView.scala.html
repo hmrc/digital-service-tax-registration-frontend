@@ -68,7 +68,6 @@
             .withWidth(TwoThirds)
         )
 
-
         @govukInput(
             InputViewModel(
                 field = form("line4"),
@@ -85,12 +84,7 @@
                 items = countries
             ).withCssClass("govuk-!-width-full")
             .withAttribute("autocomplete" -> "country-name")
-            .asAccessibleAutocomplete(Some(
-            AccessibleAutocomplete(
-            defaultValue = Some(""),
-            showAllValues = true,
-            autoSelect = true)
-            ))
+            .asAccessibleAutocomplete()
         )
 
         @govukButton(

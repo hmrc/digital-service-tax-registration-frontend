@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.mappings.{Mappings, StopOnFirstFail}
+import forms.mappings.Mappings
 import models.{Country, InternationalContactAddress}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -31,20 +31,15 @@ class InternationalContactAddressFormProvider @Inject() extends Mappings {
   def apply(countryList: Seq[Country]): Form[InternationalContactAddress] = Form(
     mapping(
       "line1" -> text("internationalContactAddress.error.line1.required")
-        .verifying(
-          StopOnFirstFail[String](
-            regexp(regex, "internationalContactAddress.error.line1.invalid"),
-            maxLength(maxLength, "internationalContactAddress.error.line1.length")
-          )),
-      "line2" -> optional(text("internationalContactAddress.error.line2.required")
-        .verifying(regexp(regex, "internationalContactAddress.error.line2.invalid"))
-        .verifying(maxLength(maxLength, "internationalContactAddress.error.line2.length"))),
-      "line3" -> optional(text("internationalContactAddress.error.line3.required")
-        .verifying(regexp(regex, "internationalContactAddress.error.line3.invalid"))
-        .verifying(maxLength(maxLength, "internationalContactAddress.error.line3.length"))),
-      "line4" -> optional(text("internationalContactAddress.error.line4.required")
-        .verifying(regexp(regex, "internationalContactAddress.error.line4.invalid"))
-        .verifying(maxLength(maxLength, "internationalContactAddress.error.line4.length"))),
+        .verifying(regexp(regex, "internationalContactAddress.error.line1.invalid"),
+          maxLength(maxLength, "internationalContactAddress.error.line1.length")
+        ),
+      "line2" -> optionalText("internationalContactAddress.error.line2.invalid",
+        "internationalContactAddress.error.line2.length", regex, maxLength),
+      "line3" -> optionalText("internationalContactAddress.error.line3.invalid",
+        "internationalContactAddress.error.line3.length", regex, maxLength),
+      "line4" -> optionalText("internationalContactAddress.error.line4.invalid",
+        "internationalContactAddress.error.line4.length", regex, maxLength),
       "country" -> text("internationalContactAddress.error.countryCode.required")
         .verifying("internationalContactAddress.error.country.required", value => countryList.exists(_.code == value))
         .transform[Country](value => countryList.find(_.code == value).get, _.code)
