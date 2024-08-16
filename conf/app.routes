@@ -66,3 +66,8 @@ GET        /contact-uk-address                         controllers.ContactUkAddr
 POST       /contact-uk-address                         controllers.ContactUkAddressController.onSubmit(mode: Mode = NormalMode)
 GET        /change-contact-uk-address                  controllers.ContactUkAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-contact-uk-address                  controllers.ContactUkAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET        /check-if-group                                 controllers.CheckIfGroupController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-if-group                                 controllers.CheckIfGroupController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-if-group                            controllers.CheckIfGroupController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-if-group                            controllers.CheckIfGroupController.onSubmit(mode: Mode = CheckMode)
