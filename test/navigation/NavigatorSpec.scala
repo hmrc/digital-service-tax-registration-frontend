@@ -161,6 +161,10 @@ class NavigatorSpec extends SpecBase {
       }
 
       "must go from a CompanyContactAddressPage to a TODO-company-contact-address page" in pending
+
+      "must go from CheckIfGroupPage to a TODO ultimate-parent-company-name page" in pending
+
+      "must go from CheckIfGroupPage to a TODO contact-details page" in pending
     }
 
     "in Check mode" - {
