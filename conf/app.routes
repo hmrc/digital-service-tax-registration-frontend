@@ -80,3 +80,7 @@ POST       /check-if-group                                 controllers.CheckIfGr
 GET        /edit/check-if-group                            controllers.CheckIfGroupController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/check-if-group                            controllers.CheckIfGroupController.onSubmit(mode: Mode = CheckMode)
 
+GET        /contact-international-address                  controllers.InternationalContactAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /contact-international-address                  controllers.InternationalContactAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/contact-international-address             controllers.InternationalContactAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/contact-international-address             controllers.InternationalContactAddressController.onSubmit(mode: Mode = CheckMode)

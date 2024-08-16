@@ -30,6 +30,7 @@ error.summary.title = There is a problem
 checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
 service.caption = Check if you must register
+contact.persons.details.caption = Contact person’s details
 label.thisSection = This section is:
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
@@ -187,4 +188,27 @@ checkIfGroup.hint = <p>Two or more companies can register as a single taxable pe
         <li>are under common control, such as one or more company being a subsidiary of a parent company</li>\
     </ul>\
     <a target=_blank class="govuk-link" href="{0}">Find out more about how to register a group of companies for VAT from gov.uk (opens in a new window or tab)</a>
+
+
+
+internationalContactAddress.title = What is your contact address?
+internationalContactAddress.heading = What is your contact address?
+internationalContactAddress.caption=Contact person’s details
+internationalContactAddress.line1 = Address line 1
+internationalContactAddress.line2 = Address line 2 (optional)
+internationalContactAddress.line3 = Address line 3 (optional)
+internationalContactAddress.line4 = Address line 4 (optional)
+internationalContactAddress.countryCode=Country
+internationalContactAddress.checkYourAnswersLabel = InternationalContactAddress
+internationalContactAddress.error.line1.required = Enter Address Line 1
+internationalContactAddress.error.countryCode.required =  Select a country
+internationalContactAddress.error.line1.length = Address Line 1 must be 35 characters or fewer
+internationalContactAddress.error.line2.length = Address Line 2 must be 35 characters or fewer
+internationalContactAddress.error.line3.length = Address Line 3 must be 35 characters or fewer
+internationalContactAddress.error.line4.length = Address Line 4 must be 35 characters or fewer
+internationalContactAddress.error.line1.invalid=Address Line 1 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+internationalContactAddress.error.line2.invalid=Address Line 2 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+internationalContactAddress.error.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+internationalContactAddress.error.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+
 
