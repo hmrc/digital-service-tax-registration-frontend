@@ -24,7 +24,7 @@ class CheckIfGroupFormProviderSpec extends BooleanFieldBehaviours {
   val requiredKey = "checkIfGroup.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new UkRevenuesFormProvider()()
+  val form = new CheckIfGroupFormProvider()()
 
   ".value" - {
 

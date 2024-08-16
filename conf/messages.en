@@ -159,9 +159,9 @@ checkIfGroup.heading = Is the company you want to register part of a VAT group?
 checkIfGroup.heading.hint = Your company details
 checkIfGroup.error.required = Select yes if the company you want to register is part of a group
 checkIfGroup.hint = <p>Two or more companies can register as a single taxable person or VAT group if they:</p>\
-    <ul>
-        <li>have their main or registered offices in the UK</li>
-        <li>are under common control, such as one or more company being a subsidiary of a parent company</li>
-    </ul>
+    <ul>\
+        <li>have their main or registered offices in the UK</li>\
+        <li>are under common control, such as one or more company being a subsidiary of a parent company</li>\
+    </ul>\
     <a target=_blank class="govuk-link" href="{0}">Find out more about how to register a group of companies for VAT from gov.uk (opens in a new window or tab)</a>
 
