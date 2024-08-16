@@ -41,6 +41,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration,servicesConfig: 
   val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   val signOutUrl: String       = configuration.get[String]("urls.signOut")
   val findLostUtr: String       = configuration.get[String]("urls.findLostUtr")
+  val vatRegisteringGroups: String = configuration.get[String]("urls.vatRegisteringGroups")
 
   private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
   val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/digital-service-tax-registration-frontend"
