@@ -135,6 +135,23 @@ checkContactAddress.checkYourAnswersLabel = checkContactAddress
 checkContactAddress.change.hidden = CheckContactAddress
 checkContactAddress.heading.hint = Your company details
 
+contactUkAddress.title = What is your contact address
+contactUkAddress.heading = What is your contact address?
+contactUkAddress.buildingOrStreet = Building or street
+contactUkAddress.buildingOrStreetLine2 = Building or street line 2 (optional)
+contactUkAddress.townOrCity = Town or city (optional)
+contactUkAddress.county = County (optional)
+contactUkAddress.postcode = Postcode
+contactUkAddress.checkYourAnswersLabel = ContactUkAddress
+contactUkAddress.error.buildingOrStreet.required = Enter a building or street
+contactUkAddress.error.postcode.required = Enter the postcode
+contactUkAddress.error.buildingOrStreet.length = Building or street must be 35 characters or fewer
+contactUkAddress.error.buildingOrStreetLine2.length = Building or street line 2 must be 35 characters or fewer
+contactUkAddress.error.townOrCity.length = Town or city must be 35 characters or fewer
+contactUkAddress.error.county.length = County must be 35 characters or fewer
+contactUkAddress.buildingOrStreet.change.hidden = Building or street
+contactUkAddress.postcode.change.hidden = Postcode
+
 checkIfGroup.checkYourAnswersLabel = checkIfGroup
 checkIfGroup.change.hidden = CheckIfGroup
 checkIfGroup.title = Is the company you want to register part of a VAT group?
