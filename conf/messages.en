@@ -97,6 +97,16 @@ companyRegisteredOfficePostcode.checkYourAnswersLabel = checkCompanyRegisteredOf
 companyRegisteredOfficePostcode.change.hidden = CheckCompanyRegisteredOfficePostcode
 error.invalid.postcode = Enter a real postcode
 
+companyName.title = What is the name of the company you want to register?
+companyName.heading = What is the name of the company you want to register?
+companyName.hint = This is the name registered with an official company register, such as Companies House
+companyName.caption = Your company details
+companyName.checkYourAnswersLabel = companyName
+companyName.error.required = Enter the name of the company you want to register
+companyName.error.length = The name of the company must be 105 characters or fewer
+companyName.error.invalid = The name of the company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
+companyName.change.hidden = CompanyName
+
 checkUtr.title = Your company details
 checkUtr.heading = Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
 checkUtr.checkYourAnswersLabel = checkUtr
@@ -125,6 +135,24 @@ checkContactAddress.heading = Is your contact address in the UK?
 checkContactAddress.checkYourAnswersLabel = checkContactAddress
 checkContactAddress.change.hidden = CheckContactAddress
 checkContactAddress.heading.hint = Your company details
+
+contactUkAddress.title = What is your contact address
+contactUkAddress.heading = What is your contact address?
+contactUkAddress.buildingOrStreet = Building or street
+contactUkAddress.buildingOrStreetLine2 = Building or street line 2 (optional)
+contactUkAddress.townOrCity = Town or city (optional)
+contactUkAddress.county = County (optional)
+contactUkAddress.postcode = Postcode
+contactUkAddress.checkYourAnswersLabel = ContactUkAddress
+contactUkAddress.error.buildingOrStreet.required = Enter a building or street
+contactUkAddress.error.postcode.required = Enter the postcode
+contactUkAddress.error.buildingOrStreet.length = Building or street must be 35 characters or fewer
+contactUkAddress.error.buildingOrStreetLine2.length = Building or street line 2 must be 35 characters or fewer
+contactUkAddress.error.townOrCity.length = Town or city must be 35 characters or fewer
+contactUkAddress.error.county.length = County must be 35 characters or fewer
+contactUkAddress.buildingOrStreet.change.hidden = Building or street
+contactUkAddress.postcode.change.hidden = Postcode
+
 
 internationalContactAddress.title = What is your contact address?
 internationalContactAddress.heading = What is your contact address?

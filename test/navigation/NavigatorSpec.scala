@@ -90,10 +90,16 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)
       }
 
-      /**
-       * TODO the /company-name page needs to be done
-        */
-      "must go from a CheckCompanyRegisteredOfficeAddressPage with option `false` to TODO page" in pending
+      "must go from a CheckCompanyRegisteredOfficeAddressPage with option `false` to CompanyNamePage" in {
+        navigator.nextPage(
+          CheckCompanyRegisteredOfficeAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckCompanyRegisteredOfficeAddressPage, false)
+            .success
+            .value
+        ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
+      }
 
       "must go from a CheckCompanyRegisteredOfficePostcodePage with valid postcode to CheckUtr page" in {
         navigator.nextPage(
@@ -116,14 +122,36 @@ class NavigatorSpec extends SpecBase {
             .value
         ) mustBe routes.CorporationTaxEnterUtrController.onPageLoad(NormalMode)
       }
-      
-      "must go from a checkUTR with option `false` to TODO page" in pending
+
+      "must go from a checkUTR with option 'false' to CompanyNamePage" in {
+        navigator.nextPage(
+          CheckUtrPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckUtrPage, false)
+            .success
+            .value
+        ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
+      }
 
       "must go from a CorporationTaxEnterUtrPage to TODO page" in pending
 
-      "must go from a CheckContactAddressPage to a TODO-contact-uk-address page" in pending
+      "must go from a CompanyNamePage with valid Company Name to TODO page" in pending
+
+      "must go from a CheckContactAddressPage to contact-uk-address page" in {
+        navigator.nextPage(
+          CheckContactAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckContactAddressPage, true)
+            .success
+            .value
+        ) mustBe routes.ContactUkAddressController.onPageLoad(NormalMode)
+      }
 
       "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
+
+      "must go from a CompanyContactAddressPage to a TODO-company-contact-address page" in pending
     }
 
     "in Check mode" - {
