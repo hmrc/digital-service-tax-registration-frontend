@@ -149,7 +149,16 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.ContactUkAddressController.onPageLoad(NormalMode)
       }
 
-      "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
+      "must go from a CheckContactAddressPage to a contact-international-address page" in {
+        navigator.nextPage(
+          CheckContactAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckContactAddressPage, false)
+            .success
+            .value
+        ) mustBe routes.InternationalContactAddressController.onPageLoad(NormalMode)
+      }
 
       "must go from a CompanyContactAddressPage to a TODO-company-contact-address page" in pending
     }

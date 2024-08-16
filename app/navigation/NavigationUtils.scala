@@ -69,7 +69,7 @@ trait NavigationUtils {
   def checkContactAddress(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CheckContactAddressPage).map {
       case true => routes.ContactUkAddressController.onPageLoad(NormalMode)
-      case false => ??? // TODO page needs to be implemented contact-international-address
+      case false => routes.InternationalContactAddressController.onPageLoad(NormalMode)
     }
   }
 
