@@ -22,11 +22,16 @@ import play.api.data.Forms.of
 import play.api.i18n.Messages
 
 import java.time.LocalDate
+import scala.util.matching.Regex
 
 trait Mappings extends Formatters with Constraints {
 
   protected def text(errorKey: String = "error.required", args: Seq[String] = Seq.empty): FieldMapping[String] =
     of(stringFormatter(errorKey, args))
+
+  protected def optionalText(invalidKey: String = "error.invalid", lengthKey: String = "error.length",
+                             regex: String, size: Int, args: Seq[String] = Seq.empty): FieldMapping[Option[String]] =
+    of(optionalStringFormatter(invalidKey, lengthKey, regex, size, args))
 
   protected def int(requiredKey: String = "error.required",
                     wholeNumberKey: String = "error.wholeNumber",

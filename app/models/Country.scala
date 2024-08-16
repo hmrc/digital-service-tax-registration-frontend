@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package viewmodels
+package models
 
-package object govuk {
+import play.api.libs.json.{Json, OFormat}
 
-  object all
-    extends ImplicitConversions
-      with BackLinkFluency
-      with ButtonFluency
-      with CheckboxFluency
-      with DateFluency
-      with ErrorSummaryFluency
-      with FieldsetFluency
-      with HintFluency
-      with InputFluency
-      with LabelFluency
-      with SelectFluency
-      with RadiosFluency
-      with SummaryListFluency
-      with TagFluency
+case class Country(name: String, code: String, `type`: String)
+
+object Country {
+
+  implicit val LocationFormat: OFormat[Country] = Json.format[Country]
 }
+
