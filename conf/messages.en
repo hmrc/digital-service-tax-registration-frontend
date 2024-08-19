@@ -31,6 +31,9 @@ checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
 service.caption = Check if you must register
 contact.persons.details.caption = Contact person’s details
+ultimate.parent.company.details.caption=Ultimate parent company details
+
+
 label.thisSection = This section is:
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
@@ -199,14 +202,6 @@ ultimateParentCompanyName.error.length = Name of group’s ultimate global paren
 ultimateParentCompanyName.error.invalid=Name of group’s ultimate global parent company must only include letters a to z, numbers,hyphens, apostrophes, ampersands (&), and spaces
 ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
 
-ultimateParentCompanyInternationalAddress.title = ultimateParentCompanyInternationalAddress
-ultimateParentCompanyInternationalAddress.heading = ultimateParentCompanyInternationalAddress
-ultimateParentCompanyInternationalAddress.line1 = line1
-ultimateParentCompanyInternationalAddress.line2 = line2
+ultimateParentCompanyInternationalAddress.title = What is the registered office address of {0}?
+ultimateParentCompanyInternationalAddress.heading = What is the registered office address of {0}?
 ultimateParentCompanyInternationalAddress.checkYourAnswersLabel = UltimateParentCompanyInternationalAddress
-ultimateParentCompanyInternationalAddress.error.line1.required = Enter line1
-ultimateParentCompanyInternationalAddress.error.line2.required = Enter line2
-ultimateParentCompanyInternationalAddress.error.line1.length = line1 must be 35 characters or less
-ultimateParentCompanyInternationalAddress.error.line2.length = line2 must be 5 characters or less
-ultimateParentCompanyInternationalAddress.line1.change.hidden = line1
-ultimateParentCompanyInternationalAddress.line2.change.hidden = line2

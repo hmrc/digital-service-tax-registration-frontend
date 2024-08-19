@@ -17,17 +17,18 @@
 package controllers
 
 import controllers.actions._
-import forms.UltimateParentCompanyInternationalAddressFormProvider
-import javax.inject.Inject
-import models.Mode
+import forms.InternationalAddressFormProvider
+import models.{InternationalAddress, Location, Mode}
 import navigation.Navigator
 import pages.UltimateParentCompanyInternationalAddressPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.UltimateParentCompanyInternationalAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UltimateParentCompanyInternationalAddressController @Inject()(
@@ -37,12 +38,13 @@ class UltimateParentCompanyInternationalAddressController @Inject()(
                                       identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
-                                      formProvider: UltimateParentCompanyInternationalAddressFormProvider,
+                                      location: Location,
+                                      formProvider: InternationalAddressFormProvider,
                                       val controllerComponents: MessagesControllerComponents,
                                       view: UltimateParentCompanyInternationalAddressView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[InternationalAddress] = formProvider(location.countryListWithoutGB)
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
@@ -52,7 +54,7 @@ class UltimateParentCompanyInternationalAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      Ok(view(preparedForm,  location.countrySelectList(form.data, location.countryListWithoutGB), mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -60,7 +62,7 @@ class UltimateParentCompanyInternationalAddressController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+          Future.successful(BadRequest(view(formWithErrors, location.countrySelectList(form.data, location.countryListWithoutGB), mode))),
 
         value =>
           for {

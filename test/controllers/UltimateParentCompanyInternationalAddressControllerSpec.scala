@@ -1,38 +1,66 @@
+/*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers
 
 import base.SpecBase
-import forms.UltimateParentCompanyInternationalAddressFormProvider
-import models.{NormalMode, UltimateParentCompanyInternationalAddress, UserAnswers}
+import forms.InternationalAddressFormProvider
+import models.{Country, InternationalAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.UltimateParentCompanyInternationalAddressPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 import views.html.UltimateParentCompanyInternationalAddressView
 
 import scala.concurrent.Future
 
 class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new UltimateParentCompanyInternationalAddressFormProvider()
-  val form = formProvider()
+  private val country: Country = Country("Andorra", "AD", "country")
+  private val locations: Seq[Country] = Seq(country)
+  val formProvider = new InternationalAddressFormProvider()
+  val form: Form[InternationalAddress] = formProvider(locations)
 
-  lazy val ultimateParentCompanyInternationalAddressRoute = routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode).url
+  private val selectOptions: Seq[SelectItem] = Seq(SelectItem(Some(""), ""),
+    SelectItem(value = Some("AL"), text = "Albania"),
+    SelectItem(value = Some("DZ"), text = "Algeria"),
+    SelectItem(value = Some("AD"), text = "Andorra", selected = true))
 
-  val userAnswers = UserAnswers(
+  lazy val ultimateParentCompanyInternationalAddressRoute: String = routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode).url
+
+  val userAnswers: UserAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
       UltimateParentCompanyInternationalAddressPage.toString -> Json.obj(
         "line1" -> "value 1",
-        "line2" -> "value 2"
+        "line2" -> "value 2",
+        "line3" -> "value 3",
+        "line4" -> "value 4",
+        "country" -> Json.toJson(country)
       )
     )
   )
@@ -51,7 +79,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, selectOptions, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -67,7 +95,9 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(UltimateParentCompanyInternationalAddress("value 1", "value 2")), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
+            selectOptions, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -88,7 +118,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
       running(application) {
         val request =
           FakeRequest(POST, ultimateParentCompanyInternationalAddressRoute)
-            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
+            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "AD"))
 
         val result = route(application, request).value
 
@@ -113,7 +143,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, selectOptions, NormalMode)(request, messages(application)).toString
       }
     }
 

@@ -36,7 +36,7 @@ object InternationalContactAddressSummary  {
         answer.line2.map(x => "<br/>" + HtmlFormat.escape(x)) +
         answer.line3.map(x => "<br/>" + HtmlFormat.escape(x)) +
         answer.line4.map(x => "<br/>" + HtmlFormat.escape(x)) +
-        answer.country
+        answer.country.name
 
         SummaryListRowViewModel(
           key     = "internationalContactAddress.checkYourAnswersLabel",
