@@ -198,3 +198,15 @@ ultimateParentCompanyName.error.required = Enter the name of the group’s ultim
 ultimateParentCompanyName.error.length = Name of group’s ultimate global parent company must be 105 characters or fewer
 ultimateParentCompanyName.error.invalid=Name of group’s ultimate global parent company must only include letters a to z, numbers,hyphens, apostrophes, ampersands (&), and spaces
 ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
+
+ultimateParentCompanyInternationalAddress.title = ultimateParentCompanyInternationalAddress
+ultimateParentCompanyInternationalAddress.heading = ultimateParentCompanyInternationalAddress
+ultimateParentCompanyInternationalAddress.line1 = line1
+ultimateParentCompanyInternationalAddress.line2 = line2
+ultimateParentCompanyInternationalAddress.checkYourAnswersLabel = UltimateParentCompanyInternationalAddress
+ultimateParentCompanyInternationalAddress.error.line1.required = Enter line1
+ultimateParentCompanyInternationalAddress.error.line2.required = Enter line2
+ultimateParentCompanyInternationalAddress.error.line1.length = line1 must be 35 characters or less
+ultimateParentCompanyInternationalAddress.error.line2.length = line2 must be 5 characters or less
+ultimateParentCompanyInternationalAddress.line1.change.hidden = line1
+ultimateParentCompanyInternationalAddress.line2.change.hidden = line2
