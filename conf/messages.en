@@ -188,4 +188,12 @@ internationalContactAddress.error.line2.invalid=Address Line 2 must only include
 internationalContactAddress.error.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 internationalContactAddress.error.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 
-
+ultimateParentCompanyName.title = What is the name of the group’s ultimate global parent company?
+ultimateParentCompanyName.heading = What is the name of the group’s ultimate global parent company?
+ultimateParentCompanyName.heading.hint = Ultimate parent company details
+ultimateParentCompanyName.hint = This is the name registered with an official company register, such as Companies House
+ultimateParentCompanyName.checkYourAnswersLabel = ultimateParentCompanyName
+ultimateParentCompanyName.error.required = Enter the name of the group’s ultimate parent company
+ultimateParentCompanyName.error.length = Name of group’s ultimate global parent company must be 105 characters or fewer
+ultimateParentCompanyName.error.invalid=Name of group’s ultimate global parent company must only include letters a to z, numbers,hyphens, apostrophes, ampersands (&), and spaces
+ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
