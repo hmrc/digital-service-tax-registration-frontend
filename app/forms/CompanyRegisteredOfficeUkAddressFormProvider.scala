@@ -16,6 +16,8 @@
 
 package forms
 
+import forms.mappings.Constraints.Address
+
 import javax.inject.Inject
 import forms.mappings.{Constraints, Mappings}
 import play.api.data.Form
@@ -28,27 +30,27 @@ class CompanyRegisteredOfficeUkAddressFormProvider @Inject() extends Mappings {
   private val postcodeRequired = "postcode.error.postcode.required"
 
   def apply(): Form[CompanyRegisteredOfficeUkAddress] = Form(
-  mapping(
-    "buildingorstreet" -> text(buildingOrStreetRequired)
-      .verifying(
-        firstError(
-          isNotEmpty("buildingorstreet", buildingOrStreetRequired),
-          maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.buildingorstreet.length"))),
-    "buildingorstreet2" -> optional(
-      text()
-        .verifying(maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.buildingorstreet2.length"))),
-    "town" -> optional(
-      text()
-        .verifying(maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.town.length"))),
-    "county" -> optional(
-      text()
-        .verifying(maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.county.length"))),
-    "postcode" -> text(postcodeRequired)
-      .verifying(
-        firstError(
-          isNotEmpty("postcode", postcodeRequired),
-          regexp(Constraints.postcodeRegex.toString(), "error.invalid.postcode")))
-  )(CompanyRegisteredOfficeUkAddress.apply)(x => Some((x.buildingorstreet, x.buildingorstreet2, x.town, x.county, x.postcode)))
+    mapping(
+      "buildingorstreet" -> text(buildingOrStreetRequired)
+        .verifying(
+          regexp(Address.addressRegex, "companyRegisteredOfficeUkAddress.error.buildingOrStreet.invalidChar"),
+          maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.buildingorstreet.length")),
+      "buildingorstreet2" -> optional(
+        text()
+          .verifying(regexp(Address.addressRegex, "companyRegisteredOfficeUkAddress.error.buildingOrStreet2.invalidChar"),
+            maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.buildingorstreet2.length"))),
+      "town" -> optional(
+        text()
+          .verifying(regexp(Address.addressRegex, "companyRegisteredOfficeUkAddress.error.town.invalidChar"),
+            maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.town.length"))),
+      "county" -> optional(
+        text()
+          .verifying(regexp(Address.addressRegex, "companyRegisteredOfficeUkAddress.error.county.invalidChar"),
+            maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.county.length"))),
+      "postcode" -> text("contactUkAddress.error.postcode.required")
+        .verifying(postcode("company.registeredOffice.postcode.required"))
+    )(CompanyRegisteredOfficeUkAddress.apply)(x => Some((x.buildingorstreet, x.buildingorstreet2, x.town, x.county, x.postcode)))
+
   )
 }
 

@@ -168,7 +168,10 @@ companyRegisteredOfficeUkAddress.error.buildingorstreet2.required = Enter buildi
 town.error.town.required = Enter town
 county.error.county.required = Enter county
 postcode.error.postcode.required = Enter the postcode
-
+companyRegisteredOfficeUkAddress.error.buildingOrStreet.invalidChar = Building and street must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+companyRegisteredOfficeUkAddress.error.buildingOrStreet2.invalidChar = Building or street line 2 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+companyRegisteredOfficeUkAddress.error.town.invalidChar = Town or city must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+companyRegisteredOfficeUkAddress.error.county.invalidChar = County must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces spaces
 companyRegisteredOfficeUkAddress.error.buildingorstreet.length = Building or street must be 35 characters or fewer
 companyRegisteredOfficeUkAddress.error.buildingorstreet2.length = Building or street 2 must be 35 characters or fewer
 companyRegisteredOfficeUkAddress.error.town.length = Town or city must be 35 characters or fewer

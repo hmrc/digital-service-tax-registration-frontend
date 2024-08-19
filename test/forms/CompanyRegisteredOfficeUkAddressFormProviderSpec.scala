@@ -18,13 +18,14 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
+import wolfendale.scalacheck.regexp.RegexpGen
 
 class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehaviours {
+  val genAddress = RegexpGen.from("""^[a-zA-Z0-9'&.-]{1,30}$""".r.regex)
 
   val form = new CompanyRegisteredOfficeUkAddressFormProvider()()
 
   ".buildingorstreet" - {
-
     val fieldName = "buildingorstreet"
     val requiredKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet.required"
     val lengthKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet.length"
@@ -33,7 +34,7 @@ class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehavi
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      genAddress
     )
 
     behave like fieldWithMaxLength(
@@ -60,9 +61,8 @@ class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehavi
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      genAddress
     )
-
     behave like fieldWithMaxLength(
       form,
       fieldName,
@@ -78,16 +78,11 @@ class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehavi
     val lengthKey = "companyRegisteredOfficeUkAddress.error.town.length"
     val maxLength = 35
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
+    behave like fieldWithMaxLengthGeneratingFromRegex(
       form,
       fieldName,
       maxLength = maxLength,
+      """^[a-zA-Z]$""",
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
@@ -102,15 +97,17 @@ class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehavi
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      genAddress
     )
 
-    behave like fieldWithMaxLength(
+    behave like fieldWithMaxLengthGeneratingFromRegex(
       form,
       fieldName,
       maxLength = maxLength,
+      """^[a-zA-Z]$""",
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
+
 
   }
 }
