@@ -14,10 +14,7 @@
  * limitations under the License.
  *@
 
-@import viewmodels.InputWidth._
-@import viewmodels.InputWidth._
-@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+@import views.html.components.NonUkAddress
 
 @this(
     layout: templates.Layout,
@@ -25,7 +22,8 @@
     govukErrorSummary: GovukErrorSummary,
     govukInput: GovukInput,
     govukSelect: GovukSelect,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    nonUKAddress: NonUkAddress
 )
 
 @(form: Form[_], countries: Seq[SelectItem], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -41,51 +39,7 @@
        <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("contact.persons.details.caption")</h2>
        <h1 class="govuk-heading-l">@messages("internationalContactAddress.heading")</h1>
 
-        @govukInput(
-            InputViewModel(
-                field = form("line1"),
-                label = LabelViewModel(messages("internationalContactAddress.line1"))
-            )
-            .withAutocomplete("line1")
-            .withWidth(TwoThirds)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("line2"),
-                label = LabelViewModel(messages("internationalContactAddress.line2"))
-            )
-            .withAutocomplete("line2")
-            .withWidth(TwoThirds)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("line3"),
-                label = LabelViewModel(messages("internationalContactAddress.line3"))
-            )
-            .withAutocomplete("line3")
-            .withWidth(TwoThirds)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("line4"),
-                label = LabelViewModel(messages("internationalContactAddress.line4"))
-            )
-            .withAutocomplete("line4")
-            .withWidth(TwoThirds)
-        )
-
-        @govukSelect(
-            SelectViewModel(
-                field = form("country"),
-                label = LabelViewModel(messages("internationalContactAddress.countryCode")),
-                items = countries
-            ).withCssClass("govuk-!-width-full")
-            .withAttribute("autocomplete" -> "country-name")
-            .asAccessibleAutocomplete()
-        )
+       @nonUKAddress(form, countries)
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))

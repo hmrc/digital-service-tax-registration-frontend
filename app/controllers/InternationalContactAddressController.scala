@@ -17,10 +17,10 @@
 package controllers
 
 import controllers.actions._
-import forms.InternationalContactAddressFormProvider
+import forms.InternationalAddressFormProvider
 
 import javax.inject.Inject
-import models.{InternationalContactAddress, Location, Mode}
+import models.{InternationalAddress, Location, Mode}
 import navigation.Navigator
 import pages.InternationalContactAddressPage
 import play.api.data.Form
@@ -33,19 +33,19 @@ import views.html.InternationalContactAddressView
 import scala.concurrent.{ExecutionContext, Future}
 
 class InternationalContactAddressController @Inject()(
-                                      override val messagesApi: MessagesApi,
-                                      sessionRepository: SessionRepository,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      location: Location,
-                                      formProvider: InternationalContactAddressFormProvider,
-                                      val controllerComponents: MessagesControllerComponents,
-                                      view: InternationalContactAddressView
+                                                       override val messagesApi: MessagesApi,
+                                                       sessionRepository: SessionRepository,
+                                                       navigator: Navigator,
+                                                       identify: IdentifierAction,
+                                                       getData: DataRetrievalAction,
+                                                       requireData: DataRequiredAction,
+                                                       location: Location,
+                                                       formProvider: InternationalAddressFormProvider,
+                                                       val controllerComponents: MessagesControllerComponents,
+                                                       view: InternationalContactAddressView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[InternationalContactAddress] = formProvider(location.countryListWithoutGB)
+  val form: Form[InternationalAddress] = formProvider(location.countryListWithoutGB)
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>

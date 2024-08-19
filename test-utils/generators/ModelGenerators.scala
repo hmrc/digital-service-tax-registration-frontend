@@ -42,7 +42,7 @@ trait ModelGenerators {
       } yield Country(name, code.mkString, type1)
     }
 
-  implicit lazy val arbitraryInternationalContactAddress: Arbitrary[InternationalContactAddress] =
+  implicit lazy val arbitraryInternationalContactAddress: Arbitrary[InternationalAddress] =
     Arbitrary {
       for {
         line1 <- Arbitrary.arbitrary[String]
@@ -50,7 +50,7 @@ trait ModelGenerators {
         line3 <- Arbitrary.arbitrary[Option[String]]
         line4 <- Arbitrary.arbitrary[Option[String]]
         countryCode <- Arbitrary.arbitrary[Country]
-      } yield InternationalContactAddress(line1, line2, line3, line4, countryCode)
+      } yield InternationalAddress(line1, line2, line3, line4, countryCode)
     }
   val genPostcode: Gen[String] = RegexpGen.from(Constraints.postcodeRegex.regex)
 }

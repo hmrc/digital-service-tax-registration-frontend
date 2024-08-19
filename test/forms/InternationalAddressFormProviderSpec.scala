@@ -21,18 +21,18 @@ import models.Country
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
-class InternationalContactAddressFormProviderSpec extends StringFieldBehaviours {
+class InternationalAddressFormProviderSpec extends StringFieldBehaviours {
   val locations: Seq[Country] = Seq(Country("Andorra", "AD", "country"))
-  val form = new InternationalContactAddressFormProvider()(locations)
+  val form = new InternationalAddressFormProvider()(locations)
   val addressLineRegex = """^[A-Za-z0-9 \-,.&']*$"""
   val validData = """^[A-Za-z0-9-,.&']{1, 35}*$"""
 
   ".line1" - {
 
     val fieldName = "line1"
-    val requiredKey = "internationalContactAddress.error.line1.required"
-    val lengthKey = "internationalContactAddress.error.line1.length"
-    val invalidKey = "internationalContactAddress.error.line1.invalid"
+    val requiredKey = "internationalAddress.error.line1.required"
+    val lengthKey = "internationalAddress.error.line1.length"
+    val invalidKey = "internationalAddress.error.line1.invalid"
     val maxLength = 35
 
     behave like fieldThatBindsValidData(
@@ -67,8 +67,8 @@ class InternationalContactAddressFormProviderSpec extends StringFieldBehaviours 
   ".line2" - {
 
     val fieldName = "line2"
-    val lengthKey = "internationalContactAddress.error.line2.length"
-    val invalidKey = "internationalContactAddress.error.line2.invalid"
+    val lengthKey = "internationalAddress.error.line2.length"
+    val invalidKey = "internationalAddress.error.line2.invalid"
     val maxLength = 35
 
     behave like fieldThatBindsValidData(
@@ -95,8 +95,8 @@ class InternationalContactAddressFormProviderSpec extends StringFieldBehaviours 
   ".line3" - {
 
     val fieldName = "line3"
-    val lengthKey = "internationalContactAddress.error.line3.length"
-    val invalidKey = "internationalContactAddress.error.line3.invalid"
+    val lengthKey = "internationalAddress.error.line3.length"
+    val invalidKey = "internationalAddress.error.line3.invalid"
     val maxLength = 35
 
     behave like fieldThatBindsValidData(
@@ -123,8 +123,8 @@ class InternationalContactAddressFormProviderSpec extends StringFieldBehaviours 
   ".line4" - {
 
     val fieldName = "line4"
-    val lengthKey = "internationalContactAddress.error.line4.length"
-    val invalidKey = "internationalContactAddress.error.line4.invalid"
+    val lengthKey = "internationalAddress.error.line4.length"
+    val invalidKey = "internationalAddress.error.line4.invalid"
     val maxLength = 35
 
     behave like fieldThatBindsValidData(
@@ -151,7 +151,7 @@ class InternationalContactAddressFormProviderSpec extends StringFieldBehaviours 
   ".country" - {
 
     val fieldName = "country"
-    val requiredKey = "internationalContactAddress.error.countryCode.required"
+    val requiredKey = "internationalAddress.error.countryCode.required"
 
     behave like fieldThatBindsValidData(
       form,
