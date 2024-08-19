@@ -26,6 +26,14 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryUltimateParentCompanyUkAddress: Arbitrary[UltimateParentCompanyUkAddress] =
+    Arbitrary {
+      for {
+        buildingOrStreet <- arbitrary[String]
+        postcode <- arbitrary[String]
+      } yield UltimateParentCompanyUkAddress(buildingOrStreet, None, None, None, postcode)
+    }
+
   implicit lazy val arbitraryContactUkAddress: Arbitrary[ContactUkAddress] =
     Arbitrary {
       for {
