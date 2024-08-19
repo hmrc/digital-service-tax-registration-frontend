@@ -37,11 +37,21 @@
         <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("companyContactAddress.heading.hint")</h2>
 
         @govukRadios(
-            RadiosViewModel.yesNo(
+            RadiosViewModel.apply(
                 field = form("value"),
+                items = Seq(
+                    RadioItem(
+                        id      = Some("value"),
+                        value   = Some("true"),
+                        content = Text(messages("site.yes"))
+                    ),
+                    RadioItem(
+                        id      = Some("value-no"),
+                        value   = Some("false"),
+                        content = Text(messages("companyContactAddress.site.no"))
+                    )),
                 legend = LegendViewModel(messages("companyContactAddress.heading")).asPageHeading(LegendSize.Large)
             )
-            .withHint(HintViewModel(HtmlContent(messages(""))))
         )
 
         @govukButton(

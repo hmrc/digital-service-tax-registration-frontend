@@ -139,6 +139,7 @@ checkContactAddress.heading.hint = Your company details
 companyContactAddress.title = Can we use this address to contact you about your Digital Services Tax?
 companyContactAddress.heading = Can we use this address to contact you about your Digital Services Tax?
 companyContactAddress.heading.hint = Your company details
+companyContactAddress.site.no = No - I want to enter a different address
 companyContactAddress.checkYourAnswersLabel = companyContactAddress
 companyContactAddress.error.required = Select yes if we can use this address to contact you about your Digital Services Tax
 companyContactAddress.change.hidden = CompanyContactAddress

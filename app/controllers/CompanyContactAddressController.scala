@@ -18,8 +18,9 @@ package controllers
 
 import controllers.actions._
 import forms.CompanyContactAddressFormProvider
+
 import javax.inject.Inject
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.CompanyContactAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -46,7 +47,7 @@ class CompanyContactAddressController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-
+//      request.userAnswers.get(CompanyRegisteredOfficeUKAddress)
       val preparedForm = request.userAnswers.get(CompanyContactAddressPage) match {
         case None => form
         case Some(value) => form.fill(value)
