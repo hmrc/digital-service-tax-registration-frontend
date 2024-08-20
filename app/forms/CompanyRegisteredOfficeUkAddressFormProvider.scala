@@ -19,7 +19,7 @@ package forms
 import forms.mappings.Constraints.Address
 
 import javax.inject.Inject
-import forms.mappings.{Constraints, Mappings}
+import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.Forms._
 import models.CompanyRegisteredOfficeUkAddress
@@ -27,7 +27,6 @@ import models.CompanyRegisteredOfficeUkAddress
 class CompanyRegisteredOfficeUkAddressFormProvider @Inject() extends Mappings {
   private val maximumLength = 35
   private val buildingOrStreetRequired = "companyRegisteredOfficeUkAddress.error.buildingorstreet.required"
-  private val postcodeRequired = "postcode.error.postcode.required"
 
   def apply(): Form[CompanyRegisteredOfficeUkAddress] = Form(
     mapping(
