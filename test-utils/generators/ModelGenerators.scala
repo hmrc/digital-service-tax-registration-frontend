@@ -17,6 +17,8 @@
 package generators
 
 import forms.mappings.Constraints
+
+import models.CompanyRegisteredOfficeUkAddress
 import models.{ContactUkAddress, _}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -33,6 +35,13 @@ trait ModelGenerators {
     }
   val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
 
+  implicit lazy val arbitraryCompanyRegisteredOfficeUkAddress: Arbitrary[CompanyRegisteredOfficeUkAddress] =
+    Arbitrary {
+      for {
+        buildingorstreet <- arbitrary[String]
+        postcode <- arbitrary[String]
+      } yield CompanyRegisteredOfficeUkAddress(buildingorstreet, None, None, None, postcode)
+    }
   implicit lazy val arbitraryLocation: Arbitrary[Country] =
     Arbitrary {
       for {
