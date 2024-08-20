@@ -27,7 +27,7 @@
 
 @(form: Form[_], countries: Seq[SelectItem], parentName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("ultimateParentCompanyInternationalAddress.title"))) {
+@layout(pageTitle = title(form, messages("ultimateParentCompanyInternationalAddress.title", parentName))) {
 
     @formHelper(action = routes.UltimateParentCompanyInternationalAddressController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
