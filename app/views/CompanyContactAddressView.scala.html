@@ -52,6 +52,7 @@
                     )),
                 legend = LegendViewModel(messages("companyContactAddress.heading")).asPageHeading(LegendSize.Large)
             )
+            .withHint(HintViewModel(HtmlContent(messages("<p class='govuk-body'><br>ADDRESS 1<br></p>"))))
         )
 
         @govukButton(

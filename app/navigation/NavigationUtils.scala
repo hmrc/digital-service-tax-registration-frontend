@@ -88,7 +88,7 @@ trait NavigationUtils {
     userAnswers.get(UltimateParentCompanyNamePage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
   }
 
-  def companyContactAddressPage(userAnswers: UserAnswers): Option[Call] = {
+  def companyContactAddress(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CompanyContactAddressPage).map {
       case true => ??? // TODO page needs to  be implemented
       case false => ??? // TODO page needs to  be implemented
