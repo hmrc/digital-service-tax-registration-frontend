@@ -18,12 +18,13 @@ package controllers
 
 import controllers.actions._
 import forms.InternationalAddressFormProvider
+import models.requests.DataRequest
 import models.{InternationalAddress, Location, Mode}
 import navigation.Navigator
-import pages.UltimateParentCompanyInternationalAddressPage
+import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.UltimateParentCompanyInternationalAddressView
@@ -48,13 +49,19 @@ class UltimateParentCompanyInternationalAddressController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(UltimateParentCompanyInternationalAddressPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
+      renderPage(mode, preparedForm, Ok)
+  }
 
-      Ok(view(preparedForm,  location.countrySelectList(form.data, location.countryListWithoutGB), mode))
+  private def renderPage(mode: Mode, form: Form[InternationalAddress], status: Status)(implicit request: DataRequest[AnyContent]): Result = {
+    request.userAnswers.get(UltimateParentCompanyNamePage) match {
+      case Some(parentName) =>
+        status(view(form, location.countrySelectList(form.data, location.countryListWithoutGB), parentName, mode))
+      case _ => Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -62,8 +69,7 @@ class UltimateParentCompanyInternationalAddressController @Inject()(
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, location.countrySelectList(form.data, location.countryListWithoutGB), mode))),
-
+          Future.successful(renderPage(mode, formWithErrors, BadRequest)),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UltimateParentCompanyInternationalAddressPage, value))

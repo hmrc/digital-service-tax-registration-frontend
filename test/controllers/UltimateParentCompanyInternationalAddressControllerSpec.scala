@@ -23,10 +23,10 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.UltimateParentCompanyInternationalAddressPage
+import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage}
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -49,6 +49,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
     SelectItem(value = Some("AL"), text = "Albania"),
     SelectItem(value = Some("DZ"), text = "Algeria"),
     SelectItem(value = Some("AD"), text = "Andorra", selected = true))
+  private val ultimateParentCompanyName: String = "UltimateParentName"
 
   lazy val ultimateParentCompanyInternationalAddressRoute: String = routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode).url
 
@@ -61,13 +62,32 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         "line3" -> "value 3",
         "line4" -> "value 4",
         "country" -> Json.toJson(country)
-      )
+      ),
+      UltimateParentCompanyNamePage.toString -> JsString(ultimateParentCompanyName)
     )
   )
 
   "UltimateParentCompanyInternationalAddress Controller" - {
 
     "must return OK and the correct view for a GET" in {
+      val userAnswers = emptyUserAnswers
+        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, ultimateParentCompanyInternationalAddressRoute)
+
+        val view = application.injector.instanceOf[UltimateParentCompanyInternationalAddressView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, selectOptions, ultimateParentCompanyName, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to there is a problem page when UltimateParentCompanyNamePage is empty" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -78,10 +98,11 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
         val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, selectOptions, NormalMode)(request, messages(application)).toString
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) mustEqual Some(routes.JourneyRecoveryController.onPageLoad().url)
       }
     }
+
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
@@ -97,7 +118,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         status(result) mustEqual OK
         contentAsString(result) mustEqual
           view(form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
-            selectOptions, NormalMode)(request, messages(application)).toString
+            selectOptions, ultimateParentCompanyName, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -128,8 +149,10 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+      val userAnswers = emptyUserAnswers
+        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
@@ -143,7 +166,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, selectOptions, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, selectOptions, ultimateParentCompanyName, NormalMode)(request, messages(application)).toString
       }
     }
 
