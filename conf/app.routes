@@ -89,3 +89,8 @@ GET        /ultimate-parent-company-name                   controllers.UltimateP
 POST       /ultimate-parent-company-name                   controllers.UltimateParentCompanyNameController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/ultimate-parent-company-name              controllers.UltimateParentCompanyNameController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/ultimate-parent-company-name              controllers.UltimateParentCompanyNameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /ultimate-parent-company-international-address                controllers.UltimateParentCompanyInternationalAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /ultimate-parent-company-international-address                controllers.UltimateParentCompanyInternationalAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/ultimate-parent-company-international-address           controllers.UltimateParentCompanyInternationalAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/ultimate-parent-company-international-address           controllers.UltimateParentCompanyInternationalAddressController.onSubmit(mode: Mode = CheckMode)

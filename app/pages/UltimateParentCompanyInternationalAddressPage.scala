@@ -19,9 +19,9 @@ package pages
 import models.InternationalAddress
 import play.api.libs.json.JsPath
 
-case object InternationalContactAddressPage extends QuestionPage[InternationalAddress] {
+case object UltimateParentCompanyInternationalAddressPage extends QuestionPage[InternationalAddress] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "internationalContactAddress"
+  override def toString: String = "ultimateParentCompanyInternationalAddress"
 }

@@ -1,0 +1,78 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.InputWidth._
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+
+@this(
+    govukInput: GovukInput,
+    govukSelect: GovukSelect,
+    govukFieldset: GovukFieldset
+)
+
+@(form:Form[_], countries: Seq[SelectItem])(implicit messages: Messages)
+
+ @html = {
+    @govukInput(
+        InputViewModel(
+            field = form("line1"),
+            label = LabelViewModel(messages("internationalAddress.line1"))
+        )
+        .withAutocomplete("line1")
+        .withWidth(TwoThirds)
+    )
+
+    @govukInput(
+        InputViewModel(
+            field = form("line2"),
+            label = LabelViewModel(messages("internationalAddress.line2"))
+        )
+        .withAutocomplete("line2")
+        .withWidth(TwoThirds)
+    )
+
+    @govukInput(
+        InputViewModel(
+            field = form("line3"),
+            label = LabelViewModel(messages("internationalAddress.line3"))
+        )
+        .withAutocomplete("line3")
+        .withWidth(TwoThirds)
+    )
+
+    @govukInput(
+        InputViewModel(
+            field = form("line4"),
+            label = LabelViewModel(messages("internationalAddress.line4"))
+        )
+        .withAutocomplete("line4")
+        .withWidth(TwoThirds)
+    )
+
+    @govukSelect(
+        SelectViewModel(
+            field = form("country"),
+            label = LabelViewModel(messages("internationalAddress.countryCode")),
+            items = countries
+        ).withCssClass("govuk-!-width-full")
+        .withAttribute("autocomplete" -> "country-name")
+        .asAccessibleAutocomplete()
+    )}
+
+    @govukFieldset(Fieldset(
+        html = html
+    ))

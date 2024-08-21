@@ -17,8 +17,8 @@
 package controllers
 
 import base.SpecBase
-import forms.InternationalContactAddressFormProvider
-import models.{Country, InternationalContactAddress, NormalMode, UserAnswers}
+import forms.InternationalAddressFormProvider
+import models.{Country, InternationalAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -36,14 +36,14 @@ import views.html.InternationalContactAddressView
 
 import scala.concurrent.Future
 
-class InternationalContactAddressControllerSpec extends SpecBase with MockitoSugar {
+class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val country: Country = Country("Andorra", "AD", "country")
   private val locations: Seq[Country] = Seq(country)
-  private val formProvider = new InternationalContactAddressFormProvider()
-  private val form: Form[InternationalContactAddress] = formProvider(locations)
+  private val formProvider = new InternationalAddressFormProvider()
+  private val form: Form[InternationalAddress] = formProvider(locations)
 
   private val selectOptions: Seq[SelectItem] = Seq(SelectItem(Some(""), ""),
     SelectItem(value = Some("AL"), text = "Albania"),
@@ -98,7 +98,7 @@ class InternationalContactAddressControllerSpec extends SpecBase with MockitoSug
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(InternationalContactAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
+          view(form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
             selectOptions, NormalMode)(request, messages(application)).toString
       }
     }
