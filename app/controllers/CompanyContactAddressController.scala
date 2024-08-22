@@ -52,19 +52,13 @@ class CompanyContactAddressController @Inject()(
       case None => form
       case Some(value) => form.fill(value)
     }
-      println("EASY TO FIND CHECKPOINT 1")
       renderPage(mode, preparedForm, Ok)
   }
 
   private def renderPage(mode: Mode, form: Form[Boolean],status: Status)(implicit request: DataRequest[AnyContent]) = {
-    println("EASY TO FIND CHECKPOINT 2")
     request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage) match {
-      case Some(address) =>
-        println("EASY TO FIND CHECKPOINT 3")
-        status(view(form, address, mode))
-      case _ =>
-        println("EASY TO FIND CHECKPOINT 4")
-        Redirect(routes.JourneyRecoveryController.onPageLoad())
+      case Some(address) => status(view(form, address, mode))
+      case _ => Redirect(routes.JourneyRecoveryController.onPageLoad())
     }
   }
 
