@@ -67,7 +67,7 @@ trait NavigationUtils {
   }
 
   def companyRegisteredOfficeUkAddress(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode) }
+    userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map { _ => routes.CompanyContactAddressController.onPageLoad(NormalMode) }
   }
 
   def checkContactAddress(userAnswers: UserAnswers): Option[Call] = {

@@ -18,11 +18,13 @@ package controllers
 
 import controllers.actions._
 import forms.CompanyContactAddressFormProvider
+import models.requests.DataRequest
 
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.{CompanyRegisteredOfficeUkAddress, Mode, UserAnswers}
 import navigation.Navigator
-import pages.CompanyContactAddressPage
+import pages.{CompanyContactAddressPage, CompanyRegisteredOfficeUkAddressPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,23 +48,31 @@ class CompanyContactAddressController @Inject()(
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-//      request.userAnswers.get(CompanyRegisteredOfficeUKAddress)
-      val preparedForm = request.userAnswers.get(CompanyContactAddressPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    implicit request => val preparedForm = request.userAnswers.get(CompanyContactAddressPage) match {
+      case None => form
+      case Some(value) => form.fill(value)
+    }
+      println("EASY TO FIND CHECKPOINT 1")
+      renderPage(mode, preparedForm, Ok)
+  }
 
-      Ok(view(preparedForm, mode))
+  private def renderPage(mode: Mode, form: Form[Boolean],status: Status)(implicit request: DataRequest[AnyContent]) = {
+    println("EASY TO FIND CHECKPOINT 2")
+    request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage) match {
+      case Some(address) =>
+        println("EASY TO FIND CHECKPOINT 3")
+        status(view(form, address, mode))
+      case _ =>
+        println("EASY TO FIND CHECKPOINT 4")
+        Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
       form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
+        formWithErrors => Future.successful(renderPage(mode, formWithErrors, BadRequest)),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CompanyContactAddressPage, value))

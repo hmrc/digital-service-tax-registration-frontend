@@ -15,6 +15,7 @@
  *@
 
 @import viewmodels.LegendSize
+@import models.CompanyRegisteredOfficeUkAddress
 
 @this(
     layout: templates.Layout,
@@ -24,7 +25,17 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], address: CompanyRegisteredOfficeUkAddress, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@content=@{
+    val contentAddress = s"""${address.buildingorstreet}<br>
+    ${address.buildingorstreet2.fold("")(buildingorstreet2 => s"$buildingorstreet2<br>")}
+    ${address.town.fold("")(town => s"$town<br>")}
+    ${address.county.fold("")(county => s"$county<br>")}
+    ${address.postcode}<br>"""
+
+    HtmlContent(Html(contentAddress))
+}
 
 @layout(pageTitle = title(form, messages("companyContactAddress.title"))) {
 
@@ -35,6 +46,8 @@
         }
 
         <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("companyContactAddress.heading.hint")</h2>
+
+        <h1 class="govuk-heading-l">@messages("companyContactAddress.heading")</h1>
 
         @govukRadios(
             RadiosViewModel.apply(
@@ -50,9 +63,8 @@
                         value   = Some("false"),
                         content = Text(messages("companyContactAddress.site.no"))
                     )),
-                legend = LegendViewModel(messages("companyContactAddress.heading")).asPageHeading(LegendSize.Large)
+                legend = LegendViewModel(content)
             )
-            .withHint(HintViewModel(HtmlContent(messages("<p class='govuk-body'><br>ADDRESS 1<br></p>"))))
         )
 
         @govukButton(
