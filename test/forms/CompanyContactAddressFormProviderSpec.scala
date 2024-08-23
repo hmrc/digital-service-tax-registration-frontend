@@ -42,7 +42,5 @@ class CompanyContactAddressFormProviderSpec extends BooleanFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
 
-
-    //TODO FOR ADDRESS LINE MAKE SURE THE ADDRESS IS WORKING/ VALIDATION. IF THERE IS NOTHING THERE THEN HAVE SOMETHING APPEAR
   }
 }

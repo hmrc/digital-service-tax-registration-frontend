@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -67,7 +67,7 @@ trait NavigationUtils {
   }
 
   def companyRegisteredOfficeUkAddress(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map { _ => routes.CompanyContactAddressController.onPageLoad(NormalMode) }
+    userAnswers.get(CompanyRegisteredOfficeUkAddressPage).map { _ => routes.CompanyContactAddressController.onPageLoad(NormalMode) }
   }
 
   def checkContactAddress(userAnswers: UserAnswers): Option[Call] = {
