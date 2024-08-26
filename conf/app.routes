@@ -94,3 +94,5 @@ GET        /ultimate-parent-company-international-address                control
 POST       /ultimate-parent-company-international-address                controllers.UltimateParentCompanyInternationalAddressController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/ultimate-parent-company-international-address           controllers.UltimateParentCompanyInternationalAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/ultimate-parent-company-international-address           controllers.UltimateParentCompanyInternationalAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET        /register/registration-sent                       controllers.RegistrationSentController.onPageLoad()

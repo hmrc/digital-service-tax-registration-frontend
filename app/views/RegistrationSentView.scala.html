@@ -1,0 +1,73 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.helper.CSPNonce
+
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton,
+        govukPanel : GovukPanel
+)
+
+@(companyName: String, email: String)(implicit request: Request[_], messages: Messages)
+  @layout(pageTitle = titleNoForm(messages("registrationSent.title"))) {
+
+  @govukPanel(Panel(
+   title = HtmlContent(messages("registrationSent.heading")),
+   content = HtmlContent(messages("registrationSent.detail", companyName))
+  ))
+
+  <p class="govuk-body">@messages("registrationSent.email", email)</p>
+
+  <p class="govuk-body jsonly print-hide">
+   <a id="printId" href="#" class="govuk-link print-icon">@messages("registrationSent.print-save")</a>
+   <script @CSPNonce.attr>
+           document.getElementById("printId").addEventListener("click", function() {
+            if(window.print) {
+             window.print()
+            }
+           });
+   </script>
+  </p>
+
+  <h2 class="govuk-heading-m">@messages("registrationSent.what-happens-next.title")</h2>
+  <p class="govuk-body">@messages("registrationSent.what-happens-next.p1", email)</p>
+
+  <h2 class="govuk-heading-m">@messages("registrationSent.help-using-this-service.title")</h2>
+  <p class="govuk-body">@HtmlContent(messages(
+   "registrationSent.help-using-this-service.p1",
+   "https://www.gov.uk/topic/business-tax/digital-services-tax"
+  )).asHtml</p>
+
+  <p class="govuk-body">@messages("registrationSent.help-using-this-service.list.title")</p>
+  <ul class="govuk-list govuk-list--bullet">
+   <li>@messages("registrationSent.help-using-this-service.list.1")</li>
+   <li>@messages("registrationSent.help-using-this-service.list.2")</li>
+  </ul>
+
+  <p class="govuk-body">
+  @HtmlContent(messages(
+   "registrationSent.ccm-email",
+   ("<a class='govuk-link' href='mailto:ccgdstmailbox@hmrc.gov.uk'>ccgdstmailbox@hmrc.gov.uk</a>")
+  )).asHtml
+  </p>
+
+  <h2 class="govuk-heading-m">@messages("registrationSent.feedback.title")</h2>
+  <p class="govuk-body">@messages("registrationSent.feedback.p1")</p>
+  <p class="govuk-body">
+   <a class="govuk-link" href="@controllers.auth.routes.AuthController.signOut().url">@messages("registrationSent.feedback.link")</a> @messages("registrationSent.feedback.p2")
+  </p>
+ }

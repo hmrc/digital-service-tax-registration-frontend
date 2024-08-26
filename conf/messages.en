@@ -231,3 +231,21 @@ ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
 ultimateParentCompanyInternationalAddress.title = What is the registered office address of {0}?
 ultimateParentCompanyInternationalAddress.heading = What is the registered office address of {0}?
 ultimateParentCompanyInternationalAddress.checkYourAnswersLabel = UltimateParentCompanyInternationalAddress
+
+registrationSent.title = registrationSent
+registrationSent.heading = Registration sent
+registrationSent.detail=We received your registration for {0} for the Digital Services Tax
+registrationSent.email= We have sent a confirmation email to {0}.
+registrationSent.what-happens-next.title=What happens next
+registrationSent.what-happens-next.p1=We will send your Digital Services Tax registration number to {0} in the next 24 hours.
+registrationSent.help-using-this-service.title=Help using this service
+registrationSent.print-save=Print or save this page
+registrationSent.help-using-this-service.p1=For help with payments and returns, <a href="{0}" class="govuk-link">check the Digital Services Tax guidance</a>.
+registrationSent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
+registrationSent.help-using-this-service.list.1=do not receive your registration number
+registrationSent.help-using-this-service.list.2=need to change your registered details
+registrationSent.ccm-email=If you do not know who your CCM is, or do not have one, email: {0}.
+registrationSent.feedback.title = Before you go
+registrationSent.feedback.p1 = Your feedback helps us make our service better.
+registrationSent.feedback.link = Take a short survey
+registrationSent.feedback.p2 = to share your feedback on this service.
