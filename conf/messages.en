@@ -139,6 +139,15 @@ checkContactAddress.checkYourAnswersLabel = checkContactAddress
 checkContactAddress.change.hidden = CheckContactAddress
 checkContactAddress.heading.hint = Your company details
 
+companyContactAddress.title = Can we use this address to contact you about your Digital Services Tax?
+companyContactAddress.heading = Can we use this address to contact you about your Digital Services Tax?
+companyContactAddress.heading.hint = Your company details
+companyContactAddress.site.no = No - I want to enter a different address
+companyContactAddress.checkYourAnswersLabel = companyContactAddress
+companyContactAddress.error.required = Select yes if we can use this address to contact you about your Digital Services Tax
+companyContactAddress.change.hidden = CompanyContactAddress
+
+
 contactUkAddress.title = What is your contact address
 contactUkAddress.heading = What is your contact address?
 contactUkAddress.buildingOrStreet = Building or street
@@ -155,10 +164,10 @@ contactUkAddress.error.townOrCity.length = Town or city must be 35 characters or
 contactUkAddress.error.county.length = County must be 35 characters or fewer
 contactUkAddress.buildingOrStreet.change.hidden = Building or street
 contactUkAddress.postcode.change.hidden = Postcode
+
 companyRegisteredOfficeUkAddress.title = companyRegisteredOfficeUkAddress
 companyRegisteredOfficeUkAddress.heading = Where is the registered office address of
 companyRegisteredOfficeUkAddress.subHeading =Your company details
-
 
 companyRegisteredOfficeUkAddress.buildingorstreet = Building or street
 companyRegisteredOfficeUkAddress.buildingorstreet2 = Building or street line 2 (optional)
@@ -182,6 +191,7 @@ companyRegisteredOfficeUkAddress.error.county.length = County must be 35 charact
 companyRegisteredOfficeUkAddress.error.county.invalid = Enter a real postcode
 companyRegisteredOfficeUkAddress.buildingorstreet.change.hidden = buildingorstreet
 companyRegisteredOfficeUkAddress.buildingorstreet2.change.hidden = buildingorstreet2
+
 checkIfGroup.checkYourAnswersLabel = checkIfGroup
 checkIfGroup.change.hidden = CheckIfGroup
 checkIfGroup.title = Is the company you want to register part of a VAT group?

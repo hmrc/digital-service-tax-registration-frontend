@@ -173,6 +173,23 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.UltimateParentCompanyNameController.onPageLoad(NormalMode)
       }
 
+      "must go from CompanyRegisteredOfficeAddressPage to CompanyContactAddressPage" in {
+        navigator.nextPage(
+          CompanyRegisteredOfficeUkAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CompanyRegisteredOfficeUkAddressPage, CompanyRegisteredOfficeUkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ"))
+            .success
+            .value
+        ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
+
+      "must go from a CompanyContactAddressPage with option `true` to TODO page" in pending
+
+      "must go from a CompanyContactAddressPage with option `false` to TODO page" in pending
+
       "must go from CheckIfGroupPage to a TODO contact-details page" in pending
 
       "must go from a UltimateParentCompanyNamePage to a TODO-register/check-ultimate-parent-company-address page" in pending
