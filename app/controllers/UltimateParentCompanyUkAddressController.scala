@@ -20,11 +20,13 @@ import controllers.actions._
 import forms.UltimateParentCompanyUkAddressFormProvider
 
 import javax.inject.Inject
-import models.Mode
+import models.{Mode, UltimateParentCompanyUkAddress}
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.{CompanyNamePage, UltimateParentCompanyUkAddressPage}
+import pages.{UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.UltimateParentCompanyUkAddressView
@@ -53,8 +55,15 @@ class UltimateParentCompanyUkAddressController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      val companyName = request.userAnswers.get(CompanyNamePage).getOrElse("")
-      Ok(view(preparedForm, mode, companyName))
+      renderPage(mode, preparedForm, Ok)
+  }
+
+  private def renderPage(mode: Mode, form: Form[UltimateParentCompanyUkAddress], status: Status)(implicit request: DataRequest[AnyContent]): Result = {
+    request.userAnswers.get(UltimateParentCompanyNamePage) match {
+      case Some(parentName) =>
+        status(view(form, mode, parentName))
+      case _ => Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

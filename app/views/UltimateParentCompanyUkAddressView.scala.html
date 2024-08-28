@@ -34,7 +34,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        <h1 class="govuk-heading-l">@messages("ultimateParentCompanyUkAddress.heading") @companyName?</h1>
+        <h1 class="govuk-heading-l">@messages("ultimateParentCompanyUkAddress.heading", companyName)</h1>
 
         @ukAddress(
             form = form

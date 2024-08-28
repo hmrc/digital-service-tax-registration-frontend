@@ -23,9 +23,9 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CompanyNamePage, UltimateParentCompanyUkAddressPage}
+import pages.{UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -42,6 +42,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
   val form = formProvider()
 
   lazy val ultimateParentCompanyUkAddressRoute = routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode).url
+  private val ultimateParentCompanyName: String = "UltimateParentName"
 
   val userAnswers = UserAnswers(
     userAnswersId,
@@ -49,13 +50,32 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
       UltimateParentCompanyUkAddressPage.toString -> Json.obj(
         "buildingOrStreet" -> "value 1",
         "postcode" -> "BT15GB"
-      )
+      ),
+      UltimateParentCompanyNamePage.toString -> JsString(ultimateParentCompanyName)
     )
   )
 
   "UltimateParentCompanyUkAddress Controller" - {
 
     "must return OK and the correct view for a GET" in {
+      val userAnswers = emptyUserAnswers
+        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, ultimateParentCompanyUkAddressRoute)
+
+        val view = application.injector.instanceOf[UltimateParentCompanyUkAddressView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode, ultimateParentCompanyName)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to there is a problem page when UltimateParentCompanyNamePage is empty" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -66,8 +86,8 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
         val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) mustEqual Some(routes.JourneyRecoveryController.onPageLoad().url)
       }
     }
 
@@ -83,7 +103,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(UltimateParentCompanyUkAddress("value 1", None, None, None, "BT15GB")), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(UltimateParentCompanyUkAddress("value 1", None, None, None, "BT15GB")), NormalMode, ultimateParentCompanyName)(request, messages(application)).toString
       }
     }
 
