@@ -17,11 +17,11 @@
 package forms
 
 import forms.mappings.Constraints.CompanyName
-
-import javax.inject.Inject
-import forms.mappings.{Constraints, Mappings}
+import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
+
+import javax.inject.Inject
 
 class CompanyNameFormProvider @Inject() extends Mappings {
 

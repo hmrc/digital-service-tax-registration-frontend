@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUtrPage, CompanyNamePage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage}
+import pages.{AccountingPeriodEndDatePage, CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUtrPage, CompanyNamePage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -86,6 +86,10 @@ trait NavigationUtils {
 
   def ultimateParentCompanyNamePage(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UltimateParentCompanyNamePage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
+  }
+
+  def accountingPeriodEndDatePage(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(AccountingPeriodEndDatePage).map { _ => routes.AccountingPeriodEndDateController.onPageLoad(NormalMode)}
   }
 
 }

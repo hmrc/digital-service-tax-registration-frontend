@@ -16,6 +16,8 @@
 
 package generators
 
+import models.DataValues.DST_EPOCH
+
 import java.time.{Instant, LocalDate, ZoneOffset}
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
@@ -122,5 +124,12 @@ trait Generators extends ModelGenerators {
       millis =>
         Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).toLocalDate
     }
+  }
+
+  /**
+   * Generates a valid Accounting Period End Date
+   */
+  def genAccountingPeriodEndDate(liabilityDate: LocalDate): Gen[LocalDate] = {
+    Gen.choose(DST_EPOCH.plusDays(1), liabilityDate.plusYears(1))
   }
 }

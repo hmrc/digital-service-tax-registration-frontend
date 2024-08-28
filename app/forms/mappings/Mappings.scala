@@ -22,7 +22,6 @@ import play.api.data.Forms.of
 import play.api.i18n.Messages
 
 import java.time.LocalDate
-import scala.util.matching.Regex
 
 trait Mappings extends Formatters with Constraints {
 

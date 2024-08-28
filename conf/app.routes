@@ -89,3 +89,8 @@ GET        /ultimate-parent-company-name                   controllers.UltimateP
 POST       /ultimate-parent-company-name                   controllers.UltimateParentCompanyNameController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/ultimate-parent-company-name              controllers.UltimateParentCompanyNameController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/ultimate-parent-company-name              controllers.UltimateParentCompanyNameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /accounting-period-end-date                   controllers.AccountingPeriodEndDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /accounting-period-end-date                   controllers.AccountingPeriodEndDateController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/accounting-period-end-date              controllers.AccountingPeriodEndDateController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/accounting-period-end-date              controllers.AccountingPeriodEndDateController.onSubmit(mode: Mode = CheckMode)

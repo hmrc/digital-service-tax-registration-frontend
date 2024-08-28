@@ -18,25 +18,25 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.CheckCompanyRegisteredOfficePostcodePage
+import pages.AccountingPeriodEndDatePage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CheckCompanyRegisteredOfficePostcodeSummary  {
+class AccountingPeriodEndDateSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CheckCompanyRegisteredOfficePostcodePage).map {
+    answers.get(AccountingPeriodEndDatePage).map {
       answer =>
 
         SummaryListRowViewModel(
-          key     = "checkCompanyRegisteredOfficePostcode.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlFormat.escape(answer).toString),
+          key = "accountingPeriodEndDate.checkYourAnswersLabel",
+          value = ValueViewModel(HtmlFormat.escape(answer.toString).toString()),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("checkCompanyRegisteredOfficePostcode.change.hidden"))
+            ActionItemViewModel("site.change", routes.AccountingPeriodEndDateController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText(messages("accountingPeriodEndDate.change.hidden"))
           )
         )
     }
