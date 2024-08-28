@@ -162,6 +162,10 @@ contactUkAddress.error.buildingOrStreet.length = Building or street must be 35 c
 contactUkAddress.error.buildingOrStreetLine2.length = Building or street line 2 must be 35 characters or fewer
 contactUkAddress.error.townOrCity.length = Town or city must be 35 characters or fewer
 contactUkAddress.error.county.length = County must be 35 characters or fewer
+contactUkAddress.error.buildingOrStreet.invalid = Building or street must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+contactUkAddress.error.buildingOrStreetLine2.invalid = Building or street line 2 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+contactUkAddress.error.townOrCity.invalid = Town or city must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+contactUkAddress.error.county.invalid = County must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 contactUkAddress.buildingOrStreet.change.hidden = Building or street
 contactUkAddress.postcode.change.hidden = Postcode
 
@@ -241,3 +245,8 @@ ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
 ultimateParentCompanyInternationalAddress.title = What is the registered office address of {0}?
 ultimateParentCompanyInternationalAddress.heading = What is the registered office address of {0}?
 ultimateParentCompanyInternationalAddress.checkYourAnswersLabel = UltimateParentCompanyInternationalAddress
+
+ultimateParentCompanyUkAddress.title = What is the registered office address of {0}?
+ultimateParentCompanyUkAddress.heading = What is the registered office address of {0}?
+ultimateParentCompanyUkAddress.buildingOrStreet.change.hidden = buildingOrStreet
+ultimateParentCompanyUkAddress.postcode.change.hidden = postcode

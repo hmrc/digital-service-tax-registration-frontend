@@ -18,18 +18,18 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import forms.mappings.Constraints
-import play.api.data.FormError
 import org.scalacheck.Arbitrary.arbitrary
+import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
-class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
+class UltimateParentCompanyUkAddressFormProviderSpec extends StringFieldBehaviours {
 
-  val form = new ContactUkAddressFormProvider()()
+  val form = new UltimateParentCompanyUkAddressFormProvider()()
   val addressLineRegex = """^[A-Za-z0-9 \-,.&']*$"""
   val validData = """^[A-Za-z0-9-,.&']{1, 35}*$"""
   val maxLength = 35
 
-  ".Building or street" - {
+  ".buildingOrStreet" - {
 
     val fieldName = "building-or-street"
     val requiredKey = "contactUkAddress.error.buildingOrStreet.required"
@@ -144,7 +144,7 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".Postcode" - {
+  ".postcode" - {
 
     val fieldName = "postcode"
     val requiredKey = "contactUkAddress.error.postcode.required"
