@@ -25,19 +25,20 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CheckCompanyRegisteredOfficePostcodeSummary  {
+object CheckCompanyRegisteredOfficePostcodeSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CheckCompanyRegisteredOfficePostcodePage).map {
-      answer =>
-
-        SummaryListRowViewModel(
-          key     = "checkCompanyRegisteredOfficePostcode.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlFormat.escape(answer).toString),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("checkCompanyRegisteredOfficePostcode.change.hidden"))
+    answers.get(CheckCompanyRegisteredOfficePostcodePage).map { answer =>
+      SummaryListRowViewModel(
+        key = "checkCompanyRegisteredOfficePostcode.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer).toString),
+        actions = Seq(
+          ActionItemViewModel(
+            "site.change",
+            routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(CheckMode).url
           )
+            .withVisuallyHiddenText(messages("checkCompanyRegisteredOfficePostcode.change.hidden"))
         )
+      )
     }
 }

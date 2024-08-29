@@ -24,21 +24,22 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CheckCompanyRegisteredOfficeAddressSummary  {
+object CheckCompanyRegisteredOfficeAddressSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CheckCompanyRegisteredOfficeAddressPage).map {
-      answer =>
+    answers.get(CheckCompanyRegisteredOfficeAddressPage).map { answer =>
+      val value = if (answer) "site.yes" else "site.no"
 
-        val value = if (answer) "site.yes" else "site.no"
-
-        SummaryListRowViewModel(
-          key     = "checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("checkCompanyRegisteredOfficeAddress.change.hidden"))
+      SummaryListRowViewModel(
+        key = "checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel(
+            "site.change",
+            routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(CheckMode).url
           )
+            .withVisuallyHiddenText(messages("checkCompanyRegisteredOfficeAddress.change.hidden"))
         )
+      )
     }
 }

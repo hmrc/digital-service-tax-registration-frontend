@@ -21,43 +21,36 @@ import play.api.data.{Form, FormError}
 
 trait StringFieldBehaviours extends FieldBehaviours {
 
-  def fieldWithMaxLength(form: Form[_],
-                         fieldName: String,
-                         maxLength: Int,
-                         lengthError: FormError): Unit = {
-
+  def fieldWithMaxLength(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
     s"not bind strings longer than $maxLength characters" in {
 
-      forAll(stringsLongerThan(maxLength) -> "longString") {
-        (string: String) =>
-          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-          result.errors must contain only lengthError
+      forAll(stringsLongerThan(maxLength) -> "longString") { (string: String) =>
+        val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+        result.errors must contain only lengthError
       }
     }
-  }
 
-  def fieldWithMaxLengthGeneratingFromRegex(form: Form[_],
-                                            fieldName: String,
-                                            maxLength: Int,
-                                            regex: String,
-                                            lengthError: FormError): Unit = {
-
+  def fieldWithMaxLengthGeneratingFromRegex(
+    form: Form[_],
+    fieldName: String,
+    maxLength: Int,
+    regex: String,
+    lengthError: FormError
+  ): Unit =
     s"not bind strings longer than $maxLength characters" in {
 
-      forAll(stringsLongerThanGivenRegex(maxLength, regex) -> "longString") {
-        (string: String) =>
-          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-          result.errors must contain only lengthError
+      forAll(stringsLongerThanGivenRegex(maxLength, regex) -> "longString") { (string: String) =>
+        val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+        result.errors must contain only lengthError
       }
     }
-  }
 
   def fieldWithInValidData(
-                            form: Form[_],
-                            fieldName: String,
-                            invalidDataGenerator: Gen[String],
-                            invalidDataError: FormError
-                          ): Unit =
+    form: Form[_],
+    fieldName: String,
+    invalidDataGenerator: Gen[String],
+    invalidDataError: FormError
+  ): Unit =
     s"not bind invalid characters" in {
       forAll(invalidDataGenerator -> "inValidDataItem") { dataItem: String =>
         val result = form.bind(Map(fieldName -> dataItem)).apply(fieldName)

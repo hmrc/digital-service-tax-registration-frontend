@@ -38,7 +38,7 @@ class CheckUtrControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CheckUtrFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
   lazy val checkUtrRoute = routes.CheckUtrController.onPageLoad(NormalMode).url
 

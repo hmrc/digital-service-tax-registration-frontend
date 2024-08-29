@@ -38,7 +38,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new CheckContactAddressFormProvider()
+  val formProvider        = new CheckContactAddressFormProvider()
   val form: Form[Boolean] = formProvider()
 
   lazy val checkContactAddressRoute: String = routes.CheckContactAddressController.onPageLoad(NormalMode).url

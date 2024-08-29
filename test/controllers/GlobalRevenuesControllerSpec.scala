@@ -38,7 +38,7 @@ class GlobalRevenuesControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new GlobalRevenuesFormProvider()
+  val formProvider        = new GlobalRevenuesFormProvider()
   val form: Form[Boolean] = formProvider()
 
   lazy val globalRevenuesRoute: String = routes.GlobalRevenuesController.onPageLoad(NormalMode).url

@@ -22,12 +22,12 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class CorporationTaxEnterUtrFormProviderSpec extends StringFieldBehaviours {
 
-  val fieldName                   = "value"
-  val requiredKey                 = "corporationTaxEnterUtr.error.required"
-  val invalidKey                  = "corporationTaxEnterUtr.error.invalid"
-  val uniqueTaxReferenceMaxRegex  = "^[0-9]{10}$"
-  val utrRegexWithWhitespace      = """^\s*(\d\s*){10}$"""
-  val maxLength                   = 10
+  val fieldName                  = "value"
+  val requiredKey                = "corporationTaxEnterUtr.error.required"
+  val invalidKey                 = "corporationTaxEnterUtr.error.invalid"
+  val uniqueTaxReferenceMaxRegex = "^[0-9]{10}$"
+  val utrRegexWithWhitespace     = """^\s*(\d\s*){10}$"""
+  val maxLength                  = 10
 
   val form = new CorporationTaxEnterUtrFormProvider()()
 

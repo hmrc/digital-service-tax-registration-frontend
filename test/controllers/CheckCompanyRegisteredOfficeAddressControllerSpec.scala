@@ -38,9 +38,10 @@ class CheckCompanyRegisteredOfficeAddressControllerSpec extends SpecBase with Mo
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CheckCompanyRegisteredOfficeAddressFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
-  lazy val checkCompanyRegisteredOfficeAddressRoute = routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode).url
+  lazy val checkCompanyRegisteredOfficeAddressRoute =
+    routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode).url
 
   "CheckCompanyRegisteredOfficeAddress Controller" - {
 

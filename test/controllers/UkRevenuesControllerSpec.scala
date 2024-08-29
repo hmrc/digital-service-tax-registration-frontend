@@ -38,7 +38,7 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new UkRevenuesFormProvider()
+  val formProvider        = new UkRevenuesFormProvider()
   val form: Form[Boolean] = formProvider()
 
   lazy val UkRevenuesRoute: String = routes.UkRevenuesController.onPageLoad(NormalMode).url
