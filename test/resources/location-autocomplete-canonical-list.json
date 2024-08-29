@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Albania",
+    "code": "AL",
+    "type": "country"
+  },
+  {
+    "name": "Algeria",
+    "code": "DZ",
+    "type": "country"
+  },
+  {
+    "name": "Andorra",
+    "code": "AD",
+    "type": "country"
+  }
+]

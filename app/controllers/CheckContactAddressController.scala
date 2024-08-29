@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.CheckContactAddressFormProvider
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
 import pages.CheckContactAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}

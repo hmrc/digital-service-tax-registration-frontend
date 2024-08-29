@@ -149,9 +149,52 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.ContactUkAddressController.onPageLoad(NormalMode)
       }
 
-      "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
+      "must go from a CheckContactAddressPage to a contact-international-address page" in {
+        navigator.nextPage(
+          CheckContactAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckContactAddressPage, false)
+            .success
+            .value
+        ) mustBe routes.InternationalContactAddressController.onPageLoad(NormalMode)
+      }
 
       "must go from a CompanyContactAddressPage to a TODO-company-contact-address page" in pending
+
+      "must go from CheckIfGroupPage to ultimate-parent-company-name page" in {
+        navigator.nextPage(
+          CheckIfGroupPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckIfGroupPage, true)
+            .success
+            .value
+        ) mustBe routes.UltimateParentCompanyNameController.onPageLoad(NormalMode)
+      }
+
+      "must go from CompanyRegisteredOfficeAddressPage to CompanyContactAddressPage" in {
+        navigator.nextPage(
+          CompanyRegisteredOfficeUkAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CompanyRegisteredOfficeUkAddressPage, CompanyRegisteredOfficeUkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ"))
+            .success
+            .value
+        ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
+
+      "must go from a CompanyContactAddressPage with option `true` to TODO page" in pending
+
+      "must go from a CompanyContactAddressPage with option `false` to TODO page" in pending
+
+      "must go from CheckIfGroupPage to a TODO contact-details page" in pending
+
+      "must go from a UltimateParentCompanyNamePage to a TODO-register/check-ultimate-parent-company-address page" in pending
+
+      "must go from a UltimateParentCompanyUkAddressPage to a TODO-register/contact-details" in pending
     }
 
     "in Check mode" - {

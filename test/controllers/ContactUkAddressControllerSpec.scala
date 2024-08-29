@@ -26,7 +26,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.ContactUkAddressPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -101,7 +100,7 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, contactUkAddressRoute)
-            .withFormUrlEncodedBody(("Building or street", "value 1"), ("Postcode", "BT15GB"))
+            .withFormUrlEncodedBody(("building-or-street", "value 1"), ("postcode", "BT15GB"))
 
         val result = route(application, request).value
 
