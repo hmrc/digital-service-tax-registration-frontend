@@ -16,15 +16,27 @@
 
 package generators
 
+import cats.implicits._
 import forms.mappings.Constraints
-
-import models.CompanyRegisteredOfficeUkAddress
-import models.{ContactUkAddress, _}
+import models.DataModel._
+import models._
 import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.cats.implicits.genInstances
 import org.scalacheck.{Arbitrary, Gen}
+import shapeless.tag.@@
 import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {
+
+  implicit def arbAddressLine: Arbitrary[AddressLine] = Arbitrary(AddressLine.gen)
+  implicit def arbPostcode: Arbitrary[Postcode]       = Arbitrary(Postcode.gen.retryUntil(x => x == x.replaceAll(" ", "")))
+  implicit def arbCountryCode: Arbitrary[CountryCode] = Arbitrary(CountryCode.gen)
+  implicit def arbUtr: Arbitrary[UTR] = Arbitrary(UTR.gen)
+  implicit def arbCompanyName: Arbitrary[CompanyName] = Arbitrary(CompanyName.gen)
+
+  implicit class RichRegexValidatedString[A <: RegexValidatedString](val in: A) {
+    def gen: Gen[String @@ RichRegexValidatedString.this.in.Tag] = RegexpGen.from(in.regex).map(in.apply)
+  }
 
   implicit lazy val arbitraryUltimateParentCompanyUkAddress: Arbitrary[UltimateParentCompanyUkAddress] =
     Arbitrary {
@@ -70,4 +82,44 @@ trait ModelGenerators {
       } yield InternationalAddress(line1, line2, line3, line4, countryCode)
     }
   val genPostcode: Gen[String] = RegexpGen.from(Constraints.postcodeRegex.regex)
+
+  implicit def arbAddr: Arbitrary[Address] = Arbitrary {
+
+    val ukGen: Gen[Address] =
+      (
+        arbitrary[AddressLine],
+        arbitrary[Option[AddressLine]],
+        arbitrary[Option[AddressLine]],
+        arbitrary[Option[AddressLine]],
+        arbitrary[Postcode]
+      ).mapN(UkAddress.apply)
+
+    val foreignGen: Gen[Address] =
+      (
+        arbitrary[AddressLine],
+        arbitrary[Option[AddressLine]],
+        arbitrary[Option[AddressLine]],
+        arbitrary[Option[AddressLine]],
+        arbitrary[CountryCode]
+      ).mapN(ForeignAddress.apply)
+
+    Gen.oneOf(ukGen, foreignGen)
+
+  }
+
+  implicit def arbCo: Arbitrary[Company] = Arbitrary(
+    (
+      arbitrary[CompanyName],
+      arbitrary[Address]
+    ).mapN(Company.apply)
+  )
+
+  implicit def arbCoRegWrap: Arbitrary[CompanyRegWrapper] = Arbitrary(
+    (
+      arbitrary[Company],
+      Gen.const(none[UTR]),
+      Gen.const(none[SafeId]),
+      Gen.const(false)
+    ).mapN(CompanyRegWrapper.apply)
+  )
 }

@@ -250,3 +250,11 @@ ultimateParentCompanyUkAddress.title = What is the registered office address of 
 ultimateParentCompanyUkAddress.heading = What is the registered office address of {0}?
 ultimateParentCompanyUkAddress.buildingOrStreet.change.hidden = buildingOrStreet
 ultimateParentCompanyUkAddress.postcode.change.hidden = postcode
+
+confirmCompanyDetails.title = confirmCompanyDetails
+confirmCompanyDetails.heading = Is this the company you want to register as the responsible member?
+confirmCompanyDetails.heading.hint = Your company details
+confirmCompanyDetails.paragraph.hint = If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
+confirmCompanyDetails.checkYourAnswersLabel = confirmCompanyDetails
+confirmCompanyDetails.error.required = Select yes if confirmCompanyDetails
+confirmCompanyDetails.change.hidden = ConfirmCompanyDetails
