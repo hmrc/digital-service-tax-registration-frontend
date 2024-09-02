@@ -251,8 +251,8 @@ ultimateParentCompanyUkAddress.heading = What is the registered office address o
 ultimateParentCompanyUkAddress.buildingOrStreet.change.hidden = buildingOrStreet
 ultimateParentCompanyUkAddress.postcode.change.hidden = postcode
 checkUltimateGlobalParentCompanyInUk.title = Ultimate parent company details
-checkUltimateGlobalParentCompanyInUk.heading = is the registered office address of {0} in the UK?
+checkUltimateGlobalParentCompanyInUk.heading = Is the registered office address of {0} in the UK?
 checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = checkUltimateGlobalParentCompanyInUk
-checkUltimateGlobalParentCompanyInUk.error.required = Select yes if checkUltimateGlobalParentCompanyInUk
+checkUltimateGlobalParentCompanyInUk.error.required = Select yes if the registered office address of hello is in the UK
 checkUltimateGlobalParentCompanyInUk.change.hidden = CheckUltimateGlobalParentCompanyInUk
 
