@@ -38,7 +38,7 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new ContactUkAddressFormProvider()
+  val formProvider                 = new ContactUkAddressFormProvider()
   val form: Form[ContactUkAddress] = formProvider()
 
   lazy val contactUkAddressRoute: String = routes.ContactUkAddressController.onPageLoad(NormalMode).url
@@ -78,8 +78,10 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.
-          fill(ContactUkAddress("Street 1", None, None, None, "BT15GB")), NormalMode)(request, messages(application)).toString()
+        contentAsString(result) mustEqual view(
+          form.fill(ContactUkAddress("Street 1", None, None, None, "BT15GB")),
+          NormalMode
+        )(request, messages(application)).toString()
       }
     }
 

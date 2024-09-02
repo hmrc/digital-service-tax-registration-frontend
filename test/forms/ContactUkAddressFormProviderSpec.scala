@@ -24,17 +24,17 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
-  val form = new ContactUkAddressFormProvider()()
+  val form             = new ContactUkAddressFormProvider()()
   val addressLineRegex = """^[A-Za-z0-9 \-,.&']*$"""
-  val validData = """^[A-Za-z0-9-,.&']{1, 35}*$"""
-  val maxLength = 35
+  val validData        = """^[A-Za-z0-9-,.&']{1, 35}*$"""
+  val maxLength        = 35
 
   ".Building or street" - {
 
-    val fieldName = "building-or-street"
+    val fieldName   = "building-or-street"
     val requiredKey = "contactUkAddress.error.buildingOrStreet.required"
-    val lengthKey = "contactUkAddress.error.buildingOrStreet.length"
-    val invalidKey = "contactUkAddress.error.buildingOrStreet.invalid"
+    val lengthKey   = "contactUkAddress.error.buildingOrStreet.length"
+    val invalidKey  = "contactUkAddress.error.buildingOrStreet.invalid"
 
     behave like fieldThatBindsValidData(
       form,
@@ -65,8 +65,8 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".Building or street line 2" - {
 
-    val fieldName = "building-or-street-line-2"
-    val lengthKey = "contactUkAddress.error.buildingOrStreetLine2.length"
+    val fieldName  = "building-or-street-line-2"
+    val lengthKey  = "contactUkAddress.error.buildingOrStreetLine2.length"
     val invalidKey = "contactUkAddress.error.buildingOrStreetLine2.invalid"
 
     behave like fieldThatBindsValidData(
@@ -92,8 +92,8 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".Twon or City" - {
 
-    val fieldName = "town-or-city"
-    val lengthKey = "contactUkAddress.error.townOrCity.length"
+    val fieldName  = "town-or-city"
+    val lengthKey  = "contactUkAddress.error.townOrCity.length"
     val invalidKey = "contactUkAddress.error.townOrCity.invalid"
 
     behave like fieldThatBindsValidData(
@@ -119,8 +119,8 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".County" - {
 
-    val fieldName = "county"
-    val lengthKey = "contactUkAddress.error.county.length"
+    val fieldName  = "county"
+    val lengthKey  = "contactUkAddress.error.county.length"
     val invalidKey = "contactUkAddress.error.county.invalid"
 
     behave like fieldThatBindsValidData(
@@ -146,9 +146,9 @@ class ContactUkAddressFormProviderSpec extends StringFieldBehaviours {
 
   ".Postcode" - {
 
-    val fieldName = "postcode"
+    val fieldName   = "postcode"
     val requiredKey = "contactUkAddress.error.postcode.required"
-    val invalidKey = "error.invalid.postcode"
+    val invalidKey  = "error.invalid.postcode"
 
     behave like fieldThatBindsValidData(
       form,

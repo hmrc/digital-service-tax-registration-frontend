@@ -22,7 +22,7 @@ import play.api.data.FormError
 class CheckUltimateGlobalParentCompanyInUkFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "checkUltimateGlobalParentCompanyInUk.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new CheckUltimateGlobalParentCompanyInUkFormProvider()()
 

@@ -40,30 +40,33 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val country: Country = Country("Andorra", "AD", "country")
-  private val locations: Seq[Country] = Seq(country)
-  val formProvider = new InternationalAddressFormProvider()
+  private val country: Country         = Country("Andorra", "AD", "country")
+  private val locations: Seq[Country]  = Seq(country)
+  val formProvider                     = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider(locations)
 
-  private val selectOptions: Seq[SelectItem] = Seq(SelectItem(Some(""), ""),
+  private val selectOptions: Seq[SelectItem]    = Seq(
+    SelectItem(Some(""), ""),
     SelectItem(value = Some("AL"), text = "Albania"),
     SelectItem(value = Some("DZ"), text = "Algeria"),
-    SelectItem(value = Some("AD"), text = "Andorra", selected = true))
+    SelectItem(value = Some("AD"), text = "Andorra", selected = true)
+  )
   private val ultimateParentCompanyName: String = "UltimateParentName"
 
-  lazy val ultimateParentCompanyInternationalAddressRoute: String = routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode).url
+  lazy val ultimateParentCompanyInternationalAddressRoute: String =
+    routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode).url
 
   val userAnswers: UserAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
       UltimateParentCompanyInternationalAddressPage.toString -> Json.obj(
-        "line1" -> "value 1",
-        "line2" -> "value 2",
-        "line3" -> "value 3",
-        "line4" -> "value 4",
+        "line1"   -> "value 1",
+        "line2"   -> "value 2",
+        "line3"   -> "value 3",
+        "line4"   -> "value 4",
         "country" -> Json.toJson(country)
       ),
-      UltimateParentCompanyNamePage.toString -> JsString(ultimateParentCompanyName)
+      UltimateParentCompanyNamePage.toString                 -> JsString(ultimateParentCompanyName)
     )
   )
 
@@ -71,7 +74,9 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
     "must return OK and the correct view for a GET" in {
       val userAnswers = emptyUserAnswers
-        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value
+        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -83,7 +88,10 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, selectOptions, ultimateParentCompanyName, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, selectOptions, ultimateParentCompanyName, NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -103,7 +111,6 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
       }
     }
 
-
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -117,8 +124,12 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
-            selectOptions, ultimateParentCompanyName, NormalMode)(request, messages(application)).toString
+          view(
+            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
+            selectOptions,
+            ultimateParentCompanyName,
+            NormalMode
+          )(request, messages(application)).toString
       }
     }
 
@@ -150,7 +161,9 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
     "must return a Bad Request and errors when invalid data is submitted" in {
       val userAnswers = emptyUserAnswers
-        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value
+        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -166,7 +179,10 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, selectOptions, ultimateParentCompanyName, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, selectOptions, ultimateParentCompanyName, NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 

@@ -38,15 +38,15 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CheckUltimateGlobalParentCompanyInUkFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
-  lazy val checkUltimateGlobalParentCompanyInUkRoute = routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode).url
+  lazy val checkUltimateGlobalParentCompanyInUkRoute =
+    routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode).url
 
   "CheckUltimateGlobalParentCompanyInUk Controller" - {
 
     "must return OK and the correct view for a GET" in {
       val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyNamePage, "").success.value
-
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

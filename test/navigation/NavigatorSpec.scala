@@ -178,12 +178,14 @@ class NavigatorSpec extends SpecBase {
           CompanyRegisteredOfficeUkAddressPage,
           NormalMode,
           UserAnswers("id")
-            .set(CompanyRegisteredOfficeUkAddressPage, CompanyRegisteredOfficeUkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ"))
+            .set(
+              CompanyRegisteredOfficeUkAddressPage,
+              CompanyRegisteredOfficeUkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ")
+            )
             .success
             .value
         ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
       }
-
 
       "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
 

@@ -38,7 +38,7 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider = new CheckIfGroupFormProvider()
+  val formProvider        = new CheckIfGroupFormProvider()
   val form: Form[Boolean] = formProvider()
 
   lazy val checkIfGroupRoute: String = routes.CheckIfGroupController.onPageLoad(NormalMode).url

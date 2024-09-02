@@ -40,27 +40,29 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val country: Country = Country("Andorra", "AD", "country")
-  private val locations: Seq[Country] = Seq(country)
-  private val formProvider = new InternationalAddressFormProvider()
+  private val country: Country                 = Country("Andorra", "AD", "country")
+  private val locations: Seq[Country]          = Seq(country)
+  private val formProvider                     = new InternationalAddressFormProvider()
   private val form: Form[InternationalAddress] = formProvider(locations)
 
-  private val selectOptions: Seq[SelectItem] = Seq(SelectItem(Some(""), ""),
+  private val selectOptions: Seq[SelectItem] = Seq(
+    SelectItem(Some(""), ""),
     SelectItem(value = Some("AL"), text = "Albania"),
     SelectItem(value = Some("DZ"), text = "Algeria"),
-    SelectItem(value = Some("AD"), text = "Andorra", selected = true))
+    SelectItem(value = Some("AD"), text = "Andorra", selected = true)
+  )
 
-
-  lazy val internationalContactAddressRoute: String = routes.InternationalContactAddressController.onPageLoad(NormalMode).url
+  lazy val internationalContactAddressRoute: String =
+    routes.InternationalContactAddressController.onPageLoad(NormalMode).url
 
   val userAnswers: UserAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
       InternationalContactAddressPage.toString -> Json.obj(
-        "line1" -> "value 1",
-        "line2" -> "value 2",
-        "line3" -> "value 3",
-        "line4" -> "value 4",
+        "line1"   -> "value 1",
+        "line2"   -> "value 2",
+        "line3"   -> "value 3",
+        "line4"   -> "value 4",
         "country" -> Json.toJson(country)
       )
     )
@@ -98,8 +100,11 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
-            selectOptions, NormalMode)(request, messages(application)).toString
+          view(
+            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
+            selectOptions,
+            NormalMode
+          )(request, messages(application)).toString
       }
     }
 
@@ -121,7 +126,6 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, internationalContactAddressRoute)
             .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "AD"))
-
 
         val result = route(application, request).value
 
@@ -146,7 +150,10 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, selectOptions, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, selectOptions, NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
