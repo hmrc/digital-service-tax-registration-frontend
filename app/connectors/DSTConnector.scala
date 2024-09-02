@@ -16,12 +16,12 @@
 
 package connectors
 
+import models.BackendAndFrontendJson._
 import models.CompanyRegWrapper
 import models.DataModel._
-import models.BackendAndFrontendJson._
 import play.api.Logging
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import javax.inject.Inject
