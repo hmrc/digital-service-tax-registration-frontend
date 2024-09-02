@@ -33,51 +33,51 @@ import views.html.UltimateParentCompanyUkAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UltimateParentCompanyUkAddressController @Inject()(
-                                      override val messagesApi: MessagesApi,
-                                      sessionRepository: SessionRepository,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      formProvider: UltimateParentCompanyUkAddressFormProvider,
-                                      val controllerComponents: MessagesControllerComponents,
-                                      view: UltimateParentCompanyUkAddressView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class UltimateParentCompanyUkAddressController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: UltimateParentCompanyUkAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: UltimateParentCompanyUkAddressView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(UltimateParentCompanyUkAddressPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(UltimateParentCompanyUkAddressPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      renderPage(mode, preparedForm, Ok)
+    renderPage(mode, preparedForm, Ok)
   }
 
-  private def renderPage(mode: Mode, form: Form[UltimateParentCompanyUkAddress], status: Status)(implicit request: DataRequest[AnyContent]): Result = {
+  private def renderPage(mode: Mode, form: Form[UltimateParentCompanyUkAddress], status: Status)(implicit
+    request: DataRequest[AnyContent]
+  ): Result =
     request.userAnswers.get(UltimateParentCompanyNamePage) match {
       case Some(parentName) =>
         status(view(form, mode, parentName))
-      case _ => Redirect(routes.JourneyRecoveryController.onPageLoad())
+      case _                => Redirect(routes.JourneyRecoveryController.onPageLoad())
     }
-  }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UltimateParentCompanyUkAddressPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UltimateParentCompanyUkAddressPage, mode, updatedAnswers))
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(UltimateParentCompanyUkAddressPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(UltimateParentCompanyUkAddressPage, mode, updatedAnswers))
+        )
   }
 }

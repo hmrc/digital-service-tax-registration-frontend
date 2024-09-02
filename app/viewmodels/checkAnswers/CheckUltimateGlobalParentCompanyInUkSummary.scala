@@ -24,21 +24,22 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CheckUltimateGlobalParentCompanyInUkSummary  {
+object CheckUltimateGlobalParentCompanyInUkSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CheckUltimateGlobalParentCompanyInUkPage).map {
-      answer =>
+    answers.get(CheckUltimateGlobalParentCompanyInUkPage).map { answer =>
+      val value = if (answer) "site.yes" else "site.no"
 
-        val value = if (answer) "site.yes" else "site.no"
-
-        SummaryListRowViewModel(
-          key     = "checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("checkUltimateGlobalParentCompanyInUk.change.hidden"))
+      SummaryListRowViewModel(
+        key = "checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel(
+            "site.change",
+            routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(CheckMode).url
           )
+            .withVisuallyHiddenText(messages("checkUltimateGlobalParentCompanyInUk.change.hidden"))
         )
+      )
     }
 }

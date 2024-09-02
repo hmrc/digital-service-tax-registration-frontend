@@ -18,13 +18,13 @@ package models
 
 import play.api.libs.json._
 
-case class ContactUkAddress (
-                              buildingOrStreet: String,
-                              buildingOrStreetLine2: Option[String] = None,
-                              townOrCity: Option[String] = None,
-                              county: Option[String] = None,
-                              postcode: String
-                            )
+case class ContactUkAddress(
+  buildingOrStreet: String,
+  buildingOrStreetLine2: Option[String] = None,
+  townOrCity: Option[String] = None,
+  county: Option[String] = None,
+  postcode: String
+)
 
 object ContactUkAddress {
 

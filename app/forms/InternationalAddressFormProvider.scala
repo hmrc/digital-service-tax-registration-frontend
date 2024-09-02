@@ -26,20 +26,33 @@ import javax.inject.Inject
 class InternationalAddressFormProvider @Inject() extends Mappings {
 
   val maxLength = 35
-  val regex = """^[A-Za-z0-9 \-,.&']*$"""
+  val regex     = """^[A-Za-z0-9 \-,.&']*$"""
 
   def apply(countryList: Seq[Country]): Form[InternationalAddress] = Form(
     mapping(
-      "line1" -> text("internationalAddress.error.line1.required")
-        .verifying(regexp(regex, "internationalAddress.error.line1.invalid"),
+      "line1"   -> text("internationalAddress.error.line1.required")
+        .verifying(
+          regexp(regex, "internationalAddress.error.line1.invalid"),
           maxLength(maxLength, "internationalAddress.error.line1.length")
         ),
-      "line2" -> optionalText("internationalAddress.error.line2.invalid",
-        "internationalAddress.error.line2.length", regex, maxLength),
-      "line3" -> optionalText("internationalAddress.error.line3.invalid",
-        "internationalAddress.error.line3.length", regex, maxLength),
-      "line4" -> optionalText("internationalAddress.error.line4.invalid",
-        "internationalAddress.error.line4.length", regex, maxLength),
+      "line2"   -> optionalText(
+        "internationalAddress.error.line2.invalid",
+        "internationalAddress.error.line2.length",
+        regex,
+        maxLength
+      ),
+      "line3"   -> optionalText(
+        "internationalAddress.error.line3.invalid",
+        "internationalAddress.error.line3.length",
+        regex,
+        maxLength
+      ),
+      "line4"   -> optionalText(
+        "internationalAddress.error.line4.invalid",
+        "internationalAddress.error.line4.length",
+        regex,
+        maxLength
+      ),
       "country" -> text("internationalAddress.error.countryCode.required")
         .verifying("internationalAddress.error.country.required", value => countryList.exists(_.code == value))
         .transform[Country](value => countryList.find(_.code == value).get, _.code)

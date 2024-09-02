@@ -32,49 +32,52 @@ import views.html.UltimateParentCompanyInternationalAddressView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UltimateParentCompanyInternationalAddressController @Inject()(
-                                      override val messagesApi: MessagesApi,
-                                      sessionRepository: SessionRepository,
-                                      navigator: Navigator,
-                                      identify: IdentifierAction,
-                                      getData: DataRetrievalAction,
-                                      requireData: DataRequiredAction,
-                                      location: Location,
-                                      formProvider: InternationalAddressFormProvider,
-                                      val controllerComponents: MessagesControllerComponents,
-                                      view: UltimateParentCompanyInternationalAddressView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class UltimateParentCompanyInternationalAddressController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  location: Location,
+  formProvider: InternationalAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: UltimateParentCompanyInternationalAddressView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[InternationalAddress] = formProvider(location.countryListWithoutGB)
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(UltimateParentCompanyInternationalAddressPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-      renderPage(mode, preparedForm, Ok)
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(UltimateParentCompanyInternationalAddressPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
+    renderPage(mode, preparedForm, Ok)
   }
 
-  private def renderPage(mode: Mode, form: Form[InternationalAddress], status: Status)(implicit request: DataRequest[AnyContent]): Result = {
+  private def renderPage(mode: Mode, form: Form[InternationalAddress], status: Status)(implicit
+    request: DataRequest[AnyContent]
+  ): Result =
     request.userAnswers.get(UltimateParentCompanyNamePage) match {
       case Some(parentName) =>
         status(view(form, location.countrySelectList(form.data, location.countryListWithoutGB), parentName, mode))
-      case _ => Redirect(routes.JourneyRecoveryController.onPageLoad())
+      case _                => Redirect(routes.JourneyRecoveryController.onPageLoad())
     }
-  }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(renderPage(mode, formWithErrors, BadRequest)),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UltimateParentCompanyInternationalAddressPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UltimateParentCompanyInternationalAddressPage, mode, updatedAnswers))
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(renderPage(mode, formWithErrors, BadRequest)),
+          value =>
+            for {
+              updatedAnswers <-
+                Future.fromTry(request.userAnswers.set(UltimateParentCompanyInternationalAddressPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(UltimateParentCompanyInternationalAddressPage, mode, updatedAnswers))
+        )
   }
 }

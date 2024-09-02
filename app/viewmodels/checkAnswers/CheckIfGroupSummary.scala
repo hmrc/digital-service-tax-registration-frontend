@@ -24,21 +24,19 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CheckIfGroupSummary  {
+object CheckIfGroupSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CheckIfGroupPage).map {
-      answer =>
+    answers.get(CheckIfGroupPage).map { answer =>
+      val value = if (answer) "site.yes" else "site.no"
 
-        val value = if (answer) "site.yes" else "site.no"
-
-        SummaryListRowViewModel(
-          key     = "checkIfGroup.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CheckIfGroupController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("checkIfGroup.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key = "checkIfGroup.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.CheckIfGroupController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("checkIfGroup.change.hidden"))
         )
+      )
     }
 }

@@ -22,10 +22,7 @@ import forms.CheckUltimateGlobalParentCompanyInUkFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{
-  CheckUltimateGlobalParentCompanyInUkPage,
-  UltimateParentCompanyNamePage
-}
+import pages.{CheckUltimateGlobalParentCompanyInUkPage, UltimateParentCompanyNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -35,15 +32,15 @@ import views.html.CheckUltimateGlobalParentCompanyInUkView
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckUltimateGlobalParentCompanyInUkController @Inject() (
-    override val messagesApi: MessagesApi,
-    sessionRepository: SessionRepository,
-    navigator: Navigator,
-    identify: IdentifierAction,
-    getData: DataRetrievalAction,
-    requireData: DataRequiredAction,
-    formProvider: CheckUltimateGlobalParentCompanyInUkFormProvider,
-    val controllerComponents: MessagesControllerComponents,
-    view: CheckUltimateGlobalParentCompanyInUkView
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: CheckUltimateGlobalParentCompanyInUkFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckUltimateGlobalParentCompanyInUkView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -52,7 +49,7 @@ class CheckUltimateGlobalParentCompanyInUkController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (identify andThen getData andThen requireData) { implicit request =>
-      val preparedForm = request.userAnswers.get(
+      val preparedForm                = request.userAnswers.get(
         CheckUltimateGlobalParentCompanyInUkPage
       ) match {
         case None        => form
@@ -60,7 +57,6 @@ class CheckUltimateGlobalParentCompanyInUkController @Inject() (
       }
       val ultimateCompanyName: String =
         request.userAnswers.get(UltimateParentCompanyNamePage).getOrElse("")
-
 
       Ok(view(preparedForm, mode, ultimateCompanyName))
     }
@@ -70,15 +66,14 @@ class CheckUltimateGlobalParentCompanyInUkController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(
-                request.userAnswers
-                  .set(CheckUltimateGlobalParentCompanyInUkPage, value)
-              )
-              _ <- sessionRepository.set(updatedAnswers)
+                                  request.userAnswers
+                                    .set(CheckUltimateGlobalParentCompanyInUkPage, value)
+                                )
+              _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
               navigator.nextPage(
                 CheckUltimateGlobalParentCompanyInUkPage,

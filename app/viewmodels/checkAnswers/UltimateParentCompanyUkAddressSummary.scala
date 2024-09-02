@@ -26,21 +26,20 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object UltimateParentCompanyUkAddressSummary  {
+object UltimateParentCompanyUkAddressSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(UltimateParentCompanyUkAddressPage).map {
-      answer =>
+    answers.get(UltimateParentCompanyUkAddressPage).map { answer =>
+      val value =
+        HtmlFormat.escape(answer.buildingOrStreet).toString + "<br/>" + HtmlFormat.escape(answer.postcode).toString
 
-      val value = HtmlFormat.escape(answer.buildingOrStreet).toString + "<br/>" + HtmlFormat.escape(answer.postcode).toString
-
-        SummaryListRowViewModel(
-          key     = "ultimateParentCompanyUkAddress.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlContent(value)),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.UltimateParentCompanyUkAddressController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("ultimateParentCompanyUkAddress.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key = "ultimateParentCompanyUkAddress.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlContent(value)),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.UltimateParentCompanyUkAddressController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("ultimateParentCompanyUkAddress.change.hidden"))
         )
+      )
     }
 }

@@ -24,4 +24,3 @@ object Country {
 
   implicit val LocationFormat: OFormat[Country] = Json.format[Country]
 }
-

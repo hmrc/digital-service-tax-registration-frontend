@@ -32,44 +32,48 @@ import views.html.InternationalContactAddressView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class InternationalContactAddressController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       sessionRepository: SessionRepository,
-                                                       navigator: Navigator,
-                                                       identify: IdentifierAction,
-                                                       getData: DataRetrievalAction,
-                                                       requireData: DataRequiredAction,
-                                                       location: Location,
-                                                       formProvider: InternationalAddressFormProvider,
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       view: InternationalContactAddressView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class InternationalContactAddressController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  location: Location,
+  formProvider: InternationalAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: InternationalContactAddressView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form: Form[InternationalAddress] = formProvider(location.countryListWithoutGB)
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, location.countrySelectList(form.data, location.countryListWithoutGB),  mode))
+    Ok(view(preparedForm, location.countrySelectList(form.data, location.countryListWithoutGB), mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors,location.countrySelectList(form.data, location.countryListWithoutGB), mode))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalContactAddressPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(InternationalContactAddressPage, mode, updatedAnswers))
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(
+                view(formWithErrors, location.countrySelectList(form.data, location.countryListWithoutGB), mode)
+              )
+            ),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalContactAddressPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(InternationalContactAddressPage, mode, updatedAnswers))
+        )
   }
 }

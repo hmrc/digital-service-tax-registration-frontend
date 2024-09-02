@@ -23,7 +23,7 @@ import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
 class UltimateParentCompanyNameFormProvider @Inject() extends Mappings {
 
-  val maxLength = 105
+  val maxLength        = 105
   val companyNameRegex = """^[a-zA-Z0-9 '&.-]{1,105}$"""
 
   private def validCompanyName: Constraint[String] =
