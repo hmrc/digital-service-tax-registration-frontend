@@ -250,3 +250,9 @@ ultimateParentCompanyUkAddress.title = What is the registered office address of 
 ultimateParentCompanyUkAddress.heading = What is the registered office address of {0}?
 ultimateParentCompanyUkAddress.buildingOrStreet.change.hidden = buildingOrStreet
 ultimateParentCompanyUkAddress.postcode.change.hidden = postcode
+checkUltimateGlobalParentCompanyInUk.title = Ultimate parent company details
+checkUltimateGlobalParentCompanyInUk.heading = is the registered office address of {0} in the UK?
+checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = checkUltimateGlobalParentCompanyInUk
+checkUltimateGlobalParentCompanyInUk.error.required = Select yes if checkUltimateGlobalParentCompanyInUk
+checkUltimateGlobalParentCompanyInUk.change.hidden = CheckUltimateGlobalParentCompanyInUk
+

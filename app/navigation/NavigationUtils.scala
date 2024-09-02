@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUltimateGlobalParentCompanyInUkPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -85,18 +85,26 @@ trait NavigationUtils {
   }
 
   def ultimateParentCompanyNamePage(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(UltimateParentCompanyNamePage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
+    userAnswers.get(UltimateParentCompanyNamePage).map { _ => routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode)}
   }
 
   def companyContactAddress(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(CompanyContactAddressPage).map {
-      case true => ??? // TODO page needs to  be implemented
+      case true => routes.CheckIfGroupController.onPageLoad(NormalMode) // TODO page needs to  be implemented
       case false => ??? // TODO page needs to  be implemented
     }
   }
 
   def ultimateParentCompanyUkAddresPage(userAnswers: UserAnswers): Option[Call] = {
     userAnswers.get(UltimateParentCompanyUkAddressPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
+  }
+
+
+  def checkUltimateGlobalParentCompanyInUkPage(userAnswers: UserAnswers): Option[Call] = {
+    userAnswers.get(CheckUltimateGlobalParentCompanyInUkPage).map {
+      case true => routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode) // TODO page needs to  be implemented
+      case false => routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode) // TODO page needs to  be implemented
+    }
   }
 
 }

@@ -107,3 +107,7 @@ GET        /ultimate-parent-company-uk-address                    controllers.Ul
 POST       /ultimate-parent-company-uk-address                    controllers.UltimateParentCompanyUkAddressController.onSubmit(mode: Mode = NormalMode)
 GET        /change-ultimate-parent-company-uk-address             controllers.UltimateParentCompanyUkAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-ultimate-parent-company-uk-address             controllers.UltimateParentCompanyUkAddressController.onSubmit(mode: Mode = CheckMode)
+GET        /check-ultimate-parent-company-address                        controllers.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(mode: Mode = NormalMode)
+POST       /check-ultimate-parent-company-address                        controllers.CheckUltimateGlobalParentCompanyInUkController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/check-ultimate-parent-company-address                  controllers.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/check-ultimate-parent-company-address                  controllers.CheckUltimateGlobalParentCompanyInUkController.onSubmit(mode: Mode = CheckMode)

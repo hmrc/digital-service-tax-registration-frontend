@@ -184,6 +184,7 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
       }
 
+
       "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
 
       "must go from a CompanyContactAddressPage with option `true` to TODO page" in pending
@@ -192,7 +193,38 @@ class NavigatorSpec extends SpecBase {
 
       "must go from CheckIfGroupPage to a TODO contact-details page" in pending
 
-      "must go from a UltimateParentCompanyNamePage to a TODO-register/check-ultimate-parent-company-address page" in pending
+      "must go from a UltimateParentCompanyNamePage to a check-ultimate-parent-company-address page" in {
+        navigator.nextPage(
+          UltimateParentCompanyNamePage,
+          NormalMode,
+          UserAnswers("id")
+            .set(UltimateParentCompanyNamePage, "heloo")
+            .success
+            .value
+        ) mustBe routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckUltimateGlobalParentCompanyInUkPage to a ultimate-parent-company-uk-address page" in {
+        navigator.nextPage(
+          CheckUltimateGlobalParentCompanyInUkPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckUltimateGlobalParentCompanyInUkPage, true)
+            .success
+            .value
+        ) mustBe routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckUltimateGlobalParentCompanyInUkPage to a ultimate-parent-company-international-address page" in {
+        navigator.nextPage(
+          CheckUltimateGlobalParentCompanyInUkPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckUltimateGlobalParentCompanyInUkPage, false)
+            .success
+            .value
+        ) mustBe routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode)
+      }
 
       "must go from a UltimateParentCompanyUkAddressPage to a TODO-register/contact-details" in pending
     }
