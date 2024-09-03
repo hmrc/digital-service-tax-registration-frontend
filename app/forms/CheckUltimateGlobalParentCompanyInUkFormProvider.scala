@@ -23,8 +23,8 @@ import play.api.data.Form
 
 class CheckUltimateGlobalParentCompanyInUkFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(companyName: String): Form[Boolean] =
     Form(
-      "value" -> boolean("checkUltimateGlobalParentCompanyInUk.error.required")
+      "value" -> boolean(requiredKey = "checkUltimateGlobalParentCompanyInUk.error.required", args = Seq(companyName))
     )
 }

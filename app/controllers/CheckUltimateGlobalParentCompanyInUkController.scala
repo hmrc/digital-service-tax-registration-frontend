@@ -45,28 +45,31 @@ class CheckUltimateGlobalParentCompanyInUkController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
-
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (identify andThen getData andThen requireData) { implicit request =>
-      val preparedForm                = request.userAnswers.get(
+      val ultimateCompanyName: String =
+        request.userAnswers.get(UltimateParentCompanyNamePage).getOrElse("")
+
+      val form         = formProvider(ultimateCompanyName)
+      val preparedForm = request.userAnswers.get(
         CheckUltimateGlobalParentCompanyInUkPage
       ) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-      val ultimateCompanyName: String =
-        request.userAnswers.get(UltimateParentCompanyNamePage).getOrElse("")
 
       Ok(view(preparedForm, mode, ultimateCompanyName))
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (identify andThen getData andThen requireData).async { implicit request =>
+      val ultimateCompanyName: String =
+        request.userAnswers.get(UltimateParentCompanyNamePage).getOrElse("")
+      val form                        = formProvider(ultimateCompanyName)
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, ultimateCompanyName))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(

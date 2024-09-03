@@ -24,7 +24,7 @@ class CheckUltimateGlobalParentCompanyInUkFormProviderSpec extends BooleanFieldB
   val requiredKey = "checkUltimateGlobalParentCompanyInUk.error.required"
   val invalidKey  = "error.boolean"
 
-  val form = new CheckUltimateGlobalParentCompanyInUkFormProvider()()
+  val form = new CheckUltimateGlobalParentCompanyInUkFormProvider()("companyName")
 
   ".value" - {
 
@@ -33,13 +33,13 @@ class CheckUltimateGlobalParentCompanyInUkFormProviderSpec extends BooleanFieldB
     behave like booleanField(
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      invalidError = FormError(fieldName, invalidKey, Seq("companyName"))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq("companyName"))
     )
   }
 }

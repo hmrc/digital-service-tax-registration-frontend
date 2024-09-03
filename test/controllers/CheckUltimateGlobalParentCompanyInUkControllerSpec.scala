@@ -38,7 +38,7 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CheckUltimateGlobalParentCompanyInUkFormProvider()
-  val form         = formProvider()
+  val form         = formProvider("companyname")
 
   lazy val checkUltimateGlobalParentCompanyInUkRoute =
     routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode).url
@@ -46,7 +46,7 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
   "CheckUltimateGlobalParentCompanyInUk Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyNamePage, "").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyNamePage, "companyname").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -58,7 +58,7 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
         val view = application.injector.instanceOf[CheckUltimateGlobalParentCompanyInUkView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, "companyname")(request, messages(application)).toString
       }
     }
 
@@ -76,7 +76,7 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, "")(request, messages(application)).toString
       }
     }
 
@@ -107,8 +107,9 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+      val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyNamePage, "companyname").success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
@@ -122,7 +123,10 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, "companyname")(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
