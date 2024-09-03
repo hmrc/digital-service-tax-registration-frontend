@@ -15,6 +15,7 @@
  *@
 
 @import viewmodels.LegendSize
+@import models.Address
 
 @this(
     layout: templates.Layout,
@@ -24,7 +25,17 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], address: Address, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@content=@{
+    val companyAddress = s"""${address.buildingorstreet}<br>
+    ${address.buildingorstreet2.fold("")(buildingorstreet2 => s"$buildingorstreet2<br>")}
+    ${address.town.fold("")(town => s"$town<br>")}
+    ${address.county.fold("")(county => s"$county<br>")}
+    ${address.postcode}<br>"""
+
+    HtmlContent(Html(companyAddress))
+}
 
 @layout(pageTitle = title(form, messages("confirmCompanyDetails.title"))) {
 
@@ -43,7 +54,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("confirmCompanyDetails.paragraph.hint"))
+                legend = LegendViewModel(content)
             )
         )
 
