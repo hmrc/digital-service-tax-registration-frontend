@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUltimateGlobalParentCompanyInUkPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUltimateGlobalParentCompanyInUkPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, LiabilityStartDatePage, UkRevenuesPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -102,4 +102,8 @@ trait NavigationUtils {
           .onPageLoad(NormalMode) // TODO page needs to  be implemented
     }
 
+  def liabilityStartDatePage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(LiabilityStartDatePage).map { _ =>
+      routes.GlobalRevenuesController.onPageLoad(NormalMode)
+    }
 }
