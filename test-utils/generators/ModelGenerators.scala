@@ -30,7 +30,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         buildingOrStreet <- arbitrary[String]
-        postcode <- arbitrary[String]
+        postcode         <- arbitrary[String]
       } yield UltimateParentCompanyUkAddress(buildingOrStreet, None, None, None, postcode)
     }
 
@@ -38,23 +38,23 @@ trait ModelGenerators {
     Arbitrary {
       for {
         buildingOrStreet <- arbitrary[String]
-        postcode <- arbitrary[String]
+        postcode         <- arbitrary[String]
       } yield ContactUkAddress(buildingOrStreet, None, None, None, postcode)
     }
-  val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
+  val genCompanyName                                                       = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
 
   implicit lazy val arbitraryCompanyRegisteredOfficeUkAddress: Arbitrary[CompanyRegisteredOfficeUkAddress] =
     Arbitrary {
       for {
         buildingorstreet <- arbitrary[String]
-        postcode <- arbitrary[String]
+        postcode         <- arbitrary[String]
       } yield CompanyRegisteredOfficeUkAddress(buildingorstreet, None, None, None, postcode)
     }
-  implicit lazy val arbitraryLocation: Arbitrary[Country] =
+  implicit lazy val arbitraryLocation: Arbitrary[Country]                                                  =
     Arbitrary {
       for {
-        name <- Arbitrary.arbitrary[String]
-        code <- Gen.pick(2, 'A' to 'Z')
+        name  <- Arbitrary.arbitrary[String]
+        code  <- Gen.pick(2, 'A' to 'Z')
         type1 <- Gen.oneOf(Seq("country"))
       } yield Country(name, code.mkString, type1)
     }
@@ -62,12 +62,12 @@ trait ModelGenerators {
   implicit lazy val arbitraryInternationalContactAddress: Arbitrary[InternationalAddress] =
     Arbitrary {
       for {
-        line1 <- Arbitrary.arbitrary[String]
-        line2 <- Arbitrary.arbitrary[Option[String]]
-        line3 <- Arbitrary.arbitrary[Option[String]]
-        line4 <- Arbitrary.arbitrary[Option[String]]
+        line1       <- Arbitrary.arbitrary[String]
+        line2       <- Arbitrary.arbitrary[Option[String]]
+        line3       <- Arbitrary.arbitrary[Option[String]]
+        line4       <- Arbitrary.arbitrary[Option[String]]
         countryCode <- Arbitrary.arbitrary[Country]
       } yield InternationalAddress(line1, line2, line3, line4, countryCode)
     }
-  val genPostcode: Gen[String] = RegexpGen.from(Constraints.postcodeRegex.regex)
+  val genPostcode: Gen[String]                                                            = RegexpGen.from(Constraints.postcodeRegex.regex)
 }

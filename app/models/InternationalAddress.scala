@@ -18,11 +18,13 @@ package models
 
 import play.api.libs.json._
 
-case class InternationalAddress(line1: String,
-                                line2: Option[String],
-                                line3: Option[String],
-                                line4: Option[String],
-                                country: Country)
+case class InternationalAddress(
+  line1: String,
+  line2: Option[String],
+  line3: Option[String],
+  line4: Option[String],
+  country: Country
+)
 
 object InternationalAddress {
 

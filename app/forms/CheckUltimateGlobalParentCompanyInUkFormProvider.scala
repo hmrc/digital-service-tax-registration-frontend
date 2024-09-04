@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.{Json, OFormat}
+import javax.inject.Inject
 
-case class Country(name: String, code: String, `type`: String)
+import forms.mappings.Mappings
+import play.api.data.Form
 
-object Country {
+class CheckUltimateGlobalParentCompanyInUkFormProvider @Inject() extends Mappings {
 
-  implicit val LocationFormat: OFormat[Country] = Json.format[Country]
+  def apply(companyName: String): Form[Boolean] =
+    Form(
+      "value" -> boolean(requiredKey = "checkUltimateGlobalParentCompanyInUk.error.required", args = Seq(companyName))
+    )
 }

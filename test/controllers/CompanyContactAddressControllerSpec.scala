@@ -37,10 +37,11 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CompanyContactAddressFormProvider()
-  val form = formProvider()
-  val companyOfficeRegisterEmptyAddress = CompanyRegisteredOfficeUkAddress("", Some(""), Some(""), Some(""), "")
-  val companyOfficeRegisterInformationAddress = CompanyRegisteredOfficeUkAddress("kirby", Some(""), Some("london"), Some("essex"), "SW2 5IQ")
+  val formProvider                            = new CompanyContactAddressFormProvider()
+  val form                                    = formProvider()
+  val companyOfficeRegisterEmptyAddress       = CompanyRegisteredOfficeUkAddress("", Some(""), Some(""), Some(""), "")
+  val companyOfficeRegisterInformationAddress =
+    CompanyRegisteredOfficeUkAddress("kirby", Some(""), Some("london"), Some("essex"), "SW2 5IQ")
 
   lazy val companyContactAddressRoute = routes.CompanyContactAddressController.onPageLoad(NormalMode).url
 
@@ -48,7 +49,10 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterEmptyAddress).success.value
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterEmptyAddress)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -60,13 +64,19 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[CompanyContactAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, companyOfficeRegisterEmptyAddress, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, companyOfficeRegisterEmptyAddress, NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterInformationAddress).success.value
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterInformationAddress)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -78,10 +88,12 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[CompanyContactAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, companyOfficeRegisterInformationAddress, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, companyOfficeRegisterInformationAddress, NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
-
 
     "must redirect to the next page when valid data is submitted" in {
 
@@ -111,7 +123,10 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterEmptyAddress).success.value
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterEmptyAddress)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -127,7 +142,10 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, companyOfficeRegisterEmptyAddress, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, companyOfficeRegisterEmptyAddress, NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 

@@ -19,12 +19,12 @@ package forms
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class CompanyContactAddressFormProviderSpec extends BooleanFieldBehaviours {
+class CheckUltimateGlobalParentCompanyInUkFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "companyContactAddress.error.required"
+  val requiredKey = "checkUltimateGlobalParentCompanyInUk.error.required"
   val invalidKey  = "error.boolean"
 
-  val form = new CompanyContactAddressFormProvider()()
+  val form = new CheckUltimateGlobalParentCompanyInUkFormProvider()("companyName")
 
   ".value" - {
 
@@ -33,14 +33,13 @@ class CompanyContactAddressFormProviderSpec extends BooleanFieldBehaviours {
     behave like booleanField(
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      invalidError = FormError(fieldName, invalidKey, Seq("companyName"))
     )
 
     behave like mandatoryField(
       form,
       fieldName,
-      requiredError = FormError(fieldName, requiredKey)
+      requiredError = FormError(fieldName, requiredKey, Seq("companyName"))
     )
-
   }
 }

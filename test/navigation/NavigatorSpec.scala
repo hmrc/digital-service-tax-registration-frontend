@@ -178,7 +178,10 @@ class NavigatorSpec extends SpecBase {
           CompanyRegisteredOfficeUkAddressPage,
           NormalMode,
           UserAnswers("id")
-            .set(CompanyRegisteredOfficeUkAddressPage, CompanyRegisteredOfficeUkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ"))
+            .set(
+              CompanyRegisteredOfficeUkAddressPage,
+              CompanyRegisteredOfficeUkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ")
+            )
             .success
             .value
         ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
@@ -192,7 +195,38 @@ class NavigatorSpec extends SpecBase {
 
       "must go from CheckIfGroupPage to a TODO contact-details page" in pending
 
-      "must go from a UltimateParentCompanyNamePage to a TODO-register/check-ultimate-parent-company-address page" in pending
+      "must go from a UltimateParentCompanyNamePage to a check-ultimate-parent-company-address page" in {
+        navigator.nextPage(
+          UltimateParentCompanyNamePage,
+          NormalMode,
+          UserAnswers("id")
+            .set(UltimateParentCompanyNamePage, "heloo")
+            .success
+            .value
+        ) mustBe routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckUltimateGlobalParentCompanyInUkPage to a ultimate-parent-company-uk-address page" in {
+        navigator.nextPage(
+          CheckUltimateGlobalParentCompanyInUkPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckUltimateGlobalParentCompanyInUkPage, true)
+            .success
+            .value
+        ) mustBe routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckUltimateGlobalParentCompanyInUkPage to a ultimate-parent-company-international-address page" in {
+        navigator.nextPage(
+          CheckUltimateGlobalParentCompanyInUkPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckUltimateGlobalParentCompanyInUkPage, false)
+            .success
+            .value
+        ) mustBe routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode)
+      }
 
       "must go from a UltimateParentCompanyUkAddressPage to a TODO-register/contact-details" in pending
     }

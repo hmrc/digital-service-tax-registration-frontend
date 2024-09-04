@@ -18,27 +18,27 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.UltimateParentCompanyUkAddressPage
+import pages.CheckUltimateGlobalParentCompanyInUkPage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object UltimateParentCompanyUkAddressSummary {
+object CheckUltimateGlobalParentCompanyInUkSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(UltimateParentCompanyUkAddressPage).map { answer =>
-      val value =
-        HtmlFormat.escape(answer.buildingOrStreet).toString + "<br/>" + HtmlFormat.escape(answer.postcode).toString
+    answers.get(CheckUltimateGlobalParentCompanyInUkPage).map { answer =>
+      val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key = "ultimateParentCompanyUkAddress.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlContent(value)),
+        key = "checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel",
+        value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.UltimateParentCompanyUkAddressController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("ultimateParentCompanyUkAddress.change.hidden"))
+          ActionItemViewModel(
+            "site.change",
+            routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(CheckMode).url
+          )
+            .withVisuallyHiddenText(messages("checkUltimateGlobalParentCompanyInUk.change.hidden"))
         )
       )
     }

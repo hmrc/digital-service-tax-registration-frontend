@@ -17,94 +17,66 @@
 package controllers
 
 import base.SpecBase
-import forms.InternationalAddressFormProvider
-import models.{Country, InternationalAddress, NormalMode, UserAnswers}
+import forms.CheckUltimateGlobalParentCompanyInUkFormProvider
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.InternationalContactAddressPage
-import play.api.data.Form
+import pages.{CheckContactAddressPage, CheckUltimateGlobalParentCompanyInUkPage, UltimateParentCompanyNamePage}
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
-import views.html.InternationalContactAddressView
+import views.html.CheckUltimateGlobalParentCompanyInUkView
 
 import scala.concurrent.Future
 
-class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
+class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute: Call = Call("GET", "/foo")
+  def onwardRoute = Call("GET", "/foo")
 
-  private val country: Country                 = Country("Andorra", "AD", "country")
-  private val locations: Seq[Country]          = Seq(country)
-  private val formProvider                     = new InternationalAddressFormProvider()
-  private val form: Form[InternationalAddress] = formProvider(locations)
+  val formProvider = new CheckUltimateGlobalParentCompanyInUkFormProvider()
+  val form         = formProvider("companyname")
 
-  private val selectOptions: Seq[SelectItem] = Seq(
-    SelectItem(Some(""), ""),
-    SelectItem(value = Some("AL"), text = "Albania"),
-    SelectItem(value = Some("DZ"), text = "Algeria"),
-    SelectItem(value = Some("AD"), text = "Andorra", selected = true)
-  )
+  lazy val checkUltimateGlobalParentCompanyInUkRoute =
+    routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode).url
 
-  lazy val internationalContactAddressRoute: String =
-    routes.InternationalContactAddressController.onPageLoad(NormalMode).url
-
-  val userAnswers: UserAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      InternationalContactAddressPage.toString -> Json.obj(
-        "line1"   -> "value 1",
-        "line2"   -> "value 2",
-        "line3"   -> "value 3",
-        "line4"   -> "value 4",
-        "country" -> Json.toJson(country)
-      )
-    )
-  )
-
-  "InternationalContactAddress Controller" - {
+  "CheckUltimateGlobalParentCompanyInUk Controller" - {
 
     "must return OK and the correct view for a GET" in {
+      val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyNamePage, "companyname").success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, internationalContactAddressRoute)
-
-        val view = application.injector.instanceOf[InternationalContactAddressView]
+        val request = FakeRequest(GET, checkUltimateGlobalParentCompanyInUkRoute)
 
         val result = route(application, request).value
 
+        val view = application.injector.instanceOf[CheckUltimateGlobalParentCompanyInUkView]
+
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, selectOptions, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, "companyname")(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
+      val userAnswers = UserAnswers(userAnswersId).set(CheckUltimateGlobalParentCompanyInUkPage, true).success.value
+
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, internationalContactAddressRoute)
+        val request = FakeRequest(GET, checkUltimateGlobalParentCompanyInUkRoute)
 
-        val view = application.injector.instanceOf[InternationalContactAddressView]
+        val view = application.injector.instanceOf[CheckUltimateGlobalParentCompanyInUkView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(
-            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
-            selectOptions,
-            NormalMode
-          )(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, "")(request, messages(application)).toString
       }
     }
 
@@ -124,8 +96,8 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, internationalContactAddressRoute)
-            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "AD"))
+          FakeRequest(POST, checkUltimateGlobalParentCompanyInUkRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
@@ -135,22 +107,23 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+      val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyNamePage, "companyname").success.value
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, internationalContactAddressRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+          FakeRequest(POST, checkUltimateGlobalParentCompanyInUkRoute)
+            .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form.bind(Map("value" -> "invalid value"))
+        val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[InternationalContactAddressView]
+        val view = application.injector.instanceOf[CheckUltimateGlobalParentCompanyInUkView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, selectOptions, NormalMode)(
+        contentAsString(result) mustEqual view(boundForm, NormalMode, "companyname")(
           request,
           messages(application)
         ).toString
@@ -162,7 +135,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, internationalContactAddressRoute)
+        val request = FakeRequest(GET, checkUltimateGlobalParentCompanyInUkRoute)
 
         val result = route(application, request).value
 
@@ -177,8 +150,8 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, internationalContactAddressRoute)
-            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"))
+          FakeRequest(POST, checkUltimateGlobalParentCompanyInUkRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 

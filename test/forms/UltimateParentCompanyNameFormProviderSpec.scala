@@ -22,12 +22,11 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class UltimateParentCompanyNameFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "ultimateParentCompanyName.error.required"
-  val lengthKey = "ultimateParentCompanyName.error.length"
-  val invalidKey = "ultimateParentCompanyName.error.invalid"
-  val maxLength = 105
+  val requiredKey      = "ultimateParentCompanyName.error.required"
+  val lengthKey        = "ultimateParentCompanyName.error.length"
+  val invalidKey       = "ultimateParentCompanyName.error.invalid"
+  val maxLength        = 105
   val companyNameRegex = """^[a-zA-Z0-9 '&.-]{1,105}$"""
-
 
   val form = new UltimateParentCompanyNameFormProvider()()
 

@@ -26,25 +26,26 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object UltimateParentCompanyInternationalAddressSummary  {
+object UltimateParentCompanyInternationalAddressSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(UltimateParentCompanyInternationalAddressPage).map {
-      answer =>
+    answers.get(UltimateParentCompanyInternationalAddressPage).map { answer =>
+      val value = HtmlFormat.escape(answer.line1).toString +
+        answer.line2.map(x => "<br/>" + HtmlFormat.escape(x)) +
+        answer.line3.map(x => "<br/>" + HtmlFormat.escape(x)) +
+        answer.line4.map(x => "<br/>" + HtmlFormat.escape(x)) +
+        answer.country.name
 
-        val value = HtmlFormat.escape(answer.line1).toString +
-          answer.line2.map(x => "<br/>" + HtmlFormat.escape(x)) +
-          answer.line3.map(x => "<br/>" + HtmlFormat.escape(x)) +
-          answer.line4.map(x => "<br/>" + HtmlFormat.escape(x)) +
-          answer.country.name
-
-        SummaryListRowViewModel(
-          key     = "ultimateParentCompanyInternationalAddress.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlContent(value)),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.UltimateParentCompanyInternationalAddressController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("ultimateParentCompanyInternationalAddress.change.hidden"))
+      SummaryListRowViewModel(
+        key = "ultimateParentCompanyInternationalAddress.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlContent(value)),
+        actions = Seq(
+          ActionItemViewModel(
+            "site.change",
+            routes.UltimateParentCompanyInternationalAddressController.onPageLoad(CheckMode).url
           )
+            .withVisuallyHiddenText(messages("ultimateParentCompanyInternationalAddress.change.hidden"))
         )
+      )
     }
 }

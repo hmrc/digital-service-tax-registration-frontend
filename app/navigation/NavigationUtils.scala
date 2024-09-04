@@ -18,85 +18,88 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUltimateGlobalParentCompanyInUkPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.mvc.Call
 
 trait NavigationUtils {
-  def globalRevenues(userAnswers: UserAnswers): Option[Call] = {
+  def globalRevenues(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(GlobalRevenuesPage).map {
-      case true => routes.UkRevenuesController.onPageLoad(NormalMode)
+      case true  => routes.UkRevenuesController.onPageLoad(NormalMode)
       case false => routes.GlobalRevenuesNotEligibleController.onPageLoad()
     }
-  }
 
-  def ukRevenues(userAnswers: UserAnswers): Option[Call] = {
+  def ukRevenues(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(UkRevenuesPage).map {
-      case true => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
+      case true  => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
       case false => routes.UkRevenueNotEligibleController.onPageLoad()
     }
-  }
 
-  def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] = {
+  def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
-      case true => routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)
+      case true  => routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)
       case false => routes.CompanyNameController.onPageLoad(NormalMode)
     }
-  }
 
-  def checkCompanyRegisteredOfficePostcode(userAnswers: UserAnswers): Option[Call] = {
+  def checkCompanyRegisteredOfficePostcode(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckCompanyRegisteredOfficePostcodePage).map(_ => routes.CheckUtrController.onPageLoad(NormalMode))
-  }
 
-  def checkUtr(userAnswers: UserAnswers): Option[Call] = {
+  def checkUtr(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckUtrPage).map {
-      case true => routes.CorporationTaxEnterUtrController.onPageLoad(NormalMode)
+      case true  => routes.CorporationTaxEnterUtrController.onPageLoad(NormalMode)
       case false => routes.CompanyNameController.onPageLoad(NormalMode)
     }
-  }
 
-  def corporationTaxEnterUtr(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CorporationTaxEnterUtrPage).map { _ => routes.CompanyNameController.onPageLoad(NormalMode)}
-  }
+  def corporationTaxEnterUtr(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(CorporationTaxEnterUtrPage).map(_ => routes.CompanyNameController.onPageLoad(NormalMode))
 
-  def companyNamePage(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CompanyNamePage).map { _ => routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode) }
-  }
+  def companyNamePage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(CompanyNamePage).map { _ =>
+      routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode)
+    }
 
-  def contactUkAddress(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(ContactUkAddressPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode) }
-  }
+  def contactUkAddress(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(ContactUkAddressPage).map(_ => routes.GlobalRevenuesController.onPageLoad(NormalMode))
 
-  def companyRegisteredOfficeUkAddress(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(CompanyRegisteredOfficeUkAddressPage).map { _ => routes.CompanyContactAddressController.onPageLoad(NormalMode) }
-  }
+  def companyRegisteredOfficeUkAddress(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(CompanyRegisteredOfficeUkAddressPage).map { _ =>
+      routes.CompanyContactAddressController.onPageLoad(NormalMode)
+    }
 
-  def checkContactAddress(userAnswers: UserAnswers): Option[Call] = {
+  def checkContactAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckContactAddressPage).map {
-      case true => routes.ContactUkAddressController.onPageLoad(NormalMode)
+      case true  => routes.ContactUkAddressController.onPageLoad(NormalMode)
       case false => routes.InternationalContactAddressController.onPageLoad(NormalMode)
     }
-  }
 
-  def checkIfGroup(userAnswers: UserAnswers): Option[Call] = {
+  def checkIfGroup(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckIfGroupPage).map {
-      case true => routes.UltimateParentCompanyNameController.onPageLoad(NormalMode)
+      case true  => routes.UltimateParentCompanyNameController.onPageLoad(NormalMode)
       case false => ??? // todo page needs to be implemented contact-details
     }
-  }
 
-  def ultimateParentCompanyNamePage(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(UltimateParentCompanyNamePage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
-  }
+  def ultimateParentCompanyNamePage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(UltimateParentCompanyNamePage).map { _ =>
+      routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode)
+    }
 
-  def companyContactAddress(userAnswers: UserAnswers): Option[Call] = {
+  def companyContactAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CompanyContactAddressPage).map {
-      case true => ??? // TODO page needs to  be implemented
+      case true  => routes.CheckIfGroupController.onPageLoad(NormalMode) // TODO page needs to  be implemented
       case false => ??? // TODO page needs to  be implemented
     }
-  }
 
-  def ultimateParentCompanyUkAddresPage(userAnswers: UserAnswers): Option[Call] = {
-    userAnswers.get(UltimateParentCompanyUkAddressPage).map { _ => routes.GlobalRevenuesController.onPageLoad(NormalMode)}
-  }
+  def ultimateParentCompanyUkAddresPage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(UltimateParentCompanyUkAddressPage).map { _ =>
+      routes.GlobalRevenuesController.onPageLoad(NormalMode)
+    }
+
+  def checkUltimateGlobalParentCompanyInUkPage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(CheckUltimateGlobalParentCompanyInUkPage).map {
+      case true  =>
+        routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode) // TODO page needs to  be implemented
+      case false =>
+        routes.UltimateParentCompanyInternationalAddressController
+          .onPageLoad(NormalMode) // TODO page needs to  be implemented
+    }
 
 }

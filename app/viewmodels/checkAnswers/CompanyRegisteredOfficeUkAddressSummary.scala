@@ -26,31 +26,34 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CompanyRegisteredOfficeUkAddressSummary  {
+object CompanyRegisteredOfficeUkAddressSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CompanyRegisteredOfficeUkAddressPage).map {
-      answer =>
-
-      val buldingvalue2 = answer.buildingorstreet2.getOrElse("")
-      val buildingToRender = if(!buldingvalue2.isEmpty) HtmlFormat.escape(buldingvalue2).toString + "<br/>" else ""
+    answers.get(CompanyRegisteredOfficeUkAddressPage).map { answer =>
+      val buldingvalue2    = answer.buildingorstreet2.getOrElse("")
+      val buildingToRender = if (!buldingvalue2.isEmpty) HtmlFormat.escape(buldingvalue2).toString + "<br/>" else ""
 
       val townValue = answer.town.getOrElse("")
-      val town = if(!townValue.isEmpty) HtmlFormat.escape(townValue).toString + "<br/>" else ""
+      val town      = if (!townValue.isEmpty) HtmlFormat.escape(townValue).toString + "<br/>" else ""
 
       val countyValue = answer.town.getOrElse("")
-      val county = if(!countyValue.isEmpty) HtmlFormat.escape(townValue).toString + "<br/>" else ""
+      val county      = if (!countyValue.isEmpty) HtmlFormat.escape(townValue).toString + "<br/>" else ""
 
+      val value =
+        HtmlFormat.escape(answer.buildingorstreet).toString + "<br/>" + buildingToRender + town + county + HtmlFormat
+          .escape(answer.postcode)
+          .toString
 
-      val value = HtmlFormat.escape(answer.buildingorstreet).toString + "<br/>" + buildingToRender + town +county + HtmlFormat.escape(answer.postcode).toString
-
-        SummaryListRowViewModel(
-          key     = "companyRegisteredOfficeUkAddress.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlContent(value)),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("companyRegisteredOfficeUkAddress.change.hidden"))
+      SummaryListRowViewModel(
+        key = "companyRegisteredOfficeUkAddress.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlContent(value)),
+        actions = Seq(
+          ActionItemViewModel(
+            "site.change",
+            routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(CheckMode).url
           )
+            .withVisuallyHiddenText(messages("companyRegisteredOfficeUkAddress.change.hidden"))
         )
+      )
     }
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsPath
 
-case class Country(name: String, code: String, `type`: String)
+case object CheckUltimateGlobalParentCompanyInUkPage extends QuestionPage[Boolean] {
 
-object Country {
+  override def path: JsPath = JsPath \ toString
 
-  implicit val LocationFormat: OFormat[Country] = Json.format[Country]
+  override def toString: String = "checkUltimateGlobalParentCompanyInUk"
 }

@@ -39,9 +39,10 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new UltimateParentCompanyUkAddressFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
-  lazy val ultimateParentCompanyUkAddressRoute = routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode).url
+  lazy val ultimateParentCompanyUkAddressRoute  =
+    routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode).url
   private val ultimateParentCompanyName: String = "UltimateParentName"
 
   val userAnswers = UserAnswers(
@@ -49,9 +50,9 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
     Json.obj(
       UltimateParentCompanyUkAddressPage.toString -> Json.obj(
         "buildingOrStreet" -> "value 1",
-        "postcode" -> "BT15GB"
+        "postcode"         -> "BT15GB"
       ),
-      UltimateParentCompanyNamePage.toString -> JsString(ultimateParentCompanyName)
+      UltimateParentCompanyNamePage.toString      -> JsString(ultimateParentCompanyName)
     )
   )
 
@@ -59,7 +60,9 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
     "must return OK and the correct view for a GET" in {
       val userAnswers = emptyUserAnswers
-        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value
+        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -71,7 +74,10 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, ultimateParentCompanyName)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, ultimateParentCompanyName)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -103,7 +109,11 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(UltimateParentCompanyUkAddress("value 1", None, None, None, "BT15GB")), NormalMode, ultimateParentCompanyName)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(
+          form.fill(UltimateParentCompanyUkAddress("value 1", None, None, None, "BT15GB")),
+          NormalMode,
+          ultimateParentCompanyName
+        )(request, messages(application)).toString
       }
     }
 

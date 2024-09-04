@@ -26,36 +26,37 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object ContactUkAddressSummary  {
+object ContactUkAddressSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(ContactUkAddressPage).map {
-      answer =>
-
-        SummaryListRowViewModel(
-          key     = "contactUkAddress.checkYourAnswersLabel",
-          value   = ValueViewModel(
-            HtmlContent(
-              Html(
-                s"${HtmlFormat.escape(answer.buildingOrStreet).toString}<br>" +
-                  answer.buildingOrStreetLine2
-                    .map(value => s"${HtmlFormat.escape(value).body}<br>")
-                    .getOrElse("") +
-                  answer.townOrCity
-                    .map(value => s"${HtmlFormat.escape(value).body}<br>")
-                    .getOrElse("") +
-                  answer.county
-                    .map(value => s"${HtmlFormat.escape(value).body}<br>")
-                    .getOrElse("") +
-                  HtmlFormat.escape(
+    answers.get(ContactUkAddressPage).map { answer =>
+      SummaryListRowViewModel(
+        key = "contactUkAddress.checkYourAnswersLabel",
+        value = ValueViewModel(
+          HtmlContent(
+            Html(
+              s"${HtmlFormat.escape(answer.buildingOrStreet).toString}<br>" +
+                answer.buildingOrStreetLine2
+                  .map(value => s"${HtmlFormat.escape(value).body}<br>")
+                  .getOrElse("") +
+                answer.townOrCity
+                  .map(value => s"${HtmlFormat.escape(value).body}<br>")
+                  .getOrElse("") +
+                answer.county
+                  .map(value => s"${HtmlFormat.escape(value).body}<br>")
+                  .getOrElse("") +
+                HtmlFormat
+                  .escape(
                     answer.postcode
-                  ).toString()
-              )
-            )),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.ContactUkAddressController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("contactUkAddress.change.hidden"))
+                  )
+                  .toString()
+            )
           )
+        ),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.ContactUkAddressController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("contactUkAddress.change.hidden"))
         )
+      )
     }
 }
