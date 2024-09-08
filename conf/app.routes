@@ -111,3 +111,8 @@ GET        /check-ultimate-parent-company-address                        control
 POST       /check-ultimate-parent-company-address                        controllers.CheckUltimateGlobalParentCompanyInUkController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/check-ultimate-parent-company-address                  controllers.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/check-ultimate-parent-company-address                  controllers.CheckUltimateGlobalParentCompanyInUkController.onSubmit(mode: Mode = CheckMode)
+
+GET        /liability-start-date                        controllers.LiabilityStartDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /liability-start-date                        controllers.LiabilityStartDateController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/liability-start-date                   controllers.LiabilityStartDateController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/liability-start-date                   controllers.LiabilityStartDateController.onSubmit(mode: Mode = CheckMode)

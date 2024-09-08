@@ -210,7 +210,6 @@ checkIfGroup.hint = <p>Two or more companies can register as a single taxable pe
     <a target=_blank class="govuk-link" href="{0}">Find out more about how to register a group of companies for VAT from gov.uk (opens in a new window or tab)</a>
 
 
-
 internationalContactAddress.title = What is your contact address?
 internationalContactAddress.heading = What is your contact address?
 internationalContactAddress.caption=Contact person’s details
@@ -256,3 +255,15 @@ checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = checkUltimateGlobal
 checkUltimateGlobalParentCompanyInUk.error.required = Select yes if the registered office address of {0} is in the UK
 checkUltimateGlobalParentCompanyInUk.change.hidden = CheckUltimateGlobalParentCompanyInUk
 
+liabilityStartDate.title = When did the company become liable for Digital Services Tax?
+liabilityStartDate.heading = When did the company become liable for Digital Services Tax?
+liabilityStartDate.heading.hint = Accounting period details
+liabilityStartDate.hint = For example, 31 7 2020.
+liabilityStartDate.checkYourAnswersLabel = LiabilityStartDate
+liabilityStartDate.error.required.all = Enter the date the group became liable for Digital Services Tax
+liabilityStartDate.error.required.two = The date the group became liable for Digital Services Tax must include a {0} and {1}
+liabilityStartDate.error.required = The date the group became liable for Digital Services Tax must include a {0}
+liabilityStartDate.error.invalid = The date the group became liable for Digital Services Tax must be a real date, like 31 7 2020
+liabilityStartDate.change.hidden = LiabilityStartDate
+liabilityStartDate.mininum.date= The date the group became liable for Digital Services Tax must be after 1 April 2020
+liabilityStartDate.maximum.date = The date the group became liable for Digital Services Tax must be earlier than {0}
