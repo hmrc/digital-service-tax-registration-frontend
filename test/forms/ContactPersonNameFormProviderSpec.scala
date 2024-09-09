@@ -24,11 +24,10 @@ class ContactPersonNameFormProviderSpec extends StringFieldBehaviours {
 
   val form = new ContactPersonNameFormProvider()()
 
-  private val maxLength: Int = 35
+  private val maxLength: Int     = 35
   private val fieldRegex: String = """^[a-zA-Z'&-^]{1,35}$"""
 
   Seq("firstName", "lastName") foreach { fieldName =>
-
     s".$fieldName" - {
 
       behave like fieldThatBindsValidData(

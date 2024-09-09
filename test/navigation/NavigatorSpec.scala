@@ -236,7 +236,8 @@ class NavigatorSpec extends SpecBase {
             .set(
               UltimateParentCompanyUkAddressPage,
               UltimateParentCompanyUkAddress(
-                "123 Test Street", postcode = "TE5 5ST"
+                "123 Test Street",
+                postcode = "TE5 5ST"
               )
             )
             .success
@@ -252,7 +253,11 @@ class NavigatorSpec extends SpecBase {
             .set(
               UltimateParentCompanyInternationalAddressPage,
               InternationalAddress(
-                "123 Test Street", None, None, None, country = Country("Andorra", "AD", "country")
+                "123 Test Street",
+                None,
+                None,
+                None,
+                country = Country("Andorra", "AD", "country")
               )
             )
             .success

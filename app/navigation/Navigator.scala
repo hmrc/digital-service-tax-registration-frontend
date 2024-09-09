@@ -45,7 +45,7 @@ class Navigator @Inject() extends NavigationUtils {
     case CheckUltimateGlobalParentCompanyInUkPage      => ua => checkUltimateGlobalParentCompanyInUkPage(ua)
     case LiabilityStartDatePage                        => ua => liabilityStartDatePage(ua)
     case ContactPersonNamePage                         => ua => contactPersonNamePage(ua)
-    case _                                             => _  => Some(routes.IndexController.onPageLoad())
+    case _                                             => _ => Some(routes.IndexController.onPageLoad())
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { case _ =>

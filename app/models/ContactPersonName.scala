@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json._
 
-case class ContactPersonName (firstName: String, lastName: String)
+case class ContactPersonName(firstName: String, lastName: String)
 
 object ContactPersonName {
 

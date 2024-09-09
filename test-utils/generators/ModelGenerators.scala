@@ -30,7 +30,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         firstName <- arbitrary[String]
-        lastName <- arbitrary[String]
+        lastName  <- arbitrary[String]
       } yield ContactPersonName(firstName, lastName)
     }
 

@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.ContactPersonNameFormProvider
-import models.{NormalMode, ContactPersonName, UserAnswers}
+import models.{ContactPersonName, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -39,7 +39,7 @@ class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ContactPersonNameFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
   lazy val contactPersonNameRoute = routes.ContactPersonNameController.onPageLoad(NormalMode).url
 
@@ -48,7 +48,7 @@ class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
     Json.obj(
       ContactPersonNamePage.toString -> Json.obj(
         "firstName" -> "John",
-        "lastName" -> "Smith"
+        "lastName"  -> "Smith"
       )
     )
   )
@@ -83,7 +83,10 @@ class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(ContactPersonName("John", "Smith")), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(ContactPersonName("John", "Smith")), NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 

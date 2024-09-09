@@ -24,12 +24,12 @@ import models.ContactPersonName
 
 class ContactPersonNameFormProvider @Inject() extends Mappings {
 
-   def apply(): Form[ContactPersonName] = Form(
-     mapping(
-       validationFor("firstName"),
-       validationFor("lastName")
-     )(ContactPersonName.apply)(x => Some((x.firstName, x.lastName)))
-   )
+  def apply(): Form[ContactPersonName] = Form(
+    mapping(
+      validationFor("firstName"),
+      validationFor("lastName")
+    )(ContactPersonName.apply)(x => Some((x.firstName, x.lastName)))
+  )
 
   private def validationFor(field: String): (String, Mapping[String]) =
     field -> text(s"contactPersonName.error.$field.required")
@@ -41,5 +41,5 @@ class ContactPersonNameFormProvider @Inject() extends Mappings {
       )
 
   private val nameLength = 35
-  private val nameRegex = """^[a-zA-Z'&-^]{1,35}$"""
- }
+  private val nameRegex  = """^[a-zA-Z'&-^]{1,35}$"""
+}
