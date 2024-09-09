@@ -107,6 +107,11 @@ trait NavigationUtils {
           .onPageLoad(NormalMode) // TODO page needs to  be implemented
     }
 
+  def liabilityStartDatePage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(LiabilityStartDatePage).map { _ =>
+      routes.GlobalRevenuesController.onPageLoad(NormalMode)
+    }
+
   def contactPersonNamePage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(ContactPersonNamePage).map { _ =>
       routes.ContactPersonNameController.onPageLoad(NormalMode) // TODO change to ContactPersonPhone controller GET route when implemented
