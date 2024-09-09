@@ -228,7 +228,39 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode)
       }
 
-      "must go from a UltimateParentCompanyUkAddressPage to a TODO-register/contact-details" in pending
+      "must go from a UltimateParentCompanyUkAddressPage to the ContactPersonName page" in {
+        navigator.nextPage(
+          UltimateParentCompanyUkAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              UltimateParentCompanyUkAddressPage,
+              UltimateParentCompanyUkAddress(
+                "123 Test Street", postcode = "TE5 5ST"
+              )
+            )
+            .success
+            .value
+        ) mustBe routes.ContactPersonNameController.onPageLoad(NormalMode)
+      }
+
+      "must go from a UltimateParentCompanyInternationalAddressController to the ContactPersonName page" in {
+        navigator.nextPage(
+          UltimateParentCompanyInternationalAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              UltimateParentCompanyInternationalAddressPage,
+              InternationalAddress(
+                "123 Test Street", None, None, None, country = Country("Andorra", "AD", "country")
+              )
+            )
+            .success
+            .value
+        ) mustBe routes.ContactPersonNameController.onPageLoad(NormalMode)
+      }
+
+      "must go from a ContactPersonNameController to the ContactPersonPhone page" in pending
     }
 
     "in Check mode" - {

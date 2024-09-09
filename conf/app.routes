@@ -111,3 +111,8 @@ GET        /check-ultimate-parent-company-address                        control
 POST       /check-ultimate-parent-company-address                        controllers.CheckUltimateGlobalParentCompanyInUkController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/check-ultimate-parent-company-address                  controllers.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/check-ultimate-parent-company-address                  controllers.CheckUltimateGlobalParentCompanyInUkController.onSubmit(mode: Mode = CheckMode)
+
+GET        /contact-person-name                                         controllers.ContactPersonNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /contact-person-name                                         controllers.ContactPersonNameController.onSubmit(mode: Mode = NormalMode)
+GET        /change-contact-person-name                                  controllers.ContactPersonNameController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-contact-person-name                                  controllers.ContactPersonNameController.onSubmit(mode: Mode = CheckMode)

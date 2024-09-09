@@ -256,3 +256,17 @@ checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = checkUltimateGlobal
 checkUltimateGlobalParentCompanyInUk.error.required = Select yes if the registered office address of {0} is in the UK
 checkUltimateGlobalParentCompanyInUk.change.hidden = CheckUltimateGlobalParentCompanyInUk
 
+
+contactPersonName.title = Who can we contact if we need to discuss your registration?
+contactPersonName.heading = Who can we contact if we need to discuss your registration?
+contactPersonName.firstName = First name
+contactPersonName.firstName.change.hidden = First name
+contactPersonName.error.firstName.required = Enter the contact person’s first name
+contactPersonName.error.firstName.length = Contact person’s first name must be 35 characters or fewer
+contactPersonName.error.firstName.invalid = First name must only include letters a to z, apostrophes, ampersands, hyphens and spaces
+contactPersonName.lastName = Last name
+contactPersonName.lastName.change.hidden = Last name
+contactPersonName.error.lastName.required = Enter the contact person’s last name
+contactPersonName.error.lastName.length = Contact person’s first name must be 35 characters or fewer
+contactPersonName.error.lastName.invalid = Last name must only include letters a to z, apostrophes, ampersands, hyphens and spaces
+contactPersonName.checkYourAnswersLabel = ContactPersonName

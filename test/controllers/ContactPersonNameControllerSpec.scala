@@ -17,81 +17,57 @@
 package controllers
 
 import base.SpecBase
-import forms.UltimateParentCompanyUkAddressFormProvider
-import models.{NormalMode, UltimateParentCompanyUkAddress, UserAnswers}
+import forms.ContactPersonNameFormProvider
+import models.{NormalMode, ContactPersonName, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
+import pages.ContactPersonNamePage
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.UltimateParentCompanyUkAddressView
+import views.html.ContactPersonNameView
 
 import scala.concurrent.Future
 
-class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with MockitoSugar {
+class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new UltimateParentCompanyUkAddressFormProvider()
-  val form         = formProvider()
+  val formProvider = new ContactPersonNameFormProvider()
+  val form = formProvider()
 
-  lazy val ultimateParentCompanyUkAddressRoute  =
-    routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode).url
-  private val ultimateParentCompanyName: String = "UltimateParentName"
+  lazy val contactPersonNameRoute = routes.ContactPersonNameController.onPageLoad(NormalMode).url
 
   val userAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
-      UltimateParentCompanyUkAddressPage.toString -> Json.obj(
-        "buildingOrStreet" -> "value 1",
-        "postcode"         -> "BT15GB"
-      ),
-      UltimateParentCompanyNamePage.toString      -> JsString(ultimateParentCompanyName)
+      ContactPersonNamePage.toString -> Json.obj(
+        "firstName" -> "John",
+        "lastName" -> "Smith"
+      )
     )
   )
 
-  "UltimateParentCompanyUkAddress Controller" - {
+  "ContactPersonName Controller" - {
 
     "must return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers
-        .set(UltimateParentCompanyNamePage, ultimateParentCompanyName)
-        .success
-        .value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, ultimateParentCompanyUkAddressRoute)
-
-        val view = application.injector.instanceOf[UltimateParentCompanyUkAddressView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, ultimateParentCompanyName)(
-          request,
-          messages(application)
-        ).toString
-      }
-    }
-
-    "must redirect to there is a problem page when UltimateParentCompanyNamePage is empty" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, ultimateParentCompanyUkAddressRoute)
+        val request = FakeRequest(GET, contactPersonNameRoute)
+
+        val view = application.injector.instanceOf[ContactPersonNameView]
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result) mustEqual Some(routes.JourneyRecoveryController.onPageLoad().url)
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -100,18 +76,14 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, ultimateParentCompanyUkAddressRoute)
+        val request = FakeRequest(GET, contactPersonNameRoute)
 
-        val view = application.injector.instanceOf[UltimateParentCompanyUkAddressView]
+        val view = application.injector.instanceOf[ContactPersonNameView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(
-          form.fill(UltimateParentCompanyUkAddress("value 1", None, None, None, "BT15GB")),
-          NormalMode,
-          ultimateParentCompanyName
-        )(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(ContactPersonName("John", "Smith")), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -131,8 +103,8 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
       running(application) {
         val request =
-          FakeRequest(POST, ultimateParentCompanyUkAddressRoute)
-            .withFormUrlEncodedBody(("building-or-street", "value 1"), ("postcode", "BT15GB"))
+          FakeRequest(POST, contactPersonNameRoute)
+            .withFormUrlEncodedBody(("firstName", "John"), ("lastName", "Smith"))
 
         val result = route(application, request).value
 
@@ -147,12 +119,12 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
       running(application) {
         val request =
-          FakeRequest(POST, ultimateParentCompanyUkAddressRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+          FakeRequest(POST, contactPersonNameRoute)
+            .withFormUrlEncodedBody(("value", "§"))
 
-        val boundForm = form.bind(Map("value" -> "invalid value"))
+        val boundForm = form.bind(Map("value" -> "§"))
 
-        val view = application.injector.instanceOf[UltimateParentCompanyUkAddressView]
+        val view = application.injector.instanceOf[ContactPersonNameView]
 
         val result = route(application, request).value
 
@@ -166,7 +138,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, ultimateParentCompanyUkAddressRoute)
+        val request = FakeRequest(GET, contactPersonNameRoute)
 
         val result = route(application, request).value
 
@@ -181,8 +153,8 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
       running(application) {
         val request =
-          FakeRequest(POST, ultimateParentCompanyUkAddressRoute)
-            .withFormUrlEncodedBody(("buildingOrStreet", "value 1"), ("postcode", "value 2"))
+          FakeRequest(POST, contactPersonNameRoute)
+            .withFormUrlEncodedBody(("firstName", "John"), ("lastName", "Smith"))
 
         val result = route(application, request).value
 

@@ -102,8 +102,6 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
       running(application) {
         val request = FakeRequest(GET, ultimateParentCompanyInternationalAddressRoute)
 
-        val view = application.injector.instanceOf[UltimateParentCompanyInternationalAddressView]
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER

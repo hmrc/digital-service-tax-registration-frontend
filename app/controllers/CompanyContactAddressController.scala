@@ -18,10 +18,8 @@ package controllers
 
 import controllers.actions._
 import forms.CompanyContactAddressFormProvider
+import models.Mode
 import models.requests.DataRequest
-
-import javax.inject.Inject
-import models.{CompanyRegisteredOfficeUkAddress, Mode, UserAnswers}
 import navigation.Navigator
 import pages.{CompanyContactAddressPage, CompanyRegisteredOfficeUkAddressPage}
 import play.api.data.Form
@@ -31,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CompanyContactAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CompanyContactAddressController @Inject() (

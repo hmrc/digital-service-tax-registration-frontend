@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckCompanyRegisteredOfficePostcodePage, CheckContactAddressPage, CheckIfGroupPage, CheckUltimateGlobalParentCompanyInUkPage, CheckUtrPage, CompanyContactAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, CorporationTaxEnterUtrPage, GlobalRevenuesPage, UkRevenuesPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
+import pages._
 import play.api.mvc.Call
 
 trait NavigationUtils {
@@ -88,9 +88,14 @@ trait NavigationUtils {
       case false => ??? // TODO page needs to  be implemented
     }
 
-  def ultimateParentCompanyUkAddresPage(userAnswers: UserAnswers): Option[Call] =
+  def ultimateParentCompanyUkAddressPage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(UltimateParentCompanyUkAddressPage).map { _ =>
-      routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      routes.ContactPersonNameController.onPageLoad(NormalMode)
+    }
+
+  def ultimateParentCompanyInternationalAddressPage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(UltimateParentCompanyInternationalAddressPage).map { _ =>
+      routes.ContactPersonNameController.onPageLoad(NormalMode)
     }
 
   def checkUltimateGlobalParentCompanyInUkPage(userAnswers: UserAnswers): Option[Call] =
@@ -102,4 +107,8 @@ trait NavigationUtils {
           .onPageLoad(NormalMode) // TODO page needs to  be implemented
     }
 
+  def contactPersonNamePage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(ContactPersonNamePage).map { _ =>
+      routes.ContactPersonNameController.onPageLoad(NormalMode) // TODO change to ContactPersonPhone controller GET route when implemented
+    }
 }

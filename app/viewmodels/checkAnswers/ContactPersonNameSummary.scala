@@ -18,27 +18,29 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.CheckCompanyRegisteredOfficePostcodePage
+import pages.ContactPersonNamePage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CheckCompanyRegisteredOfficePostcodeSummary {
+object ContactPersonNameSummary  {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CheckCompanyRegisteredOfficePostcodePage).map { answer =>
-      SummaryListRowViewModel(
-        key = "checkCompanyRegisteredOfficePostcode.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlFormat.escape(answer).toString),
-        actions = Seq(
-          ActionItemViewModel(
-            "site.change",
-            routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(CheckMode).url
+    answers.get(ContactPersonNamePage).map {
+      answer =>
+
+      val value = HtmlFormat.escape(answer.firstName).toString + "<br/>" + HtmlFormat.escape(answer.lastName).toString
+
+        SummaryListRowViewModel(
+          key     = "contactPersonName.checkYourAnswersLabel",
+          value   = ValueViewModel(HtmlContent(value)),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.ContactPersonNameController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText(messages("contactPersonName.change.hidden"))
           )
-            .withVisuallyHiddenText(messages("checkCompanyRegisteredOfficePostcode.change.hidden"))
         )
-      )
     }
 }
