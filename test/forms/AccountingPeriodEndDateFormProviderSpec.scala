@@ -30,9 +30,9 @@ class AccountingPeriodEndDateFormProviderSpec extends DateBehaviours with Option
   implicit val messages: Messages = stubMessages()
 
   val accountingPeriodEndDateKey = "accounting-period-end-date"
-  private val givenLiabilityDate: LocalDate = LocalDate.of(2022, 6, 14)
+  private val givenLiabilityStartDate: LocalDate = LocalDate.of(2022, 6, 14)
 
-  val form: Form[LocalDate] = new AccountingPeriodEndDateFormProvider()(true, givenLiabilityDate)
+  val form: Form[LocalDate] = new AccountingPeriodEndDateFormProvider()(true, givenLiabilityStartDate)
 
   "accounting-period-end-date field, must" - {
     "error" - {
@@ -56,7 +56,7 @@ class AccountingPeriodEndDateFormProviderSpec extends DateBehaviours with Option
         "dates more than 1 year after the liability date" in {
           checkDateAgainst(
             form,
-            givenLiabilityDate.plusYears(1).plusDays(2),
+            givenLiabilityStartDate.plusYears(1).plusDays(2),
             apFormError("maximum-date")
           )
         }
@@ -75,7 +75,7 @@ class AccountingPeriodEndDateFormProviderSpec extends DateBehaviours with Option
     "allow" - {
       "dates" - {
         "between 1st April 2020 and within 1 year of the liability date" - {
-          behave like dateField(form, accountingPeriodEndDateKey, genAccountingPeriodEndDate(givenLiabilityDate))
+          behave like dateField(form, accountingPeriodEndDateKey, genAccountingPeriodEndDate(givenLiabilityStartDate))
         }
       }
     }

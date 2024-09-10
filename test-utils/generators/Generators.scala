@@ -123,7 +123,7 @@ trait Generators extends ModelGenerators {
   /**
    * Generates a valid Accounting Period End Date
    */
-  def genAccountingPeriodEndDate(liabilityDate: LocalDate): Gen[LocalDate] = {
-    Gen.choose(DST_EPOCH.plusDays(1), liabilityDate.plusYears(1))
+  def genAccountingPeriodEndDate(liabilityStartDate: LocalDate): Gen[LocalDate] = {
+    Gen.choose(DST_EPOCH.plusDays(1), liabilityStartDate.plusYears(1))
   }
 }

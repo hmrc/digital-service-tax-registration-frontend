@@ -21,6 +21,8 @@ import controllers.routes
 import pages._
 import models._
 
+import java.time.LocalDate
+
 class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
@@ -266,6 +268,16 @@ class NavigatorSpec extends SpecBase {
       }
 
       "must go from a ContactPersonNameController to the ContactPersonPhone page" in pending
+
+      "must go from a LiabilityDatePage to the AccountingPeriodEndDatePage" in {
+        navigator.nextPage(
+          LiabilityStartDatePage,
+          NormalMode,
+          UserAnswers("id").set(LiabilityStartDatePage, LocalDate.of(2022, 7, 7)).flatMap(ua => ua.set(CheckIfGroupPage, true))
+            .success
+            .value
+        ) mustBe routes.AccountingPeriodEndDateController.onPageLoad(NormalMode)
+      }
     }
 
     "in Check mode" - {

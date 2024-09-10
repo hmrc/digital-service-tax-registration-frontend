@@ -20,7 +20,7 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import forms.AccountingPeriodEndDateFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{AccountingPeriodEndDatePage, CheckIfGroupPage, LiabilityDatePage}
+import pages.{AccountingPeriodEndDatePage, CheckIfGroupPage, LiabilityStartDatePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,26 +30,26 @@ import views.html.AccountingPeriodEndDateView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountingPeriodEndDateController @Inject() (
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  val controllerComponents: MessagesControllerComponents,
-  val formProvider: AccountingPeriodEndDateFormProvider,
-  view: AccountingPeriodEndDateView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+class AccountingPeriodEndDateController @Inject()(
+                                                   override val messagesApi: MessagesApi,
+                                                   sessionRepository: SessionRepository,
+                                                   navigator: Navigator,
+                                                   identify: IdentifierAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: DataRequiredAction,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   val formProvider: AccountingPeriodEndDateFormProvider,
+                                                   view: AccountingPeriodEndDateView
+                                                 )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     request.userAnswers
       .get(CheckIfGroupPage)
       .flatMap { isGroup =>
-        request.userAnswers.get(LiabilityDatePage).map { liabilityDate =>
-          val form = formProvider(isGroup, liabilityDate)
+        request.userAnswers.get(LiabilityStartDatePage).map { liabilityStartDate =>
+          val form = formProvider(isGroup, liabilityStartDate)
           request.userAnswers.get(AccountingPeriodEndDatePage).fold(form)(ap => form.fill(ap))
         }
       }
@@ -61,8 +61,8 @@ class AccountingPeriodEndDateController @Inject() (
       request.userAnswers
         .get(CheckIfGroupPage)
         .flatMap { isGroup =>
-          request.userAnswers.get(LiabilityDatePage).map { liabilityDate =>
-            formProvider(isGroup, liabilityDate)
+          request.userAnswers.get(LiabilityStartDatePage).map { liabilityStartDate =>
+            formProvider(isGroup, liabilityStartDate)
               .bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
@@ -70,7 +70,7 @@ class AccountingPeriodEndDateController @Inject() (
                   for {
                     updatedAnswers <-
                       Future.fromTry(request.userAnswers.set(AccountingPeriodEndDatePage, accountingPeriodEndDate))
-                    _              <- sessionRepository.set(updatedAnswers)
+                    _ <- sessionRepository.set(updatedAnswers)
                   } yield Redirect(navigator.nextPage(AccountingPeriodEndDatePage, mode, updatedAnswers))
               )
           }

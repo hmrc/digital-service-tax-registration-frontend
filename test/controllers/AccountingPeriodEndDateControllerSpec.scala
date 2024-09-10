@@ -60,7 +60,7 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new AccountingPeriodEndDateFormProvider()
   val form: Form[LocalDate] = formProvider(isGroup = true, LocalDate.now)
   lazy val apRoute: String = routes.AccountingPeriodEndDateController.onPageLoad(NormalMode).url
-  private val userAnswers = UserAnswers(userAnswersId, Json.obj("checkIfGroup" -> true, "liabilityDate" -> LocalDate.of(2022, 6, 6)))
+  private val userAnswers = UserAnswers(userAnswersId, Json.obj("checkIfGroup" -> true, "liabilityStartDate" -> LocalDate.of(2022, 6, 6)))
   private val userAnswersWithAp = userAnswers.copy(data = userAnswers.data.+(("accountingPeriodEndDate", Json.toJson(LocalDate.of(2022, 9, 9)))))
   private val accountingPeriodEndDateKey = "accounting-period-end-date"
 
