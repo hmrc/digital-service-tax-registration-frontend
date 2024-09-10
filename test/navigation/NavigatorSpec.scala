@@ -173,9 +173,99 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.UltimateParentCompanyNameController.onPageLoad(NormalMode)
       }
 
+      "must go from CompanyRegisteredOfficeAddressPage to CompanyContactAddressPage" in {
+        navigator.nextPage(
+          CompanyRegisteredOfficeUkAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              CompanyRegisteredOfficeUkAddressPage,
+              CompanyRegisteredOfficeUkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ")
+            )
+            .success
+            .value
+        ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
+
+      "must go from a CompanyContactAddressPage with option `true` to TODO page" in pending
+
+      "must go from a CompanyContactAddressPage with option `false` to TODO page" in pending
+
       "must go from CheckIfGroupPage to a TODO contact-details page" in pending
 
-      "must go from a UltimateParentCompanyNamePage to a TODO-register/check-ultimate-parent-company-address page" in pending
+      "must go from a UltimateParentCompanyNamePage to a check-ultimate-parent-company-address page" in {
+        navigator.nextPage(
+          UltimateParentCompanyNamePage,
+          NormalMode,
+          UserAnswers("id")
+            .set(UltimateParentCompanyNamePage, "heloo")
+            .success
+            .value
+        ) mustBe routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckUltimateGlobalParentCompanyInUkPage to a ultimate-parent-company-uk-address page" in {
+        navigator.nextPage(
+          CheckUltimateGlobalParentCompanyInUkPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckUltimateGlobalParentCompanyInUkPage, true)
+            .success
+            .value
+        ) mustBe routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CheckUltimateGlobalParentCompanyInUkPage to a ultimate-parent-company-international-address page" in {
+        navigator.nextPage(
+          CheckUltimateGlobalParentCompanyInUkPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckUltimateGlobalParentCompanyInUkPage, false)
+            .success
+            .value
+        ) mustBe routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from a UltimateParentCompanyUkAddressPage to the ContactPersonName page" in {
+        navigator.nextPage(
+          UltimateParentCompanyUkAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              UltimateParentCompanyUkAddressPage,
+              UltimateParentCompanyUkAddress(
+                "123 Test Street",
+                postcode = "TE5 5ST"
+              )
+            )
+            .success
+            .value
+        ) mustBe routes.ContactPersonNameController.onPageLoad(NormalMode)
+      }
+
+      "must go from a UltimateParentCompanyInternationalAddressController to the ContactPersonName page" in {
+        navigator.nextPage(
+          UltimateParentCompanyInternationalAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              UltimateParentCompanyInternationalAddressPage,
+              InternationalAddress(
+                "123 Test Street",
+                None,
+                None,
+                None,
+                country = Country("Andorra", "AD", "country")
+              )
+            )
+            .success
+            .value
+        ) mustBe routes.ContactPersonNameController.onPageLoad(NormalMode)
+      }
+
+      "must go from a ContactPersonNameController to the ContactPersonPhone page" in pending
     }
 
     "in Check mode" - {
@@ -183,7 +273,8 @@ class NavigatorSpec extends SpecBase {
       "must go from a page that doesn't exist in the edit route map to CheckYourAnswers" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad()
+        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController
+          .onPageLoad()
       }
     }
   }

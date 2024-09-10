@@ -26,10 +26,10 @@ class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehavi
   val form = new CompanyRegisteredOfficeUkAddressFormProvider()()
 
   ".buildingorstreet" - {
-    val fieldName = "buildingorstreet"
+    val fieldName   = "buildingorstreet"
     val requiredKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet.required"
-    val lengthKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet.length"
-    val maxLength = 35
+    val lengthKey   = "companyRegisteredOfficeUkAddress.error.buildingorstreet.length"
+    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
@@ -54,7 +54,6 @@ class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehavi
   ".buildingorstreet2" - {
 
     val fieldName = "buildingorstreet2"
-    val requiredKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet2.required"
     val lengthKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet2.length"
     val maxLength = 35
 
@@ -107,7 +106,6 @@ class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehavi
       """^[a-zA-Z]$""",
       lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
-
 
   }
 }

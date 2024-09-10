@@ -22,7 +22,7 @@ import play.api.data.FormError
 class CheckContactAddressFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "checkContactAddress.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new CheckContactAddressFormProvider()()
 

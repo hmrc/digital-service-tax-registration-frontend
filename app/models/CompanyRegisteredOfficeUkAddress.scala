@@ -18,7 +18,13 @@ package models
 
 import play.api.libs.json._
 
-case class CompanyRegisteredOfficeUkAddress (buildingorstreet: String, buildingorstreet2: Option[String], town: Option[String], county: Option[String], postcode: String)
+case class CompanyRegisteredOfficeUkAddress(
+  buildingorstreet: String,
+  buildingorstreet2: Option[String],
+  town: Option[String],
+  county: Option[String],
+  postcode: String
+)
 
 object CompanyRegisteredOfficeUkAddress {
 

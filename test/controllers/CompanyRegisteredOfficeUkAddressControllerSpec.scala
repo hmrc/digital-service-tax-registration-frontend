@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.CompanyRegisteredOfficeUkAddressFormProvider
-import models.{NormalMode, CompanyRegisteredOfficeUkAddress, UserAnswers}
+import models.{CompanyRegisteredOfficeUkAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -39,20 +39,20 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CompanyRegisteredOfficeUkAddressFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
-  lazy val companyRegisteredOfficeUkAddressRoute = routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode).url
+  lazy val companyRegisteredOfficeUkAddressRoute =
+    routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode).url
 
   val userAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
       CompanyRegisteredOfficeUkAddressPage.toString -> Json.obj(
-        "buildingorstreet" -> "value 1",
+        "buildingorstreet"  -> "value 1",
         "buildingorstreet2" -> "value 2",
-        "town" -> "value 3",
-        "county" -> "value 4",
-        "postcode" -> "G1 4PD"
-
+        "town"              -> "value 3",
+        "county"            -> "value 4",
+        "postcode"          -> "G1 4PD"
       )
     )
   )
@@ -87,7 +87,18 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(CompanyRegisteredOfficeUkAddress("value 1", Option("value 2"), Option("value 3"), Option("value 4"), "G1 4PD")), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(
+          form.fill(
+            CompanyRegisteredOfficeUkAddress(
+              "value 1",
+              Option("value 2"),
+              Option("value 3"),
+              Option("value 4"),
+              "G1 4PD"
+            )
+          ),
+          NormalMode
+        )(request, messages(application)).toString
       }
     }
 
@@ -108,7 +119,13 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, companyRegisteredOfficeUkAddressRoute)
-            .withFormUrlEncodedBody(("buildingorstreet", "value 1"), ("buildingorstreet2", "value 2"),("town", "value 3"), ("county", "value 4"),("postcode", "G1 4PD"))
+            .withFormUrlEncodedBody(
+              ("buildingorstreet", "value 1"),
+              ("buildingorstreet2", "value 2"),
+              ("town", "value 3"),
+              ("county", "value 4"),
+              ("postcode", "G1 4PD")
+            )
 
         val result = route(application, request).value
 

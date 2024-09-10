@@ -31,6 +31,9 @@ checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
 service.caption = Check if you must register
 contact.persons.details.caption = Contact person’s details
+ultimate.parent.company.details.caption=Ultimate parent company details
+
+
 label.thisSection = This section is:
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
@@ -136,6 +139,15 @@ checkContactAddress.checkYourAnswersLabel = checkContactAddress
 checkContactAddress.change.hidden = CheckContactAddress
 checkContactAddress.heading.hint = Your company details
 
+companyContactAddress.title = Can we use this address to contact you about your Digital Services Tax?
+companyContactAddress.heading = Can we use this address to contact you about your Digital Services Tax?
+companyContactAddress.heading.hint = Your company details
+companyContactAddress.site.no = No - I want to enter a different address
+companyContactAddress.checkYourAnswersLabel = companyContactAddress
+companyContactAddress.error.required = Select yes if we can use this address to contact you about your Digital Services Tax
+companyContactAddress.change.hidden = CompanyContactAddress
+
+
 contactUkAddress.title = What is your contact address
 contactUkAddress.heading = What is your contact address?
 contactUkAddress.buildingOrStreet = Building or street
@@ -150,12 +162,16 @@ contactUkAddress.error.buildingOrStreet.length = Building or street must be 35 c
 contactUkAddress.error.buildingOrStreetLine2.length = Building or street line 2 must be 35 characters or fewer
 contactUkAddress.error.townOrCity.length = Town or city must be 35 characters or fewer
 contactUkAddress.error.county.length = County must be 35 characters or fewer
+contactUkAddress.error.buildingOrStreet.invalid = Building or street must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+contactUkAddress.error.buildingOrStreetLine2.invalid = Building or street line 2 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+contactUkAddress.error.townOrCity.invalid = Town or city must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+contactUkAddress.error.county.invalid = County must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 contactUkAddress.buildingOrStreet.change.hidden = Building or street
 contactUkAddress.postcode.change.hidden = Postcode
+
 companyRegisteredOfficeUkAddress.title = companyRegisteredOfficeUkAddress
 companyRegisteredOfficeUkAddress.heading = Where is the registered office address of
 companyRegisteredOfficeUkAddress.subHeading =Your company details
-
 
 companyRegisteredOfficeUkAddress.buildingorstreet = Building or street
 companyRegisteredOfficeUkAddress.buildingorstreet2 = Building or street line 2 (optional)
@@ -179,6 +195,7 @@ companyRegisteredOfficeUkAddress.error.county.length = County must be 35 charact
 companyRegisteredOfficeUkAddress.error.county.invalid = Enter a real postcode
 companyRegisteredOfficeUkAddress.buildingorstreet.change.hidden = buildingorstreet
 companyRegisteredOfficeUkAddress.buildingorstreet2.change.hidden = buildingorstreet2
+
 checkIfGroup.checkYourAnswersLabel = checkIfGroup
 checkIfGroup.change.hidden = CheckIfGroup
 checkIfGroup.title = Is the company you want to register part of a VAT group?
@@ -193,26 +210,26 @@ checkIfGroup.hint = <p>Two or more companies can register as a single taxable pe
     <a target=_blank class="govuk-link" href="{0}">Find out more about how to register a group of companies for VAT from gov.uk (opens in a new window or tab)</a>
 
 
-
 internationalContactAddress.title = What is your contact address?
 internationalContactAddress.heading = What is your contact address?
 internationalContactAddress.caption=Contact person’s details
-internationalContactAddress.line1 = Address line 1
-internationalContactAddress.line2 = Address line 2 (optional)
-internationalContactAddress.line3 = Address line 3 (optional)
-internationalContactAddress.line4 = Address line 4 (optional)
-internationalContactAddress.countryCode=Country
 internationalContactAddress.checkYourAnswersLabel = InternationalContactAddress
-internationalContactAddress.error.line1.required = Enter Address Line 1
-internationalContactAddress.error.countryCode.required =  Select a country
-internationalContactAddress.error.line1.length = Address Line 1 must be 35 characters or fewer
-internationalContactAddress.error.line2.length = Address Line 2 must be 35 characters or fewer
-internationalContactAddress.error.line3.length = Address Line 3 must be 35 characters or fewer
-internationalContactAddress.error.line4.length = Address Line 4 must be 35 characters or fewer
-internationalContactAddress.error.line1.invalid=Address Line 1 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
-internationalContactAddress.error.line2.invalid=Address Line 2 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
-internationalContactAddress.error.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
-internationalContactAddress.error.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+
+internationalAddress.line1 = Address line 1
+internationalAddress.line2 = Address line 2 (optional)
+internationalAddress.line3 = Address line 3 (optional)
+internationalAddress.line4 = Address line 4 (optional)
+internationalAddress.countryCode=Country
+internationalAddress.error.line1.required = Enter address line 1
+internationalAddress.error.countryCode.required =  Select a country
+internationalAddress.error.line1.length = Address line 1 must be 35 characters or fewer
+internationalAddress.error.line2.length = Address line 2 must be 35 characters or fewer
+internationalAddress.error.line3.length = Address line 3 must be 35 characters or fewer
+internationalAddress.error.line4.length = Address line 4 must be 35 characters or fewer
+internationalAddress.error.line1.invalid=Address line 1 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+internationalAddress.error.line2.invalid=Address line 2 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+internationalAddress.error.line3.invalid=Address line 3 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
+internationalAddress.error.line4.invalid=Address line 4 must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
 
 ultimateParentCompanyName.title = What is the name of the group’s ultimate global parent company?
 ultimateParentCompanyName.heading = What is the name of the group’s ultimate global parent company?
@@ -224,9 +241,46 @@ ultimateParentCompanyName.error.length = Name of group’s ultimate global paren
 ultimateParentCompanyName.error.invalid=Name of group’s ultimate global parent company must only include letters a to z, numbers,hyphens, apostrophes, ampersands (&), and spaces
 ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
 
-#----------------------------------------------------------------#
-#-------------------Accounting Period End Date-------------------#
-#----------------------------------------------------------------#
+ultimateParentCompanyInternationalAddress.title = What is the registered office address of {0}?
+ultimateParentCompanyInternationalAddress.heading = What is the registered office address of {0}?
+ultimateParentCompanyInternationalAddress.checkYourAnswersLabel = UltimateParentCompanyInternationalAddress
+
+ultimateParentCompanyUkAddress.title = What is the registered office address of {0}?
+ultimateParentCompanyUkAddress.heading = What is the registered office address of {0}?
+ultimateParentCompanyUkAddress.buildingOrStreet.change.hidden = buildingOrStreet
+ultimateParentCompanyUkAddress.postcode.change.hidden = postcode
+checkUltimateGlobalParentCompanyInUk.title = Ultimate parent company details
+checkUltimateGlobalParentCompanyInUk.heading = Is the registered office address of {0} in the UK?
+checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = checkUltimateGlobalParentCompanyInUk
+checkUltimateGlobalParentCompanyInUk.error.required = Select yes if the registered office address of {0} is in the UK
+checkUltimateGlobalParentCompanyInUk.change.hidden = CheckUltimateGlobalParentCompanyInUk
+
+liabilityStartDate.title = When did the company become liable for Digital Services Tax?
+liabilityStartDate.heading = When did the company become liable for Digital Services Tax?
+liabilityStartDate.heading.hint = Accounting period details
+liabilityStartDate.hint = For example, 31 7 2020.
+liabilityStartDate.checkYourAnswersLabel = LiabilityStartDate
+liabilityStartDate.error.required.all = Enter the date the group became liable for Digital Services Tax
+liabilityStartDate.error.required.two = The date the group became liable for Digital Services Tax must include a {0} and {1}
+liabilityStartDate.error.required = The date the group became liable for Digital Services Tax must include a {0}
+liabilityStartDate.error.invalid = The date the group became liable for Digital Services Tax must be a real date, like 31 7 2020
+liabilityStartDate.change.hidden = LiabilityStartDate
+liabilityStartDate.mininum.date= The date the group became liable for Digital Services Tax must be after 1 April 2020
+liabilityStartDate.maximum.date = The date the group became liable for Digital Services Tax must be earlier than {0}
+
+contactPersonName.title = Who can we contact if we need to discuss your registration?
+contactPersonName.heading = Who can we contact if we need to discuss your registration?
+contactPersonName.firstName = First name
+contactPersonName.firstName.change.hidden = First name
+contactPersonName.error.firstName.required = Enter the contact person’s first name
+contactPersonName.error.firstName.length = Contact person’s first name must be 35 characters or fewer
+contactPersonName.error.firstName.invalid = First name must only include letters a to z, apostrophes, ampersands, hyphens and spaces
+contactPersonName.lastName = Last name
+contactPersonName.lastName.change.hidden = Last name
+contactPersonName.error.lastName.required = Enter the contact person’s last name
+contactPersonName.error.lastName.length = Contact person’s first name must be 35 characters or fewer
+contactPersonName.error.lastName.invalid = Last name must only include letters a to z, apostrophes, ampersands, hyphens and spaces
+contactPersonName.checkYourAnswersLabel = ContactPersonName
 
 accounting-period-end-date.heading=What is the end date of the company’s first accounting period for Digital Services Tax?
 accounting-period-end-date.heading.hint=Accounting period details
@@ -234,7 +288,6 @@ accounting-period-end-date.hint=For example, 31 7 2020
 accounting-period-end-date.Date.day.heading=Day
 accounting-period-end-date.Date.month.heading=Month
 accounting-period-end-date.Date.year.heading=Year
-
 accounting-period-end-date.maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be before {1}
 accounting-period-end-date.fixed-maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be on or before {1}
 accounting-period-end-date.minimum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be after 1 April 2020

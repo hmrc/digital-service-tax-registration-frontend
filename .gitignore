@@ -7,7 +7,6 @@ dist
 eclipse
 *.eml
 .history
-.scalafmt.conf
 .idea
 /.idea_modules
 *.iml

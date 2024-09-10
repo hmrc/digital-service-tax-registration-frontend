@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json._
+import models.ContactPersonName
+import play.api.libs.json.JsPath
 
-case class InternationalContactAddress (line1: String,
-                                        line2: Option[String],
-                                        line3: Option[String],
-                                        line4: Option[String],
-                                        country: Country)
+case object ContactPersonNamePage extends QuestionPage[ContactPersonName] {
 
-object InternationalContactAddress {
+  override def path: JsPath = JsPath \ toString
 
-  implicit val format: OFormat[InternationalContactAddress] = Json.format
+  override def toString: String = "contactPersonName"
 }

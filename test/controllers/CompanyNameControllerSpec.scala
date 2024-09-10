@@ -38,7 +38,7 @@ class CompanyNameControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new CompanyNameFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
   lazy val companyNameRoute = routes.CompanyNameController.onPageLoad(NormalMode).url
 

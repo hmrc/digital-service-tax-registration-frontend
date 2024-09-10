@@ -25,16 +25,15 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 import scala.util.matching.Regex
 
 @Singleton
-class Location @Inject ()(env: Environment, appConfig: FrontendAppConfig) {
+class Location @Inject() (env: Environment, appConfig: FrontendAppConfig) {
 
   private val alphaTwoCodeRegex: Regex = "^([A-Z]{2}|[A-Z]{2}-[A-Z0-9]{2})$".r
-  private val countryCode_GB = "GB"
+  private val countryCode_GB           = "GB"
 
-  def locations: List[Country] = {
+  def locations: List[Country] =
     (env.resourceAsStream(appConfig.canonicalList) map Json.parse map {
       _.as[List[Country]].filter(l => l.code.matches(alphaTwoCodeRegex.toString()))
     }).getOrElse(throw new Exception("location-autocomplete-canonical-list.json file is missing"))
-  }
 
   def name(code: String): String = locations.find(x => x.code == code).map(_.name).getOrElse("unknown")
 

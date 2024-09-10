@@ -31,7 +31,7 @@ import java.io.ByteArrayInputStream
 class LocationSpec extends AnyFlatSpec with Matchers with MockitoSugar with BeforeAndAfterEach {
 
   val appConfig: FrontendAppConfig = mock[FrontendAppConfig]
-  val env: Environment = mock[Environment]
+  val env: Environment             = mock[Environment]
 
   override def beforeEach(): Unit = {
     reset(appConfig, env)
@@ -49,10 +49,10 @@ class LocationSpec extends AnyFlatSpec with Matchers with MockitoSugar with Befo
     val is = new ByteArrayInputStream(countries.toString.getBytes)
     when(env.resourceAsStream(any())).thenReturn(Some(is))
 
-    val location = new Location(env, appConfig)
+    val location                = new Location(env, appConfig)
     val locations: Seq[Country] = location.locations
     locations.length mustBe 2
-    locations       mustNot contain(Country("Akrotiri", "XQZ", "territory"))
+    locations mustNot contain(Country("Akrotiri", "XQZ", "territory"))
   }
 
   "Location" must "throw an exception when the countries json file is missing" in {
