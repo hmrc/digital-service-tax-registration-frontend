@@ -295,3 +295,4 @@ accounting-period-end-date.invalid=The date the {0} became liable must be a real
 accounting-period-end-date.empty=Enter the end date of the {0}’s first accounting period for Digital Services Tax
 accounting-period-end-date.required=The end date of the {0}’s first accounting period for Digital Services Tax must include a {1}
 accounting-period-end-date.two-required=The end date of the {0}’s first accounting period for Digital Services Tax must include a {1} and {2}
+accounting-period-end-date.checkYourAnswersLabel = AccountingPeriodEndDate

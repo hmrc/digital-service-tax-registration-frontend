@@ -28,16 +28,14 @@ import viewmodels.implicits._
 class AccountingPeriodEndDateSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AccountingPeriodEndDatePage).map {
-      answer =>
-
-        SummaryListRowViewModel(
-          key = "accountingPeriodEndDate.checkYourAnswersLabel",
-          value = ValueViewModel(HtmlFormat.escape(answer.toString).toString()),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.AccountingPeriodEndDateController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("accountingPeriodEndDate.change.hidden"))
-          )
+    answers.get(AccountingPeriodEndDatePage).map { answer =>
+      SummaryListRowViewModel(
+        key = "accountingPeriodEndDate.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer.toString).toString()),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.AccountingPeriodEndDateController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("accountingPeriodEndDate.change.hidden"))
         )
+      )
     }
 }

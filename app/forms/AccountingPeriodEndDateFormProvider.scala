@@ -44,12 +44,12 @@ class AccountingPeriodEndDateFormProvider @Inject() extends Mappings {
     )
   }
 
-  private def maxAccountingPeriodEndDate(liabilityDate: LocalDate, args: Any*): Constraint[LocalDate] = {
+  private def maxAccountingPeriodEndDate(liabilityDate: LocalDate, args: Any*): Constraint[LocalDate] =
     Constraint {
       case ap if liabilityDate == DST_EPOCH && ap.isAfter(liabilityDate.plusYears(1).minusDays(1)) =>
         Invalid(s"$accountingPeriodEndDateKey.fixed-maximum-date", args: _*)
-      case ap if ap.isAfter(liabilityDate.plusYears(1).minusDays(1)) => Invalid(s"$accountingPeriodEndDateKey.maximum-date", args: _*)
-      case _ => Valid
+      case ap if ap.isAfter(liabilityDate.plusYears(1).minusDays(1))                               =>
+        Invalid(s"$accountingPeriodEndDateKey.maximum-date", args: _*)
+      case _                                                                                       => Valid
     }
-  }
 }

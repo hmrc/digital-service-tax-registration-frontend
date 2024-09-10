@@ -30,40 +30,51 @@ import views.html.AccountingPeriodEndDateView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountingPeriodEndDateController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   sessionRepository: SessionRepository,
-                                                   navigator: Navigator,
-                                                   identify: IdentifierAction,
-                                                   getData: DataRetrievalAction,
-                                                   requireData: DataRequiredAction,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   val formProvider: AccountingPeriodEndDateFormProvider,
-                                                   view: AccountingPeriodEndDateView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AccountingPeriodEndDateController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  val formProvider: AccountingPeriodEndDateFormProvider,
+  view: AccountingPeriodEndDateView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    request.userAnswers.get(CheckIfGroupPage).flatMap { isGroup =>
-      request.userAnswers.get(LiabilityDatePage).map { liabilityDate =>
-        val form = formProvider(isGroup, liabilityDate)
-        request.userAnswers.get(AccountingPeriodEndDatePage).fold(form)(ap => form.fill(ap))
+    request.userAnswers
+      .get(CheckIfGroupPage)
+      .flatMap { isGroup =>
+        request.userAnswers.get(LiabilityDatePage).map { liabilityDate =>
+          val form = formProvider(isGroup, liabilityDate)
+          request.userAnswers.get(AccountingPeriodEndDatePage).fold(form)(ap => form.fill(ap))
+        }
       }
-    }
       .fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(preparedForm => Ok(view(preparedForm, mode)))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.get(CheckIfGroupPage).flatMap { isGroup =>
-      request.userAnswers.get(LiabilityDatePage).map { liabilityDate =>
-        formProvider(isGroup, liabilityDate).bindFromRequest().fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-          accountingPeriodEndDate => for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AccountingPeriodEndDatePage, accountingPeriodEndDate))
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AccountingPeriodEndDatePage, mode, updatedAnswers))
-        )
-      }
-    }
-      .getOrElse(Future.successful(Redirect(routes.JourneyRecoveryController.onPageLoad())))
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request =>
+      request.userAnswers
+        .get(CheckIfGroupPage)
+        .flatMap { isGroup =>
+          request.userAnswers.get(LiabilityDatePage).map { liabilityDate =>
+            formProvider(isGroup, liabilityDate)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+                accountingPeriodEndDate =>
+                  for {
+                    updatedAnswers <-
+                      Future.fromTry(request.userAnswers.set(AccountingPeriodEndDatePage, accountingPeriodEndDate))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(AccountingPeriodEndDatePage, mode, updatedAnswers))
+              )
+          }
+        }
+        .getOrElse(Future.successful(Redirect(routes.JourneyRecoveryController.onPageLoad())))
   }
 }
