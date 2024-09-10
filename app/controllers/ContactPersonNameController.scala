@@ -17,31 +17,29 @@
 package controllers
 
 import controllers.actions._
-import forms.CompanyContactAddressFormProvider
+import forms.ContactPersonNameFormProvider
+import javax.inject.Inject
 import models.Mode
-import models.requests.DataRequest
 import navigation.Navigator
-import pages.{CompanyContactAddressPage, CompanyRegisteredOfficeUkAddressPage}
-import play.api.data.Form
+import pages.ContactPersonNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CompanyContactAddressView
+import views.html.ContactPersonNameView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CompanyContactAddressController @Inject() (
+class ContactPersonNameController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: CompanyContactAddressFormProvider,
+  formProvider: ContactPersonNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CompanyContactAddressView
+  view: ContactPersonNameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,30 +47,25 @@ class CompanyContactAddressController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(CompanyContactAddressPage) match {
+    val preparedForm = request.userAnswers.get(ContactPersonNamePage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
-    renderPage(mode, preparedForm, Ok)
-  }
 
-  private def renderPage(mode: Mode, form: Form[Boolean], status: Status)(implicit request: DataRequest[AnyContent]) =
-    request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage) match {
-      case Some(address) => status(view(form, address, mode))
-      case _             => Redirect(routes.JourneyRecoveryController.onPageLoad())
-    }
+    Ok(view(preparedForm, mode))
+  }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(renderPage(mode, formWithErrors, BadRequest)),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CompanyContactAddressPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPersonNamePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CompanyContactAddressPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(ContactPersonNamePage, mode, updatedAnswers))
         )
   }
 }

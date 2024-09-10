@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.CheckCompanyRegisteredOfficePostcodeFormProvider
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
 import pages.CheckCompanyRegisteredOfficePostcodePage
 import play.api.i18n.{I18nSupport, MessagesApi}

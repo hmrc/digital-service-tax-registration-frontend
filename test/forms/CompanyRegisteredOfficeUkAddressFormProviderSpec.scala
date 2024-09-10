@@ -53,10 +53,9 @@ class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehavi
 
   ".buildingorstreet2" - {
 
-    val fieldName   = "buildingorstreet2"
-    val requiredKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet2.required"
-    val lengthKey   = "companyRegisteredOfficeUkAddress.error.buildingorstreet2.length"
-    val maxLength   = 35
+    val fieldName = "buildingorstreet2"
+    val lengthKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet2.length"
+    val maxLength = 35
 
     behave like fieldThatBindsValidData(
       form,
