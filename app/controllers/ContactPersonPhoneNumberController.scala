@@ -33,48 +33,49 @@ import views.html.ContactPersonPhoneNumberView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactPersonPhoneNumberController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        sessionRepository: SessionRepository,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: ContactPersonPhoneNumberFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: ContactPersonPhoneNumberView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ContactPersonPhoneNumberController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: ContactPersonPhoneNumberFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: ContactPersonPhoneNumberView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(ContactPersonPhoneNumberPage).fold(form)(form.fill)
-      getNameOrRedirect { name =>
-        Ok(view(preparedForm, name, mode))
-      }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(ContactPersonPhoneNumberPage).fold(form)(form.fill)
+    getNameOrRedirect { name =>
+      Ok(view(preparedForm, name, mode))
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(
-            getNameOrRedirect(name => BadRequest(view(formWithErrors, name, mode)))
-          ),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPersonPhoneNumberPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ContactPersonPhoneNumberPage, mode, updatedAnswers))
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              getNameOrRedirect(name => BadRequest(view(formWithErrors, name, mode)))
+            ),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPersonPhoneNumberPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(ContactPersonPhoneNumberPage, mode, updatedAnswers))
+        )
   }
 
-  private def getNameOrRedirect(block: String => Result)(implicit request: DataRequest[AnyContent]): Result = {
+  private def getNameOrRedirect(block: String => Result)(implicit request: DataRequest[AnyContent]): Result =
     request.userAnswers.get(ContactPersonNamePage) match {
       case Some(contactName) => block(contactName.fullName)
-      case None => Redirect(routes.JourneyRecoveryController.onPageLoad())
+      case None              => Redirect(routes.JourneyRecoveryController.onPageLoad())
     }
-  }
 }

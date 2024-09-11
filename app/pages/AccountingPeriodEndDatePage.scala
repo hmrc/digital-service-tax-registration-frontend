@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+import java.time.LocalDate
 
-class ContactPersonPhoneNumberFormProvider @Inject() extends Mappings {
+case object AccountingPeriodEndDatePage extends QuestionPage[LocalDate] {
 
-  private val maxLength  = 24
-  private val phoneRegex = "^[0-9 \\-]{1,24}$"
+  override def path: JsPath = JsPath \ toString
 
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("contactPersonPhoneNumber.error.required")
-        .verifying(
-          firstError(
-            maxLength(maxLength, "contactPersonPhoneNumber.error.length"),
-            regexp(phoneRegex, "contactPersonPhoneNumber.error.invalid")
-          )
-        )
-    )
+  override def toString: String = "accountingPeriodEndDate"
 }

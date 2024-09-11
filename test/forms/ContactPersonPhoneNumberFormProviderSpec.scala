@@ -17,12 +17,12 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import org.scalacheck.Gen.{alphaNumStr, numChar}
+import org.scalacheck.Gen.numChar
 import play.api.data.FormError
 
 class ContactPersonPhoneNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val maxLength = 24
+  private val maxLength  = 24
   private val phoneRegex = "^[0-9 \\-]{1,24}$"
 
   val form = new ContactPersonPhoneNumberFormProvider()()

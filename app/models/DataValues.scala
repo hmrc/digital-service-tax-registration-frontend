@@ -14,26 +14,12 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import javax.inject.Inject
+import java.time.LocalDate
 
-import forms.mappings.Mappings
-import play.api.data.Form
-
-class ContactPersonPhoneNumberFormProvider @Inject() extends Mappings {
-
-  private val maxLength  = 24
-  private val phoneRegex = "^[0-9 \\-]{1,24}$"
-
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("contactPersonPhoneNumber.error.required")
-        .verifying(
-          firstError(
-            maxLength(maxLength, "contactPersonPhoneNumber.error.length"),
-            regexp(phoneRegex, "contactPersonPhoneNumber.error.invalid")
-          )
-        )
-    )
+object DataValues {
+  // scalastyle:off magic.number - the date is the inception of Digital Services Tax in the UK
+  val DST_EPOCH: LocalDate = LocalDate.of(2020, 4, 1)
+  // scalastyle:on
 }
