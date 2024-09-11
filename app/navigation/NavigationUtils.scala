@@ -114,7 +114,13 @@ trait NavigationUtils {
 
   def contactPersonNamePage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(ContactPersonNamePage).map { _ =>
-      routes.ContactPersonNameController
-        .onPageLoad(NormalMode) // TODO change to ContactPersonPhone controller GET route when implemented
+      routes.ContactPersonPhoneNumberController
+        .onPageLoad(NormalMode)
+    }
+
+  def contactPersonPhoneNumberPage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(ContactPersonPhoneNumberPage).map { _ =>
+      routes.ContactPersonPhoneNumberController
+        .onPageLoad(NormalMode) // TODO change to ContactPersonEmailAddress controller GET route when implemented
     }
 }

@@ -265,7 +265,21 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.ContactPersonNameController.onPageLoad(NormalMode)
       }
 
-      "must go from a ContactPersonNameController to the ContactPersonPhone page" in pending
+      "must go from a ContactPersonNameController to the ContactPersonPhoneNumber page" in {
+        navigator.nextPage(
+          ContactPersonNamePage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              ContactPersonNamePage,
+              ContactPersonName("John", "Smith")
+            )
+            .success
+            .value
+        ) mustBe routes.ContactPersonPhoneNumberController.onPageLoad(NormalMode)
+      }
+
+      "must go from a ContactPersonPhoneNumberController to the ContactPersonEmailAddress page" in pending
     }
 
     "in Check mode" - {

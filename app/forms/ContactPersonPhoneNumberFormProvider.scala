@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json._
+import javax.inject.Inject
 
-case class ContactPersonName(firstName: String, lastName: String) {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  def fullName = s"$firstName $lastName"
-}
+class ContactPersonPhoneNumberFormProvider @Inject() extends Mappings {
 
-object ContactPersonName {
+  private val maxLength = 24
+  private val phoneRegex = "^[0-9 \\-]{1,24}$"
 
-  implicit val format: OFormat[ContactPersonName] = Json.format
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("contactPersonPhoneNumber.error.required")
+        .verifying(
+          firstError(
+            maxLength(maxLength, "contactPersonPhoneNumber.error.length"),
+            regexp(phoneRegex, "contactPersonPhoneNumber.error.invalid")
+          )
+        )
+    )
 }
