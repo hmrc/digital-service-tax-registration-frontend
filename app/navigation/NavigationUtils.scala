@@ -109,7 +109,7 @@ trait NavigationUtils {
 
   def liabilityStartDatePage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(LiabilityStartDatePage).map { _ =>
-      routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      routes.AccountingPeriodEndDateController.onPageLoad(NormalMode)
     }
 
   def contactPersonNamePage(userAnswers: UserAnswers): Option[Call] =
@@ -117,4 +117,7 @@ trait NavigationUtils {
       routes.ContactPersonNameController
         .onPageLoad(NormalMode) // TODO change to ContactPersonPhone controller GET route when implemented
     }
+
+  def accountingPeriodEndDatePage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(AccountingPeriodEndDatePage).map(_ => routes.GlobalRevenuesController.onPageLoad(NormalMode))
 }
