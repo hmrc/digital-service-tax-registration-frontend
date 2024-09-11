@@ -30,18 +30,18 @@ import views.html.AccountingPeriodEndDateView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountingPeriodEndDateController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   sessionRepository: SessionRepository,
-                                                   navigator: Navigator,
-                                                   identify: IdentifierAction,
-                                                   getData: DataRetrievalAction,
-                                                   requireData: DataRequiredAction,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   val formProvider: AccountingPeriodEndDateFormProvider,
-                                                   view: AccountingPeriodEndDateView
-                                                 )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+class AccountingPeriodEndDateController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  val formProvider: AccountingPeriodEndDateFormProvider,
+  view: AccountingPeriodEndDateView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
@@ -70,7 +70,7 @@ class AccountingPeriodEndDateController @Inject()(
                   for {
                     updatedAnswers <-
                       Future.fromTry(request.userAnswers.set(AccountingPeriodEndDatePage, accountingPeriodEndDate))
-                    _ <- sessionRepository.set(updatedAnswers)
+                    _              <- sessionRepository.set(updatedAnswers)
                   } yield Redirect(navigator.nextPage(AccountingPeriodEndDatePage, mode, updatedAnswers))
               )
           }

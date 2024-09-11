@@ -273,7 +273,9 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(
           LiabilityStartDatePage,
           NormalMode,
-          UserAnswers("id").set(LiabilityStartDatePage, LocalDate.of(2022, 7, 7)).flatMap(ua => ua.set(CheckIfGroupPage, true))
+          UserAnswers("id")
+            .set(LiabilityStartDatePage, LocalDate.of(2022, 7, 7))
+            .flatMap(ua => ua.set(CheckIfGroupPage, true))
             .success
             .value
         ) mustBe routes.AccountingPeriodEndDateController.onPageLoad(NormalMode)

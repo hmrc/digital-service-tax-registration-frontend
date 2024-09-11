@@ -29,7 +29,7 @@ import java.time.LocalDate
 class AccountingPeriodEndDateFormProviderSpec extends DateBehaviours with OptionValues with EitherValues {
   implicit val messages: Messages = stubMessages()
 
-  val accountingPeriodEndDateKey = "accounting-period-end-date"
+  val accountingPeriodEndDateKey                 = "accounting-period-end-date"
   private val givenLiabilityStartDate: LocalDate = LocalDate.of(2022, 6, 14)
 
   val form: Form[LocalDate] = new AccountingPeriodEndDateFormProvider()(true, givenLiabilityStartDate)
@@ -81,15 +81,14 @@ class AccountingPeriodEndDateFormProviderSpec extends DateBehaviours with Option
     }
   }
 
-  private def apFormError(errorMsgSuffix: String): FormError = {
+  private def apFormError(errorMsgSuffix: String): FormError =
     FormError(s"$accountingPeriodEndDateKey", s"$accountingPeriodEndDateKey.$errorMsgSuffix", Seq("group"))
-  }
 
   private def checkDateAgainst(form: Form[LocalDate], apEndDate: LocalDate, formError: FormError): Assertion = {
     val data = Map(
-      s"$accountingPeriodEndDateKey.day" -> apEndDate.getDayOfMonth.toString,
+      s"$accountingPeriodEndDateKey.day"   -> apEndDate.getDayOfMonth.toString,
       s"$accountingPeriodEndDateKey.month" -> apEndDate.getMonthValue.toString,
-      s"$accountingPeriodEndDateKey.year" -> apEndDate.getYear.toString
+      s"$accountingPeriodEndDateKey.year"  -> apEndDate.getYear.toString
     )
 
     val result = form.bind(data)

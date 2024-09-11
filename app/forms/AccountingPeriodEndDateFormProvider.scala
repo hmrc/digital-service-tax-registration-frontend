@@ -48,8 +48,8 @@ class AccountingPeriodEndDateFormProvider @Inject() extends Mappings {
     Constraint {
       case ap if liabilityStartDate == DST_EPOCH && ap.isAfter(liabilityStartDate.plusYears(1).minusDays(1)) =>
         Invalid(s"$accountingPeriodEndDateKey.fixed-maximum-date", args: _*)
-      case ap if ap.isAfter(liabilityStartDate.plusYears(1).minusDays(1))                               =>
+      case ap if ap.isAfter(liabilityStartDate.plusYears(1).minusDays(1))                                    =>
         Invalid(s"$accountingPeriodEndDateKey.maximum-date", args: _*)
-      case _                                                                                       => Valid
+      case _                                                                                                 => Valid
     }
 }
