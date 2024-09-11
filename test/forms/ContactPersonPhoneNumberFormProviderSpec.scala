@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import org.scalacheck.Gen.numChar
+import org.scalacheck.Gen.{alphaChar, numChar}
 import play.api.data.FormError
 
 class ContactPersonPhoneNumberFormProviderSpec extends StringFieldBehaviours {
@@ -55,7 +55,7 @@ class ContactPersonPhoneNumberFormProviderSpec extends StringFieldBehaviours {
       form,
       fieldName,
       phoneRegex,
-      stringsExceptSpecificValues(Seq(0 to 9).map(_.toString)).suchThat(_.length <= maxLength),
+      stringsWithMaxLength(maxLength, alphaChar),
       FormError(fieldName, "contactPersonPhoneNumber.error.invalid", Seq(phoneRegex))
     )
   }
