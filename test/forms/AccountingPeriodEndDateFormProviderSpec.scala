@@ -18,7 +18,6 @@ package forms
 
 import forms.behaviours.DateBehaviours
 import models.DataValues.DST_EPOCH
-import org.scalacheck.Gen
 import org.scalatest.{Assertion, EitherValues, OptionValues}
 import play.api.data.{Form, FormError}
 import play.api.i18n.Messages

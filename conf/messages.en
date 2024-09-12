@@ -282,6 +282,15 @@ contactPersonName.error.lastName.length = Contact person’s first name must be 
 contactPersonName.error.lastName.invalid = Last name must only include letters a to z, apostrophes, ampersands, hyphens and spaces
 contactPersonName.checkYourAnswersLabel = ContactPersonName
 
+contactPersonPhoneNumber.title = What is {0}’s phone number?
+contactPersonPhoneNumber.heading = What is {0}’s phone number?
+contactPersonPhoneNumber.hint = For international numbers include the country code, like 0044 808 157 0192, not +44 808 157 0192.
+contactPersonPhoneNumber.checkYourAnswersLabel = What is {0}’s phone number?
+contactPersonPhoneNumber.error.required = Enter a phone number
+contactPersonPhoneNumber.error.length = Phone number must be 24 characters or fewer
+contactPersonPhoneNumber.error.invalid = Enter a phone number, like 01632 960 001, 07700 900 982 or 0044 808 157 0192
+contactPersonPhoneNumber.change.hidden = ContactPersonPhoneNumber
+
 accounting-period-end-date.heading=What is the end date of the company’s first accounting period for Digital Services Tax?
 accounting-period-end-date.heading.hint=Accounting period details
 accounting-period-end-date.hint=For example, 31 7 2020

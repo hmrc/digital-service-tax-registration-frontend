@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json._
+import play.api.libs.json.JsPath
 
-case class ContactPersonName(firstName: String, lastName: String) {
+case object ContactPersonPhoneNumberPage extends QuestionPage[String] {
 
-  def fullName = s"$firstName $lastName"
-}
+  override def path: JsPath = JsPath \ toString
 
-object ContactPersonName {
-
-  implicit val format: OFormat[ContactPersonName] = Json.format
+  override def toString: String = "contactPersonPhoneNumber"
 }

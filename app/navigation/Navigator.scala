@@ -46,6 +46,7 @@ class Navigator @Inject() extends NavigationUtils {
     case LiabilityStartDatePage                        => ua => liabilityStartDatePage(ua)
     case AccountingPeriodEndDatePage                   => ua => accountingPeriodEndDatePage(ua)
     case ContactPersonNamePage                         => ua => contactPersonNamePage(ua)
+    case ContactPersonPhoneNumberPage                  => ua => contactPersonPhoneNumberPage(ua)
     case _                                             => _ => Option(routes.IndexController.onPageLoad())
   }
 
