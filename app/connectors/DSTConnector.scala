@@ -31,9 +31,9 @@ class DSTConnector  @Inject() (http: HttpClientV2, servicesConfig: ServicesConfi
 
   private val backendURL: String = servicesConfig.baseUrl("digital-services-tax") + "/digital-services-tax"
 
-  def lookupCompany(utr: UTR, postcode: Postcode)(implicit hc:HeaderCarrier): Future[Option[CompanyRegWrapper]] = {
-//    println(s"$utr utr, this is postcode $postcode")
-//    println(s"$backendURL backendURL")
-    http.get(url"$backendURL/lookup-company/$utr/$postcode").execute[Option[CompanyRegWrapper]]
+  def lookupCompany(utr: UTR, postcode: Postcode)(implicit hc: HeaderCarrier): Future[Option[CompanyRegWrapper]] = {
+    http.get(url"$backendURL/lookup-company/$utr/$postcode").setHeader(("Authorization", "INSERT BEARER TOKEN"))
+      .execute[Option[CompanyRegWrapper]]
   }
+
 }

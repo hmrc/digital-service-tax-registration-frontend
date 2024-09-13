@@ -16,21 +16,18 @@
 
 package controllers
 
-import connectors.DSTConnector
 import controllers.actions._
 import forms.ConfirmCompanyDetailsFormProvider
-import models.DataModel.{Postcode, UTR}
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CheckCompanyRegisteredOfficePostcodePage, ConfirmCompanyDetailsPage, CorporationTaxEnterUtrPage}
+import pages.ConfirmCompanyDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ConfirmCompanyDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmCompanyDetailsController @Inject()(
@@ -38,7 +35,7 @@ class ConfirmCompanyDetailsController @Inject()(
                                          sessionRepository: SessionRepository,
                                          navigator: Navigator,
                                          identify: IdentifierAction,
-                                         dstConnector: DSTConnector,
+                                         lookupCompany: LookupCompanyAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          formProvider: ConfirmCompanyDetailsFormProvider,
@@ -48,45 +45,22 @@ class ConfirmCompanyDetailsController @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData andThen lookupCompany) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(ConfirmCompanyDetailsPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      val result = request.userAnswers.get(CorporationTaxEnterUtrPage) match {
-        case Some(utr) => request.userAnswers.get(CheckCompanyRegisteredOfficePostcodePage) match {
-          case Some(postcode) => dstConnector.lookupCompany(UTR(utr), Postcode(postcode))
-          case None => Future.successful(None)
-        }
-        case None => Future.successful(None)
-      }
-
-      for {
-        optCompanyRegWrapper <- result
-      } yield {
-        val companyRegWrapper = optCompanyRegWrapper.get
-        Ok(view(preparedForm, companyRegWrapper.company.address, mode))
-      }
+      Ok(view(preparedForm, request.companyRegWrapper.company.address, mode))
 
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData andThen lookupCompany).async {
     implicit request =>
 
-      val result = request.userAnswers.get(CorporationTaxEnterUtrPage) match {
-        case Some(utr) => request.userAnswers.get(CheckCompanyRegisteredOfficePostcodePage) match {
-          case Some(postcode) => dstConnector.lookupCompany(UTR(utr), Postcode(postcode))
-          case None => Future.successful(None)
-        }
-        case None => Future.successful(None)
-      }
-
       form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, , mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, request.companyRegWrapper.company.address, mode))),
 
         value =>
           for {

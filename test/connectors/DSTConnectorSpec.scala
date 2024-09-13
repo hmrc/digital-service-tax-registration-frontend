@@ -45,8 +45,6 @@ class DSTConnectorSpec extends AnyFreeSpec
 
           stubGet(Json.toJson(reg), s"/digital-services-tax/lookup-company/$utr/$escaped", OK)
 
-          println(Json.toJson(reg))
-
           val response = connector.lookupCompany(utr, postcode)
           whenReady(response) { res =>
             res mustBe defined
@@ -71,7 +69,6 @@ class DSTConnectorSpec extends AnyFreeSpec
     }
 
   }
-
 
   private def stubGet(body: JsValue, url: String, status: Int): Any =
     wireMockServer.stubFor(

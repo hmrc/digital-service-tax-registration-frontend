@@ -25,14 +25,11 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], address: Address, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], companyDetails: Address, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @content=@{
-    val companyAddress = s"""${address.buildingorstreet}<br>
-    ${address.buildingorstreet2.fold("")(buildingorstreet2 => s"$buildingorstreet2<br>")}
-    ${address.town.fold("")(town => s"$town<br>")}
-    ${address.county.fold("")(county => s"$county<br>")}
-    ${address.postcode}<br>"""
+    val companyAddress = s"""
+    ${companyDetails.line1}<br>"""
 
     HtmlContent(Html(companyAddress))
 }
