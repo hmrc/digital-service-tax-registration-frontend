@@ -129,14 +129,14 @@ trait Constraints {
       }
     }
 
-   protected def emailAddress(errorKey: String): Constraint[String] =
-     Constraint { ea =>
-       if (EmailValidator.getInstance().isValid(ea)) {
-         Valid
-       } else {
-         Invalid(errorKey)
-       }
-     }
+  protected def emailAddress(errorKey: String): Constraint[String] =
+    Constraint { ea =>
+      if (EmailValidator.getInstance().isValid(ea)) {
+        Valid
+      } else {
+        Invalid(errorKey)
+      }
+    }
 }
 
 object Constraints {

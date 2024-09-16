@@ -210,7 +210,9 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
   "email" - {
     "must return invalid for an improperly formatted email" in {
       forAll(Gen.alphaNumStr) { ea =>
-        emailAddress("contactPersonEmailAddress.error.invalid")(ea) mustEqual Invalid("contactPersonEmailAddress.error.invalid")
+        emailAddress("contactPersonEmailAddress.error.invalid")(ea) mustEqual Invalid(
+          "contactPersonEmailAddress.error.invalid"
+        )
       }
     }
 
@@ -223,7 +225,7 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
         "email@example-one.com",
         "email@example.name",
         "email@example.museum",
-        "email@example.co.jp",
+        "email@example.co.jp"
       )
 
       validEmailAddresses.foreach(ea => emailAddress("contactPersonEmailAddress.error.invalid")(ea) mustEqual Valid)

@@ -125,5 +125,4 @@ trait Generators extends ModelGenerators {
   def genAccountingPeriodEndDate(liabilityStartDate: LocalDate): Gen[LocalDate] =
     Gen.choose(DST_EPOCH.plusDays(1), liabilityStartDate.plusYears(1)).suchThat(_ => true)
 
-
 }

@@ -23,10 +23,9 @@ import javax.inject.Inject
 
 class ContactPersonEmailAddressFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] = {
+  def apply(): Form[String] =
     Form(
       "contact-email-address" -> text("contactPersonEmailAddress.error.required")
         .verifying(emailAddress("contactPersonEmailAddress.error.invalid"))
     )
-  }
 }

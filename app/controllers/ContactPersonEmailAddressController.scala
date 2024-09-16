@@ -30,16 +30,16 @@ import views.html.ContactPersonEmailAddressView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactPersonEmailAddressController @Inject()(
-                                                     override val messagesApi: MessagesApi,
-                                                     sessionRepository: SessionRepository,
-                                                     navigator: Navigator,
-                                                     identify: IdentifierAction,
-                                                     getData: DataRetrievalAction,
-                                                     requireData: DataRequiredAction,
-                                                     formProvider: ContactPersonEmailAddressFormProvider,
-                                                     val controllerComponents: MessagesControllerComponents,
-                                                     view: ContactPersonEmailAddressView
+class ContactPersonEmailAddressController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: ContactPersonEmailAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: ContactPersonEmailAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -71,7 +71,7 @@ class ContactPersonEmailAddressController @Inject()(
         formWithData.value.fold(Future.successful(Redirect(routes.JourneyRecoveryController.onPageLoad()))) { email =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPersonEmailAddressPage, email))
-            _ <- sessionRepository.set(updatedAnswers)
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ContactPersonEmailAddressPage, mode, updatedAnswers))
         }
       }

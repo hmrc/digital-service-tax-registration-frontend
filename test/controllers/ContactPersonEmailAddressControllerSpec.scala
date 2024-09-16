@@ -34,19 +34,20 @@ import views.html.ContactPersonEmailAddressView
 
 import scala.concurrent.Future
 
-
 class ContactPersonEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val contactPersonEmailAddressRoute: String = routes.ContactPersonEmailAddressController.onPageLoad(NormalMode).url
+  lazy val contactPersonEmailAddressRoute: String =
+    routes.ContactPersonEmailAddressController.onPageLoad(NormalMode).url
 
   val formProvider = new ContactPersonEmailAddressFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
-  val contactName: ContactPersonName = ContactPersonName("Harry", "Spark")
-  val userAnswersWithName: UserAnswers = UserAnswers(userAnswersId).set(ContactPersonNamePage, contactName).success.value
-  val givenEmailAddress = "harryspark@gmail.com"
+  val contactName: ContactPersonName   = ContactPersonName("Harry", "Spark")
+  val userAnswersWithName: UserAnswers =
+    UserAnswers(userAnswersId).set(ContactPersonNamePage, contactName).success.value
+  val givenEmailAddress                = "harryspark@gmail.com"
 
   "ContactPersonEmailAddress controller" - {
     "must return OK and the correct view for a GET" - {
