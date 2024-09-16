@@ -31,7 +31,6 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("corporationTaxEnterUtr.title"))) {
-    <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("corporationTaxEnterUtr.heading.hint")</h2>
 
     @formHelper(action = routes.CorporationTaxEnterUtrController.onSubmit(mode)) {
 
@@ -39,13 +38,16 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("corporationTaxEnterUtr.heading.hint")</h2>
+        <h1 class="govuk-heading-l">@messages("corporationTaxEnterUtr.heading")</h1>
+
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("corporationTaxEnterUtr.heading")).asPageHeading(LabelSize.Large)
+                label = LabelViewModel(HtmlContent(messages("corporationTaxEnterUtr.heading.info", appConfig.findLostUtr)))
             )
-            .withHint(HintViewModel(HtmlContent(messages("corporationTaxEnterUtr.hint", appConfig.findLostUtr))))
-            .withWidth(ThreeQuarters)
+            .withHint(HintViewModel(HtmlContent(messages("corporationTaxEnterUtr.subheading.hint"))))
+            .withWidth(OneThird)
         )
 
         @govukButton(
