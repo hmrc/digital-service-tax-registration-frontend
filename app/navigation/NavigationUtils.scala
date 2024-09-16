@@ -120,8 +120,14 @@ trait NavigationUtils {
 
   def contactPersonPhoneNumberPage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(ContactPersonPhoneNumberPage).map { _ =>
-      routes.ContactPersonPhoneNumberController
-        .onPageLoad(NormalMode) // TODO change to ContactPersonEmailAddress controller GET route when implemented
+      routes.ContactPersonEmailAddressController
+        .onPageLoad(NormalMode)
+    }
+
+  def contactPersonEmailAddressPage(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(ContactPersonEmailAddressPage).map { _ =>
+      routes.LiabilityStartDateController
+        .onPageLoad(NormalMode)
     }
 
   def accountingPeriodEndDatePage(userAnswers: UserAnswers): Option[Call] =

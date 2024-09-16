@@ -305,3 +305,11 @@ accounting-period-end-date.empty=Enter the end date of the {0}’s first account
 accounting-period-end-date.required=The end date of the {0}’s first accounting period for Digital Services Tax must include a {1}
 accounting-period-end-date.two-required=The end date of the {0}’s first accounting period for Digital Services Tax must include a {1} and {2}
 accounting-period-end-date.checkYourAnswersLabel = AccountingPeriodEndDate
+
+contactPersonEmailAddress.title = What is {0}'s email address?
+contactPersonEmailAddress.heading = What is {0}'s email address?
+contactPersonEmailAddress.hint = We will only use this email address to send confirmation of your registration.
+contactPersonEmailAddress.checkYourAnswersLabel = What is {0}'s email address?
+contactPersonEmailAddress.error.required = Enter an email address
+contactPersonEmailAddress.error.invalid = Enter an email address in the correct format, like name@example.com
+contactPersonEmailAddress.change.hidden = ContactPersonEmail

@@ -131,3 +131,8 @@ GET        /accounting-period-end-date                   controllers.AccountingP
 POST       /accounting-period-end-date                   controllers.AccountingPeriodEndDateController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/accounting-period-end-date              controllers.AccountingPeriodEndDateController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/accounting-period-end-date              controllers.AccountingPeriodEndDateController.onSubmit(mode: Mode = CheckMode)
+
+GET        /contact-person-email                                 controllers.ContactPersonEmailAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /contact-person-email                                 controllers.ContactPersonEmailAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /change-contact-email                                 controllers.ContactPersonEmailAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-contact-email                                 controllers.ContactPersonEmailAddressController.onSubmit(mode: Mode = CheckMode)
