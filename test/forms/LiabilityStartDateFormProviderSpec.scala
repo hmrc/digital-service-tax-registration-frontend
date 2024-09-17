@@ -18,6 +18,7 @@ package forms
 
 import java.time.{LocalDate, ZoneOffset}
 import forms.behaviours.DateBehaviours
+import models.DataValues.DST_EPOCH
 import play.api.i18n.Messages
 import play.api.test.Helpers.stubMessages
 
@@ -29,7 +30,7 @@ class LiabilityStartDateFormProviderSpec extends DateBehaviours {
   ".value" - {
 
     val validData = datesBetween(
-      min = LocalDate.of(2020, 4, 1),
+      DST_EPOCH,
       max = LocalDate.now(ZoneOffset.UTC)
     )
 

@@ -17,6 +17,7 @@
 package forms.mappings
 
 import forms.mappings.Constraints.postcodeRegex
+import org.apache.commons.validator.routines.EmailValidator
 
 import java.time.LocalDate
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
@@ -125,6 +126,15 @@ trait Constraints {
           .findFirstMatchIn(p.trim.replaceAll("[ \\t]+", " "))
           .map(_ => Valid)
           .getOrElse(Invalid(ValidationError("error.invalid.postcode")))
+      }
+    }
+
+  protected def emailAddress(errorKey: String): Constraint[String] =
+    Constraint { ea =>
+      if (EmailValidator.getInstance().isValid(ea)) {
+        Valid
+      } else {
+        Invalid(errorKey)
       }
     }
 }

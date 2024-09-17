@@ -16,13 +16,14 @@
 
 package forms.mappings
 
-import java.time.LocalDate
 import generators.Generators
 import org.scalacheck.Gen
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.data.validation.{Invalid, Valid}
+
+import java.time.LocalDate
 
 class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with Constraints {
 
@@ -203,6 +204,31 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
       forAll(genPostcode) { pc =>
         postcode("n/a")(pc) mustEqual Valid
       }
+    }
+  }
+
+  "email" - {
+    "must return invalid for an improperly formatted email" in {
+      forAll(Gen.alphaNumStr) { ea =>
+        emailAddress("contactPersonEmailAddress.error.invalid")(ea) mustEqual Invalid(
+          "contactPersonEmailAddress.error.invalid"
+        )
+      }
+    }
+
+    "must return valid for a properly formatted email address" in {
+      val validEmailAddresses = List(
+        "email@example.com",
+        "firstname.lastname@example.com",
+        "email@subdomain.example.com",
+        "1234567890@example.com",
+        "email@example-one.com",
+        "email@example.name",
+        "email@example.museum",
+        "email@example.co.jp"
+      )
+
+      validEmailAddresses.foreach(ea => emailAddress("contactPersonEmailAddress.error.invalid")(ea) mustEqual Valid)
     }
   }
 }

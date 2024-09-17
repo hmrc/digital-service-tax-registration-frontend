@@ -17,6 +17,7 @@
 package forms
 
 import forms.mappings.Mappings
+import models.DataValues.DST_EPOCH
 import play.api.data.Form
 import play.api.i18n.Messages
 
@@ -26,7 +27,6 @@ import javax.inject.Inject
 
 class LiabilityStartDateFormProvider @Inject() extends Mappings {
 
-  val mininumDate    = LocalDate.of(2020, 4, 1)
   val minimumDateKey = "liabilityStartDate.mininum.date"
   val maximumDate    = LocalDate.now().plusYears(1)
   val maximumDateKey = "liabilityStartDate.maximum.date"
@@ -38,7 +38,7 @@ class LiabilityStartDateFormProvider @Inject() extends Mappings {
         allRequiredKey = "liabilityStartDate.error.required.all",
         twoRequiredKey = "liabilityStartDate.error.required.two",
         requiredKey = "liabilityStartDate.error.required"
-      ).verifying(minDate(mininumDate, minimumDateKey))
+      ).verifying(minDate(DST_EPOCH, minimumDateKey))
         .verifying(
           maxDate(
             maximumDate,

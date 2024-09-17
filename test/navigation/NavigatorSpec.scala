@@ -281,9 +281,37 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.ContactPersonPhoneNumberController.onPageLoad(NormalMode)
       }
 
-      "must go from a ContactPersonPhoneNumberController to the ContactPersonEmailAddress page" in pending
+      "must go from a ContactPersonPhoneNumberController to the ContactPersonEmailAddress page" in {
+        navigator.nextPage(
+          ContactPersonPhoneNumberPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              ContactPersonNamePage,
+              ContactPersonName("John", "Smith")
+            )
+            .flatMap(ua => ua.set(ContactPersonPhoneNumberPage, "+447911123456"))
+            .success
+            .value
+        ) mustBe routes.ContactPersonEmailAddressController.onPageLoad(NormalMode)
+      }
 
-      "must go from a LiabilityDatePage to the AccountingPeriodEndDatePage" in {
+      "must go from a ContactPersonEmailAddressController to the LiabilityStartDatePage page" in {
+        navigator.nextPage(
+          ContactPersonEmailAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              ContactPersonNamePage,
+              ContactPersonName("John", "Smith")
+            )
+            .flatMap(ua => ua.set(ContactPersonEmailAddressPage, "johnsmith@gmail.com"))
+            .success
+            .value
+        ) mustBe routes.LiabilityStartDateController.onPageLoad(NormalMode)
+      }
+
+      "must go from a LiabilityStartDatePage to the AccountingPeriodEndDatePage" in {
         navigator.nextPage(
           LiabilityStartDatePage,
           NormalMode,
