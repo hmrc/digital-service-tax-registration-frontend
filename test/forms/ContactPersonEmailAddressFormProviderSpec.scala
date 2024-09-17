@@ -21,15 +21,23 @@ import play.api.data.FormError
 
 class ContactPersonEmailAddressFormProviderSpec extends StringFieldBehaviours {
 
-  val form = new ContactPersonEmailAddressFormProvider()()
+  private val form = new ContactPersonEmailAddressFormProvider()()
 
-  val field = "contact-email-address"
+  private val field = "contact-email-address"
 
   ".contact-email-address" - {
     behave like mandatoryField(
       form,
       field,
       requiredError = FormError(field, "contactPersonEmailAddress.error.required")
+    )
+
+    behave like fieldWithRegexpWithGenerator(
+      form,
+      field,
+      "^(.+)@(\\S+)$",
+      stringsLongerThan(1),
+      FormError(field, "contactPersonEmailAddress.error.invalid")
     )
   }
 
