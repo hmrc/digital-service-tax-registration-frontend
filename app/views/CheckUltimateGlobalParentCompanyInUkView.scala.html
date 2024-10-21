@@ -27,13 +27,13 @@
 @(form: Form[_], mode: Mode, ultimateCompanyName : String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("checkUltimateGlobalParentCompanyInUk.title"))) {
-        @if(form.errors.nonEmpty) {
-        @govukErrorSummary(ErrorSummaryViewModel(form))
-        }
-    <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("checkUltimateGlobalParentCompanyInUk.title")</h2>
+
     @formHelper(action = routes.CheckUltimateGlobalParentCompanyInUkController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form))
+        }
 
-
+        <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("checkUltimateGlobalParentCompanyInUk.title")</h2>
 
         @govukRadios(
             RadiosViewModel.yesNo(
