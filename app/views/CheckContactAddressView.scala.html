@@ -30,12 +30,12 @@
 
 @layout(pageTitle = title(form, messages("checkContactAddress.title"))) {
 
-    <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("checkContactAddress.heading.hint")</h2>
-
     @formHelper(action = routes.CheckContactAddressController.onSubmit(mode), Symbol("autoComplete") -> "off") {
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
+
+        <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("checkContactAddress.heading.hint")</h2>
 
         @govukRadios(
             RadiosViewModel.yesNo(

@@ -31,11 +31,12 @@
 
 @layout(pageTitle = title(form, messages("companyRegisteredOfficeAddressPostcode.title"))) {
 
-    <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("companyRegisteredOfficeAddressPostcode.heading.hint")</h2>
     @formHelper(action = routes.CheckCompanyOfficeRegisteredPostcodeController.onSubmit(mode)) {
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
+
+        <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("companyRegisteredOfficeAddressPostcode.heading.hint")</h2>
 
         @govukInput(
             InputViewModel(
