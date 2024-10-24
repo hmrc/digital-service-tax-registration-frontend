@@ -19,7 +19,7 @@ package viewmodels.checkAnswers
 import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages.LiabilityStartDatePage
-import play.api.i18n.{Lang, Messages}
+import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.DateTimeFormats.dateTimeFormat
 import viewmodels.govuk.summarylist._
@@ -29,11 +29,9 @@ object LiabilityStartDateSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(LiabilityStartDatePage).map { answer =>
-      implicit val lang: Lang = messages.lang
-
       SummaryListRowViewModel(
         key = "liabilityStartDate.checkYourAnswersLabel",
-        value = ValueViewModel(answer.format(dateTimeFormat())),
+        value = ValueViewModel(answer.format(dateTimeFormat()(messages.lang))),
         actions = Seq(
           ActionItemViewModel("site.change", routes.LiabilityStartDateController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("liabilityStartDate.change.hidden"))

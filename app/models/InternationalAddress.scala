@@ -24,7 +24,16 @@ case class InternationalAddress(
   line3: Option[String],
   line4: Option[String],
   country: Country
-)
+) {
+
+  def asAddressLines: Seq[String] = Seq(
+    Some(line1),
+    line2,
+    line3,
+    line4,
+    Some(country.name)
+  ).flatten
+}
 
 object InternationalAddress {
 

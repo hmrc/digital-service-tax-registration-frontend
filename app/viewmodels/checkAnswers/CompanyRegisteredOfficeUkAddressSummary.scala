@@ -20,33 +20,17 @@ import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages.CompanyRegisteredOfficeUkAddressPage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object CompanyRegisteredOfficeUkAddressSummary {
+object CompanyRegisteredOfficeUkAddressSummary extends SummaryFunctions {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(CompanyRegisteredOfficeUkAddressPage).map { answer =>
-      val buldingvalue2    = answer.buildingorstreet2.getOrElse("")
-      val buildingToRender = if (!buldingvalue2.isEmpty) HtmlFormat.escape(buldingvalue2).toString + "<br/>" else ""
-
-      val townValue = answer.town.getOrElse("")
-      val town      = if (!townValue.isEmpty) HtmlFormat.escape(townValue).toString + "<br/>" else ""
-
-      val countyValue = answer.town.getOrElse("")
-      val county      = if (!countyValue.isEmpty) HtmlFormat.escape(townValue).toString + "<br/>" else ""
-
-      val value =
-        HtmlFormat.escape(answer.buildingorstreet).toString + "<br/>" + buildingToRender + town + county + HtmlFormat
-          .escape(answer.postcode)
-          .toString
-
       SummaryListRowViewModel(
         key = "companyRegisteredOfficeUkAddress.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlContent(value)),
+        value = asAddressValue(answer.asAddressLines),
         actions = Seq(
           ActionItemViewModel(
             "site.change",

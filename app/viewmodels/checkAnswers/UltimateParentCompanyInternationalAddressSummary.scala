@@ -20,25 +20,17 @@ import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages.UltimateParentCompanyInternationalAddressPage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object UltimateParentCompanyInternationalAddressSummary {
+object UltimateParentCompanyInternationalAddressSummary extends SummaryFunctions {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(UltimateParentCompanyInternationalAddressPage).map { answer =>
-      val value = HtmlFormat.escape(answer.line1).toString +
-        answer.line2.map(x => "<br/>" + HtmlFormat.escape(x)) +
-        answer.line3.map(x => "<br/>" + HtmlFormat.escape(x)) +
-        answer.line4.map(x => "<br/>" + HtmlFormat.escape(x)) +
-        answer.country.name
-
       SummaryListRowViewModel(
         key = "ultimateParentCompanyInternationalAddress.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlContent(value)),
+        value = asAddressValue(answer.asAddressLines),
         actions = Seq(
           ActionItemViewModel(
             "site.change",

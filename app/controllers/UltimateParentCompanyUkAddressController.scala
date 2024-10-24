@@ -23,7 +23,7 @@ import javax.inject.Inject
 import models.{Mode, UltimateParentCompanyUkAddress}
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
+import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -75,8 +75,13 @@ class UltimateParentCompanyUkAddressController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(UltimateParentCompanyUkAddressPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
+              answersWithoutInternationalAddress <-
+                Future.fromTry(
+                  request.userAnswers.removeIfSet(UltimateParentCompanyInternationalAddressPage)
+                )
+              updatedAnswers                     <-
+                Future.fromTry(answersWithoutInternationalAddress.set(UltimateParentCompanyUkAddressPage, value))
+              _                                  <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(UltimateParentCompanyUkAddressPage, mode, updatedAnswers))
         )
   }

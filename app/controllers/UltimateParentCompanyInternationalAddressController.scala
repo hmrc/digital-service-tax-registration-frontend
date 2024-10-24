@@ -21,7 +21,7 @@ import forms.InternationalAddressFormProvider
 import models.requests.DataRequest
 import models.{InternationalAddress, Location, Mode}
 import navigation.Navigator
-import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage}
+import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -74,9 +74,12 @@ class UltimateParentCompanyInternationalAddressController @Inject() (
           formWithErrors => Future.successful(renderPage(mode, formWithErrors, BadRequest)),
           value =>
             for {
-              updatedAnswers <-
-                Future.fromTry(request.userAnswers.set(UltimateParentCompanyInternationalAddressPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
+              answersWithoutUKAddress <- Future.fromTry(
+                                           request.userAnswers.removeIfSet(UltimateParentCompanyUkAddressPage)
+                                         )
+              updatedAnswers          <-
+                Future.fromTry(answersWithoutUKAddress.set(UltimateParentCompanyInternationalAddressPage, value))
+              _                       <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(UltimateParentCompanyInternationalAddressPage, mode, updatedAnswers))
         )
   }

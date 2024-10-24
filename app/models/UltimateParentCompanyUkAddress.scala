@@ -24,7 +24,16 @@ case class UltimateParentCompanyUkAddress(
   townOrCity: Option[String] = None,
   county: Option[String] = None,
   postcode: String
-)
+) {
+
+  def asAddressLines: Seq[String] = Seq(
+    Some(buildingOrStreet),
+    buildingOrStreetLine2,
+    townOrCity,
+    county,
+    Some(postcode)
+  ).flatten
+}
 
 object UltimateParentCompanyUkAddress {
 
