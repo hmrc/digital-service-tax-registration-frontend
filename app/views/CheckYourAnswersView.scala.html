@@ -14,16 +14,42 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.govukfrontend.views.html.components.{FormWithCSRF, GovukSummaryList, GovukButton}
+
 @this(
+    formHelper: FormWithCSRF,
     layout: templates.Layout,
-    govukSummaryList: GovukSummaryList
+    govukSummaryList: GovukSummaryList,
+    govukButton: GovukButton
 )
 
-@(list: SummaryList)(implicit request: Request[_], messages: Messages)
+@(lists: Map[String, SummaryList], childCompanyName: String, parentCompanyName: Option[String])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkYourAnswers.title"))) {
 
-    <h1 class="govuk-heading-xl">@messages("checkYourAnswers.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("checkYourAnswers.heading")</h1>
 
-    @govukSummaryList(list)
+    @lists.map { case (key: String, value: SummaryList) =>
+        <h2 class="govuk-heading-m">@messages(s"checkYourAnswers.summary.subheading.$key")</h2>
+        @govukSummaryList(value)
+    }
+
+    <h2 class="govuk-heading-m">@messages("checkYourAnswers.sendDetails.subheading")</h2>
+
+    @parentCompanyName.fold {
+        <p class="govuk-body">@messages("checkYourAnswers.submissionNotice")</p>
+    }{ parentName =>
+        <p class="govuk-body">@messages("checkYourAnswers.sendDetails.bulletNotice")</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages("checkYourAnswers.sendDetails.bullet1", childCompanyName, parentName)</li>
+            <li>@messages("checkYourAnswers.sendDetails.bullet2", parentName, childCompanyName)</li>
+            <li>@messages("checkYourAnswers.sendDetails.bullet3")</li>
+        </ul>
+    }
+
+   @formHelper(controllers.routes.CheckYourAnswersController.onPageLoad()) {
+       @govukButton(
+           ButtonViewModel(messages("checkYourAnswers.button"))
+       )
+   }
 }

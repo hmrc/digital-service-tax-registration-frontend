@@ -27,9 +27,30 @@ class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
 
+  val ultimateParentCompanyUKAddress: UltimateParentCompanyUkAddress =
+    UltimateParentCompanyUkAddress("123 test street", postcode = "TE5 5ST")
+
+  val internationalAddress: InternationalAddress = InternationalAddress(
+    "123 Test Street",
+    None,
+    None,
+    None,
+    country = Country("Andorra", "AD", "country")
+  )
+
+  val contactPersonName = ContactPersonName("John", "Smith")
+
+  val companyName = "Big Corp"
+
   "Navigator" - {
 
     "in Normal mode" - {
+
+      "must go to Journey Recovery Controller when user answers returns None" in {
+
+        navigator.nextPage(CompanyNamePage, NormalMode, emptyUserAnswers) mustBe routes.JourneyRecoveryController
+          .onPageLoad()
+      }
 
       "must go from a page that doesn't exist in the route map to Index" in {
 
@@ -136,9 +157,39 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
       }
 
-      "must go from a CorporationTaxEnterUtrPage to TODO page" in pending
+      "must go from a CorporationTaxEnterUtr Page to Company Name page" in {
+        navigator.nextPage(
+          CorporationTaxEnterUtrPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CorporationTaxEnterUtrPage, "1111110000")
+            .success
+            .value
+        ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
+      }
 
-      "must go from a CompanyNamePage with valid Company Name to TODO page" in pending
+      "must got from CompanyNamePage to CompanyRegisteredOfficeUkAddress Page" in {
+        navigator.nextPage(
+          CompanyNamePage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CompanyNamePage, companyName)
+            .success
+            .value
+        ) mustBe routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode)
+
+      }
+
+      "must go from ContactUkAddress Page to GlobalRevenues page" in {
+        navigator.nextPage(
+          ContactUkAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(ContactUkAddressPage, ContactUkAddress("123 Test Street", None, None, None, "TE5 5ST"))
+            .success
+            .value
+        ) mustBe routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      }
 
       "must go from a CheckContactAddressPage to contact-uk-address page" in {
         navigator.nextPage(
@@ -163,6 +214,17 @@ class NavigatorSpec extends SpecBase {
       }
 
       "must go from a CompanyContactAddressPage to a TODO-company-contact-address page" in pending
+
+      "must go from CompanyContactAddress Page to CheckIfGroup page" in {
+        navigator.nextPage(
+          CompanyContactAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CompanyContactAddressPage, true)
+            .success
+            .value
+        ) mustBe routes.CheckIfGroupController.onPageLoad(NormalMode)
+      }
 
       "must go from CheckIfGroupPage to ultimate-parent-company-name page" in {
         navigator.nextPage(
@@ -191,7 +253,19 @@ class NavigatorSpec extends SpecBase {
 
       "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
 
-      "must go from a CompanyContactAddressPage with option `true` to TODO page" in pending
+      "must go from a CompanyContactAddress Page with option `true` to CheckIfGroup page" in {
+        navigator.nextPage(
+          CompanyContactAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              CompanyContactAddressPage,
+              true
+            )
+            .success
+            .value
+        ) mustBe routes.CheckIfGroupController.onPageLoad(NormalMode)
+      }
 
       "must go from a CompanyContactAddressPage with option `false` to TODO page" in pending
 
@@ -202,7 +276,7 @@ class NavigatorSpec extends SpecBase {
           UltimateParentCompanyNamePage,
           NormalMode,
           UserAnswers("id")
-            .set(UltimateParentCompanyNamePage, "heloo")
+            .set(UltimateParentCompanyNamePage, companyName)
             .success
             .value
         ) mustBe routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode)
@@ -237,10 +311,7 @@ class NavigatorSpec extends SpecBase {
           UserAnswers("id")
             .set(
               UltimateParentCompanyUkAddressPage,
-              UltimateParentCompanyUkAddress(
-                "123 Test Street",
-                postcode = "TE5 5ST"
-              )
+              ultimateParentCompanyUKAddress
             )
             .success
             .value
@@ -254,13 +325,7 @@ class NavigatorSpec extends SpecBase {
           UserAnswers("id")
             .set(
               UltimateParentCompanyInternationalAddressPage,
-              InternationalAddress(
-                "123 Test Street",
-                None,
-                None,
-                None,
-                country = Country("Andorra", "AD", "country")
-              )
+              internationalAddress
             )
             .success
             .value
@@ -274,7 +339,7 @@ class NavigatorSpec extends SpecBase {
           UserAnswers("id")
             .set(
               ContactPersonNamePage,
-              ContactPersonName("John", "Smith")
+              contactPersonName
             )
             .success
             .value
@@ -288,7 +353,7 @@ class NavigatorSpec extends SpecBase {
           UserAnswers("id")
             .set(
               ContactPersonNamePage,
-              ContactPersonName("John", "Smith")
+              contactPersonName
             )
             .flatMap(ua => ua.set(ContactPersonPhoneNumberPage, "+447911123456"))
             .success
@@ -303,7 +368,7 @@ class NavigatorSpec extends SpecBase {
           UserAnswers("id")
             .set(
               ContactPersonNamePage,
-              ContactPersonName("John", "Smith")
+              contactPersonName
             )
             .flatMap(ua => ua.set(ContactPersonEmailAddressPage, "johnsmith@gmail.com"))
             .success
@@ -322,6 +387,17 @@ class NavigatorSpec extends SpecBase {
             .value
         ) mustBe routes.AccountingPeriodEndDateController.onPageLoad(NormalMode)
       }
+
+      "must go from a AccountingPeriodEndDate Page to the CheckYourAnswers Page" in {
+        navigator.nextPage(
+          AccountingPeriodEndDatePage,
+          NormalMode,
+          UserAnswers("id")
+            .set(AccountingPeriodEndDatePage, LocalDate.of(2022, 7, 7))
+            .success
+            .value
+        ) mustBe routes.CheckYourAnswersController.onPageLoad()
+      }
     }
 
     "in Check mode" - {
@@ -331,6 +407,126 @@ class NavigatorSpec extends SpecBase {
         case object UnknownPage extends Page
         navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController
           .onPageLoad()
+      }
+
+      "must go from CheckIfGroup Page" - {
+
+        "to UltimateParentCompanyNameController when user answers 'Yes'" in {
+
+          navigator.nextPage(
+            CheckIfGroupPage,
+            CheckMode,
+            emptyUserAnswers.set(CheckIfGroupPage, true).success.value
+          ) mustBe routes.UltimateParentCompanyNameController.onPageLoad(CheckMode)
+        }
+
+        "to CheckYourAnswersController when user answers 'No'" in {
+
+          navigator.nextPage(
+            CheckIfGroupPage,
+            CheckMode,
+            emptyUserAnswers.set(CheckIfGroupPage, false).success.value
+          ) mustBe routes.CheckYourAnswersController.onPageLoad()
+        }
+      }
+
+      "must go from UltimateParentCompanyName Page" - {
+
+        "to CheckYourAnswers page when 'Ultimate Parent Company Is based in UK' question is set in User Answers" in {
+
+          navigator.nextPage(
+            UltimateParentCompanyNamePage,
+            CheckMode,
+            emptyUserAnswers
+              .set(UltimateParentCompanyNamePage, companyName)
+              .success
+              .value
+              .set(CheckUltimateGlobalParentCompanyInUkPage, true)
+              .success
+              .value
+          ) mustBe routes.CheckYourAnswersController.onPageLoad()
+        }
+
+        "to 'Ultimate Parent Company Is based in UK' page when it is not set in User Answers" in {
+
+          navigator.nextPage(
+            UltimateParentCompanyNamePage,
+            CheckMode,
+            emptyUserAnswers
+              .set(UltimateParentCompanyNamePage, companyName)
+              .success
+              .value
+          ) mustBe routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(CheckMode)
+        }
+      }
+
+      "must go from CheckUltimateGlobalParentCompanyInUk Page" - {
+
+        "to CheckYourAnswers page" - {
+
+          "when answer is 'Yes' and UK address is already set" in {
+
+            navigator.nextPage(
+              CheckUltimateGlobalParentCompanyInUkPage,
+              CheckMode,
+              emptyUserAnswers
+                .set(CheckUltimateGlobalParentCompanyInUkPage, true)
+                .success
+                .value
+                .set(UltimateParentCompanyUkAddressPage, ultimateParentCompanyUKAddress)
+                .success
+                .value
+            ) mustBe routes.CheckYourAnswersController.onPageLoad()
+          }
+
+          "when answer is 'No' and International address is already set" in {
+
+            navigator.nextPage(
+              CheckUltimateGlobalParentCompanyInUkPage,
+              CheckMode,
+              emptyUserAnswers
+                .set(CheckUltimateGlobalParentCompanyInUkPage, false)
+                .success
+                .value
+                .set(UltimateParentCompanyInternationalAddressPage, internationalAddress)
+                .success
+                .value
+            ) mustBe routes.CheckYourAnswersController.onPageLoad()
+          }
+        }
+
+        "to UltimateParentCompanyUkAddress Page when answer is 'Yes' and UK address is not set" in {
+
+          navigator.nextPage(
+            CheckUltimateGlobalParentCompanyInUkPage,
+            CheckMode,
+            emptyUserAnswers
+              .set(CheckUltimateGlobalParentCompanyInUkPage, true)
+              .success
+              .value
+          ) mustBe routes.UltimateParentCompanyUkAddressController.onPageLoad(CheckMode)
+        }
+
+        "to UltimateParentCompanyInternationalAddress Page when answer is 'No' and International address is not set" in {
+
+          navigator.nextPage(
+            CheckUltimateGlobalParentCompanyInUkPage,
+            CheckMode,
+            emptyUserAnswers
+              .set(CheckUltimateGlobalParentCompanyInUkPage, false)
+              .success
+              .value
+          ) mustBe routes.UltimateParentCompanyInternationalAddressController.onPageLoad(CheckMode)
+        }
+
+        "back to the same page when User Answers is empty" in {
+
+          navigator.nextPage(
+            CheckUltimateGlobalParentCompanyInUkPage,
+            CheckMode,
+            emptyUserAnswers
+          ) mustBe routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(CheckMode)
+        }
       }
     }
   }

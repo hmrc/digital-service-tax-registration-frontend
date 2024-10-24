@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package models
+package viewmodels.checkAnswers
 
-import play.api.libs.json._
+import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.Value
+import viewmodels.govuk.summarylist.ValueViewModel
 
-case class ContactUkAddress(
-  buildingOrStreet: String,
-  buildingOrStreetLine2: Option[String] = None,
-  townOrCity: Option[String] = None,
-  county: Option[String] = None,
-  postcode: String
-) {
+trait SummaryFunctions {
 
-  def asAddressLines: Seq[String] = Seq(
-    Some(buildingOrStreet),
-    buildingOrStreetLine2,
-    townOrCity,
-    county,
-    Some(postcode)
-  ).flatten
-}
-
-object ContactUkAddress {
-
-  implicit val format: OFormat[ContactUkAddress] = Json.format[ContactUkAddress]
+  def asAddressValue(lines: Seq[String]): Value =
+    ValueViewModel(
+      HtmlContent(
+        "<ul class=\"govuk-list\">" + lines.map { line =>
+          s"""<li>${HtmlFormat.escape(line)}<li>"""
+        }.mkString + "</ul>"
+      )
+    )
 }
