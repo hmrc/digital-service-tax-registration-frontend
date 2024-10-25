@@ -18,11 +18,14 @@ package controllers
 
 import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.CheckYourAnswersService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.govuk.summarylist._
 import views.html.CheckYourAnswersView
+
+import scala.concurrent.ExecutionContext
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
@@ -30,15 +33,37 @@ class CheckYourAnswersController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
+  checkYourAnswersService: CheckYourAnswersService,
   view: CheckYourAnswersView
-) extends FrontendBaseController
-    with I18nSupport {
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val list = SummaryListViewModel(
-      rows = Seq.empty
-    )
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    for {
+      summaryLists      <- checkYourAnswersService.getSummaryForView
+      childCompanyName  <- checkYourAnswersService.getChildCompanyName
+      parentCompanyName <- checkYourAnswersService.getParentCompanyName
+    } yield (summaryLists, childCompanyName) match {
+      case (Some(list), Some(childCompany)) =>
+        Ok(view(list, childCompany, parentCompanyName))
+      case (None, Some(_))                  =>
+        logger.warn("Could not retrieve summary lists from User Answers")
+        Redirect(routes.JourneyRecoveryController.onPageLoad())
+      case (Some(_), None)                  =>
+        logger.warn("Could not retrieve child company name from User Answers")
+        Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
+  }
 
-    Ok(view(list))
+  def onSubmit() = (identify andThen getData andThen requireData) { implicit request =>
+    /*
+     * TODO:
+     * - Implement submit registration
+     * - Check existing frontend for model and connector setup
+     */
+
+    ???
   }
 }

@@ -18,9 +18,10 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.CheckContactAddressFormProvider
-import models.Mode
+import models.{Mode, UserAnswers}
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.CheckContactAddressPage
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckContactAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, InternationalContactAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,6 +30,7 @@ import views.html.CheckContactAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class CheckContactAddressController @Inject() (
   override val messagesApi: MessagesApi,
@@ -63,9 +65,24 @@ class CheckContactAddressController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CheckContactAddressPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
+              contactUserAnswers <- Future.fromTry(handleUserAnswer(value))
+              updatedAnswers     <- Future.fromTry(contactUserAnswers.set(CheckContactAddressPage, value))
+              _                  <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(CheckContactAddressPage, mode, updatedAnswers))
         )
   }
+
+  private def handleUserAnswer(answer: Boolean)(implicit request: DataRequest[AnyContent]): Try[UserAnswers] =
+    if (answer) {
+      (
+        request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage),
+        request.userAnswers.get(InternationalContactAddressPage)
+      ) match { // TODO get International address here when implemented
+        case (Some(addr), _) => request.userAnswers.set(ContactUkAddressPage, addr.ToContactUKAddress)
+        case (_, Some(addr)) => Try(request.userAnswers) // TODO set International address here when implemented
+        case (_, _)          => Try(request.userAnswers)
+      }
+    } else {
+      Try(request.userAnswers)
+    }
 }

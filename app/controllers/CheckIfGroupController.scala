@@ -18,7 +18,8 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.CheckIfGroupFormProvider
-import models.Mode
+import models.requests.DataRequest
+import models.{Mode, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.CheckIfGroupPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,6 +30,7 @@ import views.html.CheckIfGroupView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Success
 
 class CheckIfGroupController @Inject() (
   override val messagesApi: MessagesApi,
@@ -63,9 +65,18 @@ class CheckIfGroupController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CheckIfGroupPage, value))
+              checkedAnswers <- removeAnswersIfFalseAndChanged(value, mode)
+              updatedAnswers <- Future.fromTry(checkedAnswers.set(CheckIfGroupPage, value))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(CheckIfGroupPage, mode, updatedAnswers))
         )
   }
+
+  private def removeAnswersIfFalseAndChanged(value: Boolean, mode: Mode)(implicit
+    request: DataRequest[AnyContent]
+  ): Future[UserAnswers] =
+    Future.fromTry(
+      if (value || mode == NormalMode) Success(request.userAnswers)
+      else request.userAnswers.removeUltimateParentCompanyAnswers
+    )
 }

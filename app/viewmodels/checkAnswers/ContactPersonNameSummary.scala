@@ -30,11 +30,9 @@ object ContactPersonNameSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(ContactPersonNamePage).map { answer =>
-      val value = HtmlFormat.escape(answer.firstName).toString + "<br/>" + HtmlFormat.escape(answer.lastName).toString
-
       SummaryListRowViewModel(
         key = "contactPersonName.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlContent(value)),
+        value = ValueViewModel(HtmlContent(HtmlFormat.escape(answer.fullName))),
         actions = Seq(
           ActionItemViewModel("site.change", routes.ContactPersonNameController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("contactPersonName.change.hidden"))

@@ -20,21 +20,21 @@ import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages.AccountingPeriodEndDatePage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import utils.DateTimeFormats.dateTimeFormat
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-class AccountingPeriodEndDateSummary {
+object AccountingPeriodEndDateSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(AccountingPeriodEndDatePage).map { answer =>
       SummaryListRowViewModel(
-        key = "accountingPeriodEndDate.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlFormat.escape(answer.toString).toString()),
+        key = "accounting-period-end-date.checkYourAnswersLabel",
+        value = ValueViewModel(answer.format(dateTimeFormat()(messages.lang))),
         actions = Seq(
           ActionItemViewModel("site.change", routes.AccountingPeriodEndDateController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("accountingPeriodEndDate.change.hidden"))
+            .withVisuallyHiddenText(messages("accounting-period-end-date.change.hidden"))
         )
       )
     }

@@ -24,7 +24,26 @@ case class CompanyRegisteredOfficeUkAddress(
   town: Option[String],
   county: Option[String],
   postcode: String
-)
+) {
+
+  // TODO: Remove this once address models are standardised
+  def ToContactUKAddress: ContactUkAddress =
+    ContactUkAddress(
+      buildingorstreet,
+      buildingorstreet2,
+      town,
+      county,
+      postcode
+    )
+
+  def asAddressLines: Seq[String] = Seq(
+    Some(buildingorstreet),
+    buildingorstreet2,
+    town,
+    county,
+    Some(postcode)
+  ).flatten
+}
 
 object CompanyRegisteredOfficeUkAddress {
 
