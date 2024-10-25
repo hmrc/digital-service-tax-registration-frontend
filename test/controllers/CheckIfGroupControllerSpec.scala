@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.CheckIfGroupFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CheckIfGroupPage
+import pages._
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -33,6 +33,7 @@ import repositories.SessionRepository
 import views.html.CheckIfGroupView
 
 import scala.concurrent.Future
+import scala.util.Success
 
 class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
 
@@ -102,6 +103,89 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to the correct page in Check Mode" - {
+
+      "when user answers 'Yes'" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.set(any(), any())(any()))
+          .thenReturn(Success(mockUserAnswers))
+
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(mockUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, routes.CheckIfGroupController.onPageLoad(CheckMode).url)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+          verify(mockUserAnswers, times(0)).removeUltimateParentCompanyAnswers
+          verify(mockUserAnswers, times(0)).remove(UltimateParentCompanyNamePage)
+          verify(mockUserAnswers, times(0)).remove(CheckUltimateGlobalParentCompanyInUkPage)
+          verify(mockUserAnswers, times(0)).remove(UltimateParentCompanyUkAddressPage)
+          verify(mockUserAnswers, times(0)).remove(UltimateParentCompanyInternationalAddressPage)
+        }
+      }
+
+      "and remove Ultimate Parent Company Answers when user answers 'No'" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        val mockUserAnswers = mock[UserAnswers]
+
+        when(mockUserAnswers.set(any(), any())(any()))
+          .thenReturn(Success(mockUserAnswers))
+
+        when(mockUserAnswers.remove(any()))
+          .thenReturn(Success(mockUserAnswers))
+
+        when(mockUserAnswers.removeUltimateParentCompanyAnswers)
+          .thenCallRealMethod()
+
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(mockUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, routes.CheckIfGroupController.onPageLoad(CheckMode).url)
+              .withFormUrlEncodedBody(("value", "false"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+          verify(mockUserAnswers).removeUltimateParentCompanyAnswers
+          verify(mockUserAnswers).remove(UltimateParentCompanyNamePage)
+          verify(mockUserAnswers).remove(CheckUltimateGlobalParentCompanyInUkPage)
+          verify(mockUserAnswers).remove(UltimateParentCompanyUkAddressPage)
+          verify(mockUserAnswers).remove(UltimateParentCompanyInternationalAddressPage)
+        }
       }
     }
 

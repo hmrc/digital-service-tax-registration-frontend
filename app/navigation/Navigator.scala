@@ -51,8 +51,11 @@ class Navigator @Inject() extends NavigationUtils {
     case _                                             => _ => Option(routes.IndexController.onPageLoad())
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = { case _ =>
-    _ => routes.CheckYourAnswersController.onPageLoad()
+  private val checkRouteMap: Page => UserAnswers => Call = {
+    case CheckIfGroupPage                         => ua => checkIfGroupCheckMode(ua)
+    case UltimateParentCompanyNamePage            => ua => ultimateParentCompanyNamePageCheckMode(ua)
+    case CheckUltimateGlobalParentCompanyInUkPage => ua => checkUltimateGlobalParentCompanyInUkPageCheckMode(ua)
+    case _                                        => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {

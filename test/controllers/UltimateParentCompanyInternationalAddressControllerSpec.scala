@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.InternationalAddressFormProvider
-import models.{Country, InternationalAddress, NormalMode, UserAnswers}
+import models.{Country, InternationalAddress, NormalMode, UltimateParentCompanyUkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage}
+import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.{JsString, Json}
@@ -35,6 +35,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 import views.html.UltimateParentCompanyInternationalAddressView
 
 import scala.concurrent.Future
+import scala.util.Try
 
 class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
@@ -154,6 +155,47 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect and remove UK address if it is set in User Answers" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val mockUserAnswers       = mock[UserAnswers]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      when(mockUserAnswers.removeIfSet(any())(any()))
+        .thenCallRealMethod()
+
+      when(mockUserAnswers.get(eqTo(UltimateParentCompanyUkAddressPage))(any()))
+        .thenReturn(Some(UltimateParentCompanyUkAddress("123 Test Street", postcode = "TE5 5ST")))
+
+      when(mockUserAnswers.remove(eqTo(UltimateParentCompanyUkAddressPage)))
+        .thenReturn(Try(mockUserAnswers))
+
+      when(mockUserAnswers.set(any(), any())(any()))
+        .thenReturn(Try(mockUserAnswers))
+
+      val application =
+        applicationBuilder(userAnswers = Some(mockUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, ultimateParentCompanyInternationalAddressRoute)
+            .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("country", "AD"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        verify(mockUserAnswers).remove(eqTo(UltimateParentCompanyUkAddressPage))
       }
     }
 

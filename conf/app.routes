@@ -137,5 +137,7 @@ POST       /contact-person-email                                 controllers.Con
 GET        /change-contact-email                                 controllers.ContactPersonEmailAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-contact-email                                 controllers.ContactPersonEmailAddressController.onSubmit(mode: Mode = CheckMode)
 
+GET        /checkYourAnswers                       controllers.CheckYourAnswersController.onPageLoad()
+
 GET        /incorrect-account-cred-role                  controllers.auth.IncorrectAccountCredRoleController.onPageLoad()
 GET        /incorrect-account-affinity                   controllers.auth.IncorrectAccountAffinityController.onPageLoad()

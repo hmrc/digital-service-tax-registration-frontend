@@ -17,7 +17,7 @@
 package navigation
 
 import controllers.routes
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import pages._
 import play.api.mvc.Call
 
@@ -77,14 +77,27 @@ trait NavigationUtils {
       case false => ??? // todo page needs to be implemented contact-details
     }
 
+  def checkIfGroupCheckMode(userAnswers: UserAnswers): Call =
+    if (userAnswers.get(CheckIfGroupPage).contains(true)) {
+      routes.UltimateParentCompanyNameController.onPageLoad(CheckMode)
+    } else {
+      routes.CheckYourAnswersController.onPageLoad()
+    }
+
   def ultimateParentCompanyNamePage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(UltimateParentCompanyNamePage).map { _ =>
       routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode)
     }
 
+  def ultimateParentCompanyNamePageCheckMode(userAnswers: UserAnswers): Call =
+    (userAnswers.get(UltimateParentCompanyNamePage), userAnswers.get(CheckUltimateGlobalParentCompanyInUkPage)) match {
+      case (_, Some(_)) => routes.CheckYourAnswersController.onPageLoad()
+      case (_, _)       => routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(CheckMode)
+    }
+
   def companyContactAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CompanyContactAddressPage).map {
-      case true  => routes.CheckIfGroupController.onPageLoad(NormalMode) // TODO page needs to  be implemented
+      case true  => routes.CheckIfGroupController.onPageLoad(NormalMode)
       case false => ??? // TODO page needs to  be implemented
     }
 
@@ -101,10 +114,26 @@ trait NavigationUtils {
   def checkUltimateGlobalParentCompanyInUkPage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckUltimateGlobalParentCompanyInUkPage).map {
       case true  =>
-        routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode) // TODO page needs to  be implemented
+        routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode)
       case false =>
-        routes.UltimateParentCompanyInternationalAddressController
-          .onPageLoad(NormalMode) // TODO page needs to  be implemented
+        routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode)
+    }
+
+  def checkUltimateGlobalParentCompanyInUkPageCheckMode(userAnswers: UserAnswers): Call =
+    userAnswers.get(CheckUltimateGlobalParentCompanyInUkPage) match {
+      case Some(true)  =>
+        if (userAnswers.get(UltimateParentCompanyUkAddressPage).isDefined) {
+          routes.CheckYourAnswersController.onPageLoad()
+        } else {
+          routes.UltimateParentCompanyUkAddressController.onPageLoad(CheckMode)
+        }
+      case Some(false) =>
+        if (userAnswers.get(UltimateParentCompanyInternationalAddressPage).isDefined) {
+          routes.CheckYourAnswersController.onPageLoad()
+        } else {
+          routes.UltimateParentCompanyInternationalAddressController.onPageLoad(CheckMode)
+        }
+      case None        => routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(CheckMode)
     }
 
   def liabilityStartDatePage(userAnswers: UserAnswers): Option[Call] =
@@ -131,5 +160,5 @@ trait NavigationUtils {
     }
 
   def accountingPeriodEndDatePage(userAnswers: UserAnswers): Option[Call] =
-    userAnswers.get(AccountingPeriodEndDatePage).map(_ => routes.GlobalRevenuesController.onPageLoad(NormalMode))
+    userAnswers.get(AccountingPeriodEndDatePage).map(_ => routes.CheckYourAnswersController.onPageLoad())
 }

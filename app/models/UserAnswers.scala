@@ -16,6 +16,7 @@
 
 package models
 
+import pages._
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -61,6 +62,21 @@ final case class UserAnswers(
       page.cleanup(None, updatedAnswers)
     }
   }
+
+  def removeIfSet[A](page: QuestionPage[A])(implicit reads: Reads[A]): Try[UserAnswers] =
+    get(page).fold(Try(this))(_ => remove(page))
+
+  def removeUltimateParentCompanyAnswers: Try[UserAnswers] =
+    Seq[Settable[_]](
+      UltimateParentCompanyNamePage,
+      CheckUltimateGlobalParentCompanyInUkPage,
+      UltimateParentCompanyUkAddressPage,
+      UltimateParentCompanyInternationalAddressPage
+    ).foldLeft(Try(this))((ua, page) =>
+      ua.flatMap { answers =>
+        answers.remove(page)
+      }
+    )
 }
 
 object UserAnswers {
