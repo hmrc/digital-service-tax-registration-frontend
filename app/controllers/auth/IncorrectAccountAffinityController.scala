@@ -23,7 +23,7 @@ import views.html.auth.IncorrectAccountAffinityView
 
 import javax.inject.Inject
 
-class IncorrectAccountAffinityController @Inject()(
+class IncorrectAccountAffinityController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: IncorrectAccountAffinityView
 ) extends FrontendBaseController

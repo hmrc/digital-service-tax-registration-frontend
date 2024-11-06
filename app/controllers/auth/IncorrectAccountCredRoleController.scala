@@ -23,7 +23,7 @@ import views.html.auth.IncorrectAccountCredRoleView
 
 import javax.inject.Inject
 
-class IncorrectAccountCredRoleController @Inject()(
+class IncorrectAccountCredRoleController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: IncorrectAccountCredRoleView
 ) extends FrontendBaseController

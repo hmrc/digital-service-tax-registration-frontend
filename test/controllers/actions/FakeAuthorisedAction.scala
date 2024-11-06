@@ -31,7 +31,9 @@ class FakeAuthorisedAction(mcc: MessagesControllerComponents, val authConnector:
 ) extends Auth {
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
-    val enrolments = Enrolments(Set(Enrolment("HMRC-DST-ORG", Seq(EnrolmentIdentifier("DSTRefNumber", "8213411999")), "Activated")))
+    val enrolments = Enrolments(
+      Set(Enrolment("HMRC-DST-ORG", Seq(EnrolmentIdentifier("DSTRefNumber", "8213411999")), "Activated"))
+    )
     Future.successful(Right(AuthorisedRequest(InternalId("Int-abc"), enrolments, request)))
   }
 

@@ -50,21 +50,21 @@ class AuthorisedAction @Inject() (
 )(implicit val appConfig: FrontendAppConfig, val executionContext: ExecutionContext, val messagesApi: MessagesApi)
     extends Auth {
 
-  val logger: Logger = Logger(getClass)
+  val logger: Logger                                                                                  = Logger(getClass)
   override protected def refine[A](request: Request[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     val retrieval = allEnrolments and credentialRole and internalId and affinityGroup
 
-    authorised(AuthProviders(GovernmentGateway) and Organisation and User).retrieve(retrieval) { //CODE REFACTOR
+    authorised(AuthProviders(GovernmentGateway) and Organisation and User).retrieve(retrieval) { // CODE REFACTOR
       case enrolments ~ _ ~ id ~ _ =>
         val internalIdString = id.getOrElse(throw new RuntimeException("No Internal ID found for user"))
-        val internalId = InternalId(internalIdString) //REVISIT REGEX VALIDATED STRING
+        val internalId       = InternalId(internalIdString) // REVISIT REGEX VALIDATED STRING
 
         Future.successful(Right(AuthorisedRequest(internalId, enrolments, request)))
 
     } recover {
-      case _: UnsupportedAffinityGroup  =>
+      case _: UnsupportedAffinityGroup =>
         Left(Redirect(routes.IncorrectAccountAffinityController.onPageLoad()))
 
       case _: UnsupportedCredentialRole =>

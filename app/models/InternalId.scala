@@ -16,6 +16,4 @@
 
 package models
 
-case class InternalId (internalId: String) extends AnyVal
-
-
+case class InternalId(internalId: String) extends AnyVal
