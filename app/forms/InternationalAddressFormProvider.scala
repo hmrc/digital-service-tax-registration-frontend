@@ -55,7 +55,6 @@ class InternationalAddressFormProvider @Inject() extends Mappings {
       ),
       "country" -> text("internationalAddress.error.countryCode.required")
         .verifying("internationalAddress.error.country.required", value => countryList.exists(_.code == value))
-        .transform[Country](value => countryList.find(_.code == value).get, _.code)
-    )(InternationalAddress.apply)(x => Some((x.line1, x.line2, x.line3, x.line4, x.country)))
+    )(InternationalAddress.apply)(x => Some((x.line1, x.line2, x.line3, x.line4, x.countryCode)))
   )
 }

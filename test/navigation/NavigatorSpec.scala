@@ -35,10 +35,10 @@ class NavigatorSpec extends SpecBase {
     None,
     None,
     None,
-    country = Country("Andorra", "AD", "country")
+    "AD"
   )
 
-  val contactPersonName = ContactPersonName("John", "Smith")
+  val contactPersonName: ContactPersonName = ContactPersonName("John", "Smith")
 
   val companyName = "Big Corp"
 
@@ -100,6 +100,39 @@ class NavigatorSpec extends SpecBase {
             .success
             .value
         ) mustBe routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from ConfirmCompanyDetailsPage with option `true` and Company details set to ConfirmCompanyDetailsController" in {
+        navigator.nextPage(
+          ConfirmCompanyDetailsPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(ConfirmCompanyDetailsPage, true).success.value
+            .set(CompanyNamePage, companyName).success.value
+            .set(CompanyRegisteredOfficeUkAddressPage, internationalAddress.toCompanyRegisteredOfficeUkAddress).success.value
+        ) mustBe routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
+      }
+
+      "must go from ConfirmCompanyDetailsPage with option `true` to CompanyContactAddressController" in {
+        navigator.nextPage(
+          ConfirmCompanyDetailsPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(ConfirmCompanyDetailsPage, true)
+            .success
+            .value
+        ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from ConfirmCompanyDetailsPage with option `false` to Details Not Correct page" in {
+        navigator.nextPage(
+          ConfirmCompanyDetailsPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(ConfirmCompanyDetailsPage, false)
+            .success
+            .value
+        ) mustBe routes.DetailsNotCorrectController.onPageLoad()
       }
 
       "must go from a CheckCompanyRegisteredOfficeAddressPage with option `true` to CheckCompanyRegisteredOfficePostcodePage" in {

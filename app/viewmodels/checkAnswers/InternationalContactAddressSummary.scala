@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{CheckMode, Location, UserAnswers}
 import pages.InternationalContactAddressPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -26,11 +26,11 @@ import viewmodels.implicits._
 
 object InternationalContactAddressSummary extends SummaryFunctions {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+  def row(answers: UserAnswers, location: Location)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(InternationalContactAddressPage).map { answer =>
       SummaryListRowViewModel(
         key = "internationalContactAddress.checkYourAnswersLabel",
-        value = asAddressValue(answer.asAddressLines),
+        value = asAddressValue(answer.asAddressLines(location)),
         actions = Seq(
           ActionItemViewModel("site.change", routes.InternationalContactAddressController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("internationalContactAddress.change.hidden"))

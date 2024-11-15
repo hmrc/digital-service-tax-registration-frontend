@@ -56,11 +56,7 @@ class UserAnswersSpec extends SpecBase {
               Some("Brooklyn"),
               Some("Manhattan"),
               Some("New York"),
-              Country(
-                "United States",
-                "US",
-                "country"
-              )
+              "US"
             )
           )
           .success

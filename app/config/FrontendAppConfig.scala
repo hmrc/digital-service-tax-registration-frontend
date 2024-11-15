@@ -30,6 +30,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
 
   private val contactHost                  = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "digital-service-tax-registration-frontend"
+  val dstBackendBaseUrl: String            = servicesConfig.baseUrl("digital-services-tax")
   val dstFrontendBaseUrl: String           = servicesConfig.baseUrl("digital-services-tax-frontend")
   val dstFrontendRegistrationUrl: String   = dstFrontendBaseUrl + "/digital-services-tax/register/"
 
@@ -62,4 +63,5 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   lazy val dstNewRegistrationFrontendEnableFlag: Boolean =
     configuration.getOptional[Boolean]("features.dstNewRegistrationFrontendEnable").getOrElse(false)
 
+  val companiesHouseLink = "https://www.gov.uk/file-changes-to-a-company-with-companies-house"
 }
