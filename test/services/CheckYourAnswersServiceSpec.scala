@@ -18,8 +18,8 @@ package services
 
 import base.SpecBase
 import controllers.routes
-import models.requests.DataRequest
 import models._
+import models.requests.DataRequest
 import org.mockito.ArgumentMatchers.{eq => eqTo}
 import org.mockito.Mockito.{reset, when}
 import org.mockito.stubbing.OngoingStubbing
@@ -43,8 +43,9 @@ import scala.concurrent.Future
 class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
 
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
+  val mockLocation: Location                   = mock[Location]
 
-  val serviceUnderTest = new CheckYourAnswersService(mockSessionRepository)
+  val serviceUnderTest = new CheckYourAnswersService(mockSessionRepository, mockLocation)
 
   val companyName = "Company Ltd"
 
@@ -70,6 +71,8 @@ class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
     )
 
   "CheckYourAnswersService" - {
+
+    when(mockLocation.name(eqTo("US"))).thenReturn("United States")
 
     "when .getChildCompanyName is called" - {
 
@@ -193,14 +196,14 @@ class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
         "when International Contact Address is set in user answers" in {
 
           val address =
-            InternationalAddress("123 Test Street", None, None, None, Country("United States", "US", "country"))
+            InternationalAddress("123 Test Street", None, None, None, "US")
 
           mockUserAnswers(InternationalContactAddressPage, address)
 
           serviceUnderTest.getSummaryForView.futureValue.value("responsibleMember") mustBe
             theCorrectSummaryListWithRow(
               "internationalContactAddress",
-              asAddressValue(address.asAddressLines),
+              asAddressValue(address.asAddressLines(mockLocation)),
               routes.InternationalContactAddressController.onPageLoad(CheckMode).url
             )
         }
@@ -249,14 +252,14 @@ class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
         "when Ultimate Parent Company International Address is set in user answers" in {
 
           val address =
-            InternationalAddress("123 Test Street", None, None, None, Country("United States", "US", "country"))
+            InternationalAddress("123 Test Street", None, None, None, "US")
 
           mockUserAnswers(UltimateParentCompanyInternationalAddressPage, address)
 
           serviceUnderTest.getSummaryForView.futureValue.value("ultimateGlobalParent") mustBe
             theCorrectSummaryListWithRow(
               "ultimateParentCompanyInternationalAddress",
-              asAddressValue(address.asAddressLines),
+              asAddressValue(address.asAddressLines(mockLocation)),
               routes.UltimateParentCompanyInternationalAddressController.onPageLoad(CheckMode).url
             )
         }

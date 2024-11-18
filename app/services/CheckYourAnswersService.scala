@@ -16,7 +16,7 @@
 
 package services
 
-import models.UserAnswers
+import models.{Location, UserAnswers}
 import models.requests.DataRequest
 import pages.{CompanyNamePage, UltimateParentCompanyNamePage}
 import play.api.i18n.Messages
@@ -30,7 +30,9 @@ import viewmodels.govuk.summarylist._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersService @Inject() (sessionRepository: SessionRepository)(implicit ec: ExecutionContext) {
+class CheckYourAnswersService @Inject() (sessionRepository: SessionRepository, location: Location)(implicit
+  ec: ExecutionContext
+) {
 
   def getChildCompanyName(implicit request: DataRequest[_]): Future[Option[String]] =
     retrieveFromUserAnswers(CompanyNamePage)
@@ -61,7 +63,7 @@ class CheckYourAnswersService @Inject() (sessionRepository: SessionRepository)(i
         CompanyNameSummary.row(userAnswers),
         CompanyRegisteredOfficeUkAddressSummary.row(userAnswers),
         ContactUkAddressSummary.row(userAnswers),
-        InternationalContactAddressSummary.row(userAnswers),
+        InternationalContactAddressSummary.row(userAnswers, location),
         CheckIfGroupSummary.row(userAnswers)
       ).flatten
     )
@@ -72,7 +74,7 @@ class CheckYourAnswersService @Inject() (sessionRepository: SessionRepository)(i
     val rows = Seq(
       UltimateParentCompanyNameSummary.row(userAnswers),
       UltimateParentCompanyUkAddressSummary.row(userAnswers),
-      UltimateParentCompanyInternationalAddressSummary.row(userAnswers)
+      UltimateParentCompanyInternationalAddressSummary.row(userAnswers, location)
     ).flatten
 
     if (rows.nonEmpty) {

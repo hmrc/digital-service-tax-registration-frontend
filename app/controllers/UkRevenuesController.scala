@@ -16,19 +16,22 @@
 
 package controllers
 
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import forms.UkRevenuesFormProvider
-import models.{Mode, UserAnswers}
+import models.{Company, Mode, UserAnswers}
 import navigation.Navigator
-import pages.UkRevenuesPage
+import pages.{CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, UkRevenuesPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.DigitalServicesTaxService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.UkRevenuesView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class UkRevenuesController @Inject() (
   override val messagesApi: MessagesApi,
@@ -36,15 +39,15 @@ class UkRevenuesController @Inject() (
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
   formProvider: UkRevenuesFormProvider,
   val controllerComponents: MessagesControllerComponents,
+  backendService: DigitalServicesTaxService,
   view: UkRevenuesView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(UkRevenuesPage) match {
@@ -60,12 +63,31 @@ class UkRevenuesController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
+        value => {
+          val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.userId))
+
+          val answersWithCompanyIfExists =
+            if (value) {
+              for {
+                companyOpt              <- backendService.getCompany
+                answersWithCompanyIfSet <- Future.fromTry(setCompanyAnswers(userAnswers, companyOpt))
+              } yield answersWithCompanyIfSet
+            } else {
+              Future.successful(userAnswers)
+            }
+
           for {
-            updatedAnswers <-
-              Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.userId)).set(UkRevenuesPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkRevenuesPage, mode, updatedAnswers))
+            answers        <- answersWithCompanyIfExists
+            revenueAnswers <- Future.fromTry(answers.set(UkRevenuesPage, value))
+            _              <- sessionRepository.set(revenueAnswers)
+          } yield Redirect(navigator.nextPage(UkRevenuesPage, mode, revenueAnswers))
+        }
       )
   }
+
+  private def setCompanyAnswers(ua: UserAnswers, companyOpt: Option[Company]): Try[UserAnswers] =
+    companyOpt.fold(Try(ua)) { company =>
+      ua.set(CompanyNamePage, company.name)
+        .flatMap(_.set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress))
+    }
 }

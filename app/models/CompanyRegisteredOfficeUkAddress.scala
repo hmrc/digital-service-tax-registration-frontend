@@ -35,6 +35,15 @@ case class CompanyRegisteredOfficeUkAddress(
       county,
       postcode
     )
+  // TODO: Remove this once address models are standardised
+  def ToUKAddress: UkAddress               =
+    UkAddress(
+      buildingorstreet,
+      buildingorstreet2,
+      town,
+      county,
+      postcode
+    )
 
   def asAddressLines: Seq[String] = Seq(
     Some(buildingorstreet),

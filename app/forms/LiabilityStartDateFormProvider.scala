@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 class LiabilityStartDateFormProvider @Inject() extends Mappings {
 
-  val minimumDateKey = "liabilityStartDate.mininum.date"
+  val minimumDateKey = "liabilityStartDate.minimum.date"
   val maximumDate    = LocalDate.now().plusYears(1)
   val maximumDateKey = "liabilityStartDate.maximum.date"
 
