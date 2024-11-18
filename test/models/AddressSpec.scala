@@ -26,14 +26,14 @@ import play.api.libs.json.Json
 
 class AddressSpec extends SpecBase with MockitoSugar with ScalaCheckPropertyChecks with ModelGenerators {
 
-  val name = "Big Corp"
-  val line1 = "123 Test Street"
-  val line2 = "Business Park"
-  val line3 = "Long Road"
-  val line4 = "London"
-  val postcode = "TE5 5ST"
+  val name        = "Big Corp"
+  val line1       = "123 Test Street"
+  val line2       = "Business Park"
+  val line3       = "Long Road"
+  val line4       = "London"
+  val postcode    = "TE5 5ST"
   val countryCode = "US"
-  val safeId = "13979F8H2EHRWBGSDI9"
+  val safeId      = "13979F8H2EHRWBGSDI9"
 
   "Address" - {
 
@@ -68,7 +68,13 @@ class AddressSpec extends SpecBase with MockitoSugar with ScalaCheckPropertyChec
            |}
            |""".stripMargin
 
-      Json.parse(addressJsonStr).as[Address] mustBe InternationalAddress(line1, Some(line2), Some(line3), Some(line4), countryCode)
+      Json.parse(addressJsonStr).as[Address] mustBe InternationalAddress(
+        line1,
+        Some(line2),
+        Some(line3),
+        Some(line4),
+        countryCode
+      )
     }
 
     "must serialise UK address with country code and postcode JSON as UK Address" in {
@@ -111,7 +117,7 @@ class AddressSpec extends SpecBase with MockitoSugar with ScalaCheckPropertyChec
         }
       }
 
-      "when both postcode and country are both missing" in {
+      "when both postcode and country are missing" in {
 
         val addressJsonStr =
           s"""
@@ -155,7 +161,11 @@ class AddressSpec extends SpecBase with MockitoSugar with ScalaCheckPropertyChec
           if (address.line4.isDefined) lines must contain(address.line4.get)
           lines.last mustBe address.postalCode
 
-          lines.size mustBe (Seq(address.line1, address.postalCode) ++ Seq(address.line2, address.line3, address.line4).flatten).size
+          lines.size mustBe (Seq(address.line1, address.postalCode) ++ Seq(
+            address.line2,
+            address.line3,
+            address.line4
+          ).flatten).size
         }
       }
     }
@@ -168,7 +178,6 @@ class AddressSpec extends SpecBase with MockitoSugar with ScalaCheckPropertyChec
       "must return an empty String" - {
 
         forAll(arbitraryInternationalAddress.arbitrary) { address =>
-
           assert(address.postalCode == "")
         }
       }
@@ -176,14 +185,12 @@ class AddressSpec extends SpecBase with MockitoSugar with ScalaCheckPropertyChec
 
     "when .toAddressLines is called" - {
 
-
       "must contain mandatory line 1 and country name along with any set optional values" in {
 
         val mockLocation = mock[Location]
-        val name = "Republic of Testing"
+        val name         = "Republic of Testing"
 
         forAll(arbitraryInternationalAddress.arbitrary) { address =>
-
           when(mockLocation.name(ArgumentMatchers.eq(address.countryCode))).thenReturn(name)
 
           val lines = address.asAddressLines(mockLocation)

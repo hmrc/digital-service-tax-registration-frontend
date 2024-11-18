@@ -31,48 +31,55 @@ import views.html.ConfirmCompanyDetailsView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmCompanyDetailsController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 sessionRepository: SessionRepository,
-                                                 navigator: Navigator,
-                                                 identify: IdentifierAction,
-                                                 getData: DataRetrievalAction,
-                                                 requireData: DataRequiredAction,
-                                                 formProvider: ConfirmCompanyDetailsFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 location: Location,
-                                                 view: ConfirmCompanyDetailsView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ConfirmCompanyDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: ConfirmCompanyDetailsFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  location: Location,
+  view: ConfirmCompanyDetailsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(ConfirmCompanyDetailsPage).fold(form)(form.fill)
 
-      val preparedForm = request.userAnswers.get(ConfirmCompanyDetailsPage).fold(form)(form.fill)
-
-      renderViewOrRedirectIfNoCompany(mode, company => Ok(view(company, location, preparedForm, mode)))
+    renderViewOrRedirectIfNoCompany(mode, company => Ok(view(company, location, preparedForm, mode)))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful {
-            renderViewOrRedirectIfNoCompany(mode, company => BadRequest(view(company, location, formWithErrors, mode)))
-          },
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ConfirmCompanyDetailsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ConfirmCompanyDetailsPage, mode, updatedAnswers))
-      )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful {
+              renderViewOrRedirectIfNoCompany(
+                mode,
+                company => BadRequest(view(company, location, formWithErrors, mode))
+              )
+            },
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ConfirmCompanyDetailsPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(ConfirmCompanyDetailsPage, mode, updatedAnswers))
+        )
   }
 
-  private def renderViewOrRedirectIfNoCompany(mode: Mode, f: Company => Result)(implicit request: DataRequest[AnyContent]): Result =
+  private def renderViewOrRedirectIfNoCompany(mode: Mode, f: Company => Result)(implicit
+    request: DataRequest[AnyContent]
+  ): Result =
     (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage)) match {
-      case (Some(name), Some(address)) => f(Company(name, address.ToUKAddress))// TODO change model to standardised Address
-      case _ =>  Redirect(navigator.nextPage(UkRevenuesPage, mode, request.userAnswers))
+      case (Some(name), Some(address)) =>
+        f(Company(name, address.ToUKAddress)) // TODO change model to standardised Address
+      case _                           => Redirect(navigator.nextPage(UkRevenuesPage, mode, request.userAnswers))
     }
 }

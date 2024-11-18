@@ -67,13 +67,11 @@ class UkRevenuesController @Inject() (
           val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.userId))
 
           val answersWithCompanyIfExists =
-            if(value) {
+            if (value) {
               for {
                 companyOpt              <- backendService.getCompany
                 answersWithCompanyIfSet <- Future.fromTry(setCompanyAnswers(userAnswers, companyOpt))
-              } yield {
-                answersWithCompanyIfSet
-              }
+              } yield answersWithCompanyIfSet
             } else {
               Future.successful(userAnswers)
             }
@@ -82,17 +80,14 @@ class UkRevenuesController @Inject() (
             answers        <- answersWithCompanyIfExists
             revenueAnswers <- Future.fromTry(answers.set(UkRevenuesPage, value))
             _              <- sessionRepository.set(revenueAnswers)
-          } yield {
-            Redirect(navigator.nextPage(UkRevenuesPage, mode, revenueAnswers))
-          }
+          } yield Redirect(navigator.nextPage(UkRevenuesPage, mode, revenueAnswers))
         }
       )
   }
 
-  private def setCompanyAnswers(ua: UserAnswers, companyOpt: Option[Company]): Try[UserAnswers] = {
-    companyOpt.fold(Try(ua)){ company =>
+  private def setCompanyAnswers(ua: UserAnswers, companyOpt: Option[Company]): Try[UserAnswers] =
+    companyOpt.fold(Try(ua)) { company =>
       ua.set(CompanyNamePage, company.name)
         .flatMap(_.set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress))
     }
-  }
 }

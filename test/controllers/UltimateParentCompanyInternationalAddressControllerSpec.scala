@@ -66,7 +66,9 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         Some("value 4"),
         countryCode
       )
-    ).success.value
+    )
+    .success
+    .value
 
   "UltimateParentCompanyInternationalAddress Controller" - {
 
@@ -110,8 +112,8 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val application = applicationBuilder(
-        Some(userAnswers.set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value
-      )).build()
+        Some(userAnswers.set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value)
+      ).build()
 
       running(application) {
         val request = FakeRequest(GET, ultimateParentCompanyInternationalAddressRoute)

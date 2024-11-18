@@ -26,7 +26,7 @@ import java.net.URL
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DigitalServicesTaxConnector @Inject()(http: HttpClientV2, appConfig: FrontendAppConfig) {
+class DigitalServicesTaxConnector @Inject() (http: HttpClientV2, appConfig: FrontendAppConfig) {
 
   private def backendUrl = s"${appConfig.dstBackendBaseUrl}/digital-services-tax"
 

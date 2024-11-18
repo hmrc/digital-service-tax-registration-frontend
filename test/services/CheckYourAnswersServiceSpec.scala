@@ -43,7 +43,7 @@ import scala.concurrent.Future
 class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
 
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
-  val mockLocation: Location = mock[Location]
+  val mockLocation: Location                   = mock[Location]
 
   val serviceUnderTest = new CheckYourAnswersService(mockSessionRepository, mockLocation)
 

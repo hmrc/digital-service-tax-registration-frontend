@@ -26,35 +26,35 @@ sealed trait Address {
   def line4: Option[String]
   def countryCode: String
   def postalCode: String
-  def toCompanyRegisteredOfficeUkAddress: CompanyRegisteredOfficeUkAddress =  // TODO remove when address models are standardised
+  def toCompanyRegisteredOfficeUkAddress
+    : CompanyRegisteredOfficeUkAddress = // TODO remove when address models are standardised
     CompanyRegisteredOfficeUkAddress(line1, line2, line3, line4, postalCode)
 }
 
 object Address {
   implicit val reads: Reads[Address] = (
     (__ \ "line1").read[String] and
-    (__ \ "line2").readNullable[String] and
-    (__ \ "line3").readNullable[String] and
-    (__ \ "line4").readNullable[String] and
-    (__ \ "postalCode").readNullable[String] and
-    (__ \ "countryCode").readNullable[String]
+      (__ \ "line2").readNullable[String] and
+      (__ \ "line3").readNullable[String] and
+      (__ \ "line4").readNullable[String] and
+      (__ \ "postalCode").readNullable[String] and
+      (__ \ "countryCode").readNullable[String]
   )(applyJson _)
 
-
-  private def applyJson(line1: String,
-                        line2: Option[String],
-                        line3: Option[String],
-                        line4: Option[String],
-                        postalCode: Option[String],
-                        countryCode: Option[String]): Address = {
+  private def applyJson(
+    line1: String,
+    line2: Option[String],
+    line3: Option[String],
+    line4: Option[String],
+    postalCode: Option[String],
+    countryCode: Option[String]
+  ): Address =
     (postalCode, countryCode) match {
-      case (Some(postcode), None) => UkAddress(line1, line2, line3, line4, postcode)
-      case (None, Some(countryCode)) => InternationalAddress(line1, line2, line3, line4, countryCode)
-      case (Some(postcode), Some(countryCode)) if countryCode == "GB" => UkAddress(line1, line2, line3, line4, postcode)
-      case _ => throw new IllegalArgumentException("Could not instantiate Address from Json")
+      case (Some(postcode), None)       => UkAddress(line1, line2, line3, line4, postcode)
+      case (None, Some(countryCode))    => InternationalAddress(line1, line2, line3, line4, countryCode)
+      case (Some(postcode), Some("GB")) => UkAddress(line1, line2, line3, line4, postcode)
+      case _                            => throw new IllegalArgumentException("Could not instantiate Address from Json")
     }
-
-  }
 
   implicit val writes: OWrites[Address] = Json.writes[Address]
 }
@@ -78,11 +78,11 @@ final case class UkAddress(
 }
 
 object UkAddress {
-  implicit val reads: Reads[UkAddress] = Json.reads[UkAddress]
+  implicit val reads: Reads[UkAddress]    = Json.reads[UkAddress]
   implicit val writes: OWrites[UkAddress] = Json.writes[UkAddress]
 }
 
-final case class InternationalAddress( //TODO replace other International address
+final case class InternationalAddress( // TODO replace other International address
   line1: String,
   line2: Option[String],
   line3: Option[String],
@@ -101,5 +101,6 @@ final case class InternationalAddress( //TODO replace other International addres
 }
 
 object InternationalAddress {
-  implicit val reads: Reads[InternationalAddress] = Json.reads[InternationalAddress]
-  implicit val writes: OWrites[InternationalAddress] = Json.writes[InternationalAddress]}
+  implicit val reads: Reads[InternationalAddress]    = Json.reads[InternationalAddress]
+  implicit val writes: OWrites[InternationalAddress] = Json.writes[InternationalAddress]
+}

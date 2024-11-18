@@ -84,7 +84,7 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
 
       "and a company is matched from the backend and answer is 'yes'" in {
 
-        val mockService = mock[DigitalServicesTaxService]
+        val mockService           = mock[DigitalServicesTaxService]
         val mockSessionRepository = mock[SessionRepository]
 
         val company = Company("Big Corp", UkAddress("123 Test Street", None, None, None, "TE5 3ST"))
@@ -112,24 +112,34 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
           redirectLocation(result).value mustEqual onwardRoute.url
 
           verify(mockSessionRepository)
-            .set(refEq(
-              emptyUserAnswers
-                .set(UkRevenuesPage, true).success.value
-                .set(CompanyNamePage, company.name).success.value
-                .set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress).success.value,
-              "lastUpdated"
-            ))
+            .set(
+              refEq(
+                emptyUserAnswers
+                  .set(UkRevenuesPage, true)
+                  .success
+                  .value
+                  .set(CompanyNamePage, company.name)
+                  .success
+                  .value
+                  .set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress)
+                  .success
+                  .value,
+                "lastUpdated"
+              )
+            )
         }
       }
 
       "and a company is matched from the backend and answer is 'no'" in {
 
-        val mockService = mock[DigitalServicesTaxService]
+        val mockService           = mock[DigitalServicesTaxService]
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockService.getCompany(any(), any())) thenReturn Future.successful(Some(
-          Company("Big Corp", UkAddress("123 Test Street", None, None, None, "TE5 3ST"))
-        ))
+        when(mockService.getCompany(any(), any())) thenReturn Future.successful(
+          Some(
+            Company("Big Corp", UkAddress("123 Test Street", None, None, None, "TE5 3ST"))
+          )
+        )
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val application =
@@ -158,7 +168,7 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
 
       "and no match is found from the backend" in {
 
-        val mockService = mock[DigitalServicesTaxService]
+        val mockService           = mock[DigitalServicesTaxService]
         val mockSessionRepository = mock[SessionRepository]
 
         when(mockService.getCompany(any(), any())) thenReturn Future.successful(None)
@@ -183,7 +193,9 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          verify(mockSessionRepository).set(refEq(UserAnswers("id").set(UkRevenuesPage, true).success.value, "lastUpdated"))
+          verify(mockSessionRepository).set(
+            refEq(UserAnswers("id").set(UkRevenuesPage, true).success.value, "lastUpdated")
+          )
         }
       }
     }

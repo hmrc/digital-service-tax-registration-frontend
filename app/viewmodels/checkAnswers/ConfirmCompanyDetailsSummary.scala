@@ -24,21 +24,19 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object ConfirmCompanyDetailsSummary  {
+object ConfirmCompanyDetailsSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(ConfirmCompanyDetailsPage).map {
-      answer =>
+    answers.get(ConfirmCompanyDetailsPage).map { answer =>
+      val value = if (answer) "site.yes" else "site.no"
 
-        val value = if (answer) "site.yes" else "site.no"
-
-        SummaryListRowViewModel(
-          key     = "confirmCompanyDetails.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.ConfirmCompanyDetailsController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("confirmCompanyDetails.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key = "confirmCompanyDetails.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.ConfirmCompanyDetailsController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("confirmCompanyDetails.change.hidden"))
         )
+      )
     }
 }

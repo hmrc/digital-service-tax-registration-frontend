@@ -39,7 +39,7 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ConfirmCompanyDetailsFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
   lazy val confirmCompanyDetailsRoute: String = routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode).url
 
@@ -50,8 +50,12 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
   "ConfirmCompanyDetails Controller" - {
 
     val userAnswers = UserAnswers(userAnswersId)
-      .set(CompanyNamePage, company.name).success.value
-      .set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress).success.value
+      .set(CompanyNamePage, company.name)
+      .success
+      .value
+      .set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress)
+      .success
+      .value
 
     "must return OK and the correct view for a GET" in {
 
@@ -65,7 +69,10 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[ConfirmCompanyDetailsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(company, location(application), form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(company, location(application), form, NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -83,7 +90,10 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(company, location(application), form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(company, location(application), form.fill(true), NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -101,7 +111,9 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode).url
+          redirectLocation(result).value mustEqual routes.CheckCompanyRegisteredOfficeAddressController
+            .onPageLoad(NormalMode)
+            .url
         }
       }
 
@@ -117,7 +129,10 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode).url        }
+          redirectLocation(result).value mustEqual routes.CheckCompanyRegisteredOfficeAddressController
+            .onPageLoad(NormalMode)
+            .url
+        }
       }
     }
 
@@ -163,7 +178,10 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(company, location(application), boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(company, location(application), boundForm, NormalMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 

@@ -55,7 +55,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
     routes.InternationalContactAddressController.onPageLoad(NormalMode).url
 
   val userAnswers: UserAnswers = UserAnswers(
-    userAnswersId,
+    userAnswersId
   ).set(
     InternationalContactAddressPage,
     InternationalAddress(
@@ -65,7 +65,8 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       Some("value 4"),
       countryCode
     )
-  ).success.value
+  ).success
+    .value
 
   "InternationalContactAddress Controller" - {
 

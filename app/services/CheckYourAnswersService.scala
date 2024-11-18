@@ -30,7 +30,9 @@ import viewmodels.govuk.summarylist._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersService @Inject()(sessionRepository: SessionRepository, location: Location)(implicit ec: ExecutionContext) {
+class CheckYourAnswersService @Inject() (sessionRepository: SessionRepository, location: Location)(implicit
+  ec: ExecutionContext
+) {
 
   def getChildCompanyName(implicit request: DataRequest[_]): Future[Option[String]] =
     retrieveFromUserAnswers(CompanyNamePage)

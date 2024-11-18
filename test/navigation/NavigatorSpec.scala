@@ -107,9 +107,15 @@ class NavigatorSpec extends SpecBase {
           ConfirmCompanyDetailsPage,
           NormalMode,
           UserAnswers("id")
-            .set(ConfirmCompanyDetailsPage, true).success.value
-            .set(CompanyNamePage, companyName).success.value
-            .set(CompanyRegisteredOfficeUkAddressPage, internationalAddress.toCompanyRegisteredOfficeUkAddress).success.value
+            .set(ConfirmCompanyDetailsPage, true)
+            .success
+            .value
+            .set(CompanyNamePage, companyName)
+            .success
+            .value
+            .set(CompanyRegisteredOfficeUkAddressPage, internationalAddress.toCompanyRegisteredOfficeUkAddress)
+            .success
+            .value
         ) mustBe routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
       }
 

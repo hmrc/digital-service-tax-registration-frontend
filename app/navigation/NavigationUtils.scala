@@ -40,8 +40,8 @@ trait NavigationUtils {
 
     userAnswers.get(ConfirmCompanyDetailsPage) map {
       case true if companyDetailsAreSet => routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
-      case true => routes.CompanyContactAddressController.onPageLoad(NormalMode)
-      case false => routes.DetailsNotCorrectController.onPageLoad()
+      case true                         => routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      case false                        => routes.DetailsNotCorrectController.onPageLoad()
     }
   }
 

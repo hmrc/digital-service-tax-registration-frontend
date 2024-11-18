@@ -22,6 +22,6 @@ case class Company(
   name: String,
   address: Address
 )
- object Company {
-   implicit val format: OFormat[Company] = Json.format[Company]
- }
+object Company {
+  implicit val format: OFormat[Company] = Json.format[Company]
+}

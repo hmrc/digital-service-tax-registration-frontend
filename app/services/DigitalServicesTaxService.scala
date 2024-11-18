@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DigitalServicesTaxService @Inject()(backendConnector: DigitalServicesTaxConnector) {
+class DigitalServicesTaxService @Inject() (backendConnector: DigitalServicesTaxConnector) {
 
   def getCompany(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Company]] =
     lookupCompany.map(_.map(_.company))

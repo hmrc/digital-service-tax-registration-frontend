@@ -29,11 +29,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class DigitalServicesTaxServiceSpec extends SpecBase with MockitoSugar {
 
   val mockConnector: DigitalServicesTaxConnector = mock[DigitalServicesTaxConnector]
-  val mockWrapper: CompanyRegWrapper = mock[CompanyRegWrapper]
+  val mockWrapper: CompanyRegWrapper             = mock[CompanyRegWrapper]
 
   val serviceUnderTest = new DigitalServicesTaxService(mockConnector)
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val hc: HeaderCarrier    = HeaderCarrier()
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   "DigitalServicesTaxService" - {
