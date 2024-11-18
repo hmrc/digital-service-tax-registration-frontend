@@ -43,6 +43,8 @@ checkYourAnswers.submissionNotice = By submitting this notification you are conf
 checkYourAnswers.button = Accept and send
 
 service.caption = Check if you must register
+service.feedbackLink = What did you think of this service?
+service.feedbackLink.timing = (takes 30 seconds)
 contact.persons.details.caption = Contact person’s details
 ultimate.parent.company.details.caption=Ultimate parent company details
 
@@ -278,7 +280,7 @@ liabilityStartDate.error.required.two = The date the group became liable for Dig
 liabilityStartDate.error.required = The date the group became liable for Digital Services Tax must include a {0}
 liabilityStartDate.error.invalid = The date the group became liable for Digital Services Tax must be a real date, like 31 7 2020
 liabilityStartDate.change.hidden = LiabilityStartDate
-liabilityStartDate.mininum.date= The date the group became liable for Digital Services Tax must be after 1 April 2020
+liabilityStartDate.minimum.date = The date the group became liable for Digital Services Tax must be after 1 April 2020
 liabilityStartDate.maximum.date = The date the group became liable for Digital Services Tax must be earlier than {0}
 
 contactPersonName.title = Who can we contact if we need to discuss your registration?
@@ -327,3 +329,17 @@ contactPersonEmailAddress.checkYourAnswersLabel = Email address
 contactPersonEmailAddress.error.required = Enter an email address
 contactPersonEmailAddress.error.invalid = Enter an email address in the correct format, like name@example.com
 contactPersonEmailAddress.change.hidden = ContactPersonEmail
+
+confirmCompanyDetails.title = Is this the company you want to register as the responsible member?
+confirmCompanyDetails.heading = Is this the company you want to register as the responsible member?
+confirmCompanyDetails.hint = If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
+confirmCompanyDetails.checkYourAnswersLabel = registerCompany
+confirmCompanyDetails.error.required = Select yes if this is the company you want to register as the responsible member
+confirmCompanyDetails.change.hidden = RegisterCompany
+
+detailsNotCorrect.title = What you need to do if your company details are incorrect
+detailsNotCorrect.heading = What you need to do if your company details are incorrect
+detailsNotCorrect.p1 = Make sure the user ID you entered is correct and try signing in again.
+detailsNotCorrect.p2 = If you still need to update your company details, you need to 
+detailsNotCorrect.linkText = tell Companies House about the change to your company
+detailsNotCorrect.button = Finish and sign out

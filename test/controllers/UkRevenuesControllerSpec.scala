@@ -18,18 +18,19 @@ package controllers
 
 import base.SpecBase
 import forms.UkRevenuesFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{Company, NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.{any, refEq}
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.UkRevenuesPage
+import pages.{CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, UkRevenuesPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import services.DigitalServicesTaxService
 import views.html.UkRevenuesView
 
 import scala.concurrent.Future
@@ -47,7 +48,7 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request = FakeRequest(GET, UkRevenuesRoute)
@@ -79,29 +80,123 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must redirect when valid data is submitted" - {
 
-      val mockSessionRepository = mock[SessionRepository]
+      "and a company is matched from the backend and answer is 'yes'" in {
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val mockService           = mock[DigitalServicesTaxService]
+        val mockSessionRepository = mock[SessionRepository]
 
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
+        val company = Company("Big Corp", UkAddress("123 Test Street", None, None, None, "TE5 3ST"))
+
+        when(mockService.getCompany(any(), any())) thenReturn Future.successful(Some(company))
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[DigitalServicesTaxService].toInstance(mockService),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, UkRevenuesRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+          verify(mockSessionRepository)
+            .set(
+              refEq(
+                emptyUserAnswers
+                  .set(UkRevenuesPage, true)
+                  .success
+                  .value
+                  .set(CompanyNamePage, company.name)
+                  .success
+                  .value
+                  .set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress)
+                  .success
+                  .value,
+                "lastUpdated"
+              )
+            )
+        }
+      }
+
+      "and a company is matched from the backend and answer is 'no'" in {
+
+        val mockService           = mock[DigitalServicesTaxService]
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockService.getCompany(any(), any())) thenReturn Future.successful(
+          Some(
+            Company("Big Corp", UkAddress("123 Test Street", None, None, None, "TE5 3ST"))
           )
-          .build()
+        )
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      running(application) {
-        val request =
-          FakeRequest(POST, UkRevenuesRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[DigitalServicesTaxService].toInstance(mockService),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request =
+            FakeRequest(POST, UkRevenuesRoute)
+              .withFormUrlEncodedBody(("value", "false"))
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+          verify(mockSessionRepository)
+            .set(refEq(emptyUserAnswers.set(UkRevenuesPage, false).success.value, "lastUpdated"))
+        }
+      }
+
+      "and no match is found from the backend" in {
+
+        val mockService           = mock[DigitalServicesTaxService]
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockService.getCompany(any(), any())) thenReturn Future.successful(None)
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = None)
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[DigitalServicesTaxService].toInstance(mockService),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, UkRevenuesRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+          verify(mockSessionRepository).set(
+            refEq(UserAnswers("id").set(UkRevenuesPage, true).success.value, "lastUpdated")
+          )
+        }
       }
     }
 

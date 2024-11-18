@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.UltimateParentCompanyUkAddressFormProvider
-import models.{Country, InternationalAddress, NormalMode, UltimateParentCompanyUkAddress, UserAnswers}
+import models.{InternationalAddress, NormalMode, UltimateParentCompanyUkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
@@ -154,7 +154,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
       when(mockUserAnswers.get(eqTo(UltimateParentCompanyInternationalAddressPage))(any()))
         .thenReturn(
-          Some(InternationalAddress("123 Test Street", None, None, None, Country("United States", "US", "country")))
+          Some(InternationalAddress("123 Test Street", None, None, None, "US"))
         )
 
       when(mockUserAnswers.set(any(), any())(any()))

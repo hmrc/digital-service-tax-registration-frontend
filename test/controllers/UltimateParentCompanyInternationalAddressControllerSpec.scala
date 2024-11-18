@@ -26,7 +26,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -41,8 +40,8 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val country: Country         = Country("Andorra", "AD", "country")
-  private val locations: Seq[Country]  = Seq(country)
+  private val countryCode: String      = "AD"
+  private val locations: Seq[Country]  = Seq(Country("Andorra", countryCode, "country"))
   val formProvider                     = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider(locations)
 
@@ -57,19 +56,19 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
   lazy val ultimateParentCompanyInternationalAddressRoute: String =
     routes.UltimateParentCompanyInternationalAddressController.onPageLoad(NormalMode).url
 
-  val userAnswers: UserAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      UltimateParentCompanyInternationalAddressPage.toString -> Json.obj(
-        "line1"   -> "value 1",
-        "line2"   -> "value 2",
-        "line3"   -> "value 3",
-        "line4"   -> "value 4",
-        "country" -> Json.toJson(country)
-      ),
-      UltimateParentCompanyNamePage.toString                 -> JsString(ultimateParentCompanyName)
+  val userAnswers: UserAnswers = UserAnswers(userAnswersId)
+    .set(
+      UltimateParentCompanyInternationalAddressPage,
+      InternationalAddress(
+        "value 1",
+        Some("value 2"),
+        Some("value 3"),
+        Some("value 4"),
+        countryCode
+      )
     )
-  )
+    .success
+    .value
 
   "UltimateParentCompanyInternationalAddress Controller" - {
 
@@ -112,7 +111,9 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(
+        Some(userAnswers.set(UltimateParentCompanyNamePage, ultimateParentCompanyName).success.value)
+      ).build()
 
       running(application) {
         val request = FakeRequest(GET, ultimateParentCompanyInternationalAddressRoute)
@@ -124,7 +125,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         status(result) mustEqual OK
         contentAsString(result) mustEqual
           view(
-            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
+            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), countryCode)),
             selectOptions,
             ultimateParentCompanyName,
             NormalMode

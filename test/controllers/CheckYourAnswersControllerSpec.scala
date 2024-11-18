@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.{DataRequiredActionImpl, FakeDataRetrievalAction, FakeIdentifierAction}
-import models.UserAnswers
+import models.{Location, UserAnswers}
 import models.requests.DataRequest
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -28,7 +28,7 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json._
 import play.api.mvc.AnyContent
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
+import play.api.test.{FakeRequest, Helpers, Injecting}
 import services.CheckYourAnswersService
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
 import viewmodels.checkAnswers._
@@ -37,7 +37,7 @@ import views.html.CheckYourAnswersView
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
+class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Injecting {
 
   val childCompanyName  = "Child Company Ltd"
   val parentCompanyName = "Parent Company Inc"
@@ -89,6 +89,28 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
       )
     )
 
+  implicit lazy val app: Application = applicationBuilder(Some(userAnswers)).build()
+
+  val mockService: CheckYourAnswersService = mock[CheckYourAnswersService]
+
+  val view: CheckYourAnswersView = inject[CheckYourAnswersView]
+
+  val controller = new CheckYourAnswersController(
+    inject[MessagesApi],
+    inject[FakeIdentifierAction],
+    new FakeDataRetrievalAction(Some(userAnswers)),
+    new DataRequiredActionImpl,
+    Helpers.stubMessagesControllerComponents(),
+    mockService,
+    view
+  )
+
+  val location: Location = inject[Location]
+
+  implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+
+  implicit val messages: Messages = messages(app)
+
   def summaryLists(implicit messages: Messages): Map[String, SummaryList] =
     Map[String, SummaryList](
       "responsibleMember"       -> SummaryList(
@@ -96,7 +118,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
           CompanyNameSummary.row(userAnswers),
           CompanyRegisteredOfficeUkAddressSummary.row(userAnswers),
           ContactUkAddressSummary.row(userAnswers),
-          InternationalContactAddressSummary.row(userAnswers),
+          InternationalContactAddressSummary.row(userAnswers, location),
           CheckIfGroupSummary.row(userAnswers)
         ).flatten
       ),
@@ -104,7 +126,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
         Seq(
           UltimateParentCompanyNameSummary.row(userAnswers),
           UltimateParentCompanyUkAddressSummary.row(userAnswers),
-          UltimateParentCompanyInternationalAddressSummary.row(userAnswers)
+          UltimateParentCompanyInternationalAddressSummary.row(userAnswers, location)
         ).flatten
       ),
       "contactPersonDetails"    -> SummaryList(
@@ -121,26 +143,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar {
         ).flatten
       )
     )
-
-  implicit lazy val app: Application = applicationBuilder(Some(userAnswers)).build()
-
-  val mockService: CheckYourAnswersService = mock[CheckYourAnswersService]
-
-  val view: CheckYourAnswersView = app.injector.instanceOf[CheckYourAnswersView]
-
-  val controller = new CheckYourAnswersController(
-    app.injector.instanceOf[MessagesApi],
-    app.injector.instanceOf[FakeIdentifierAction],
-    new FakeDataRetrievalAction(Some(userAnswers)),
-    new DataRequiredActionImpl,
-    Helpers.stubMessagesControllerComponents(),
-    mockService,
-    view
-  )
-
-  implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
-
-  implicit val messages: Messages = messages(app)
 
   "CheckYourAnswers Controller" - {
 

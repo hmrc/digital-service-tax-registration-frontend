@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.CheckContactAddressFormProvider
-import models.{CompanyRegisteredOfficeUkAddress, Country, InternationalAddress, NormalMode, UserAnswers}
+import models.{CompanyRegisteredOfficeUkAddress, InternationalAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
@@ -131,7 +131,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
       val mockUserAnswers       = mock[UserAnswers]
 
       val internationalAddress =
-        InternationalAddress("123 Test Street", None, None, None, Country("United States", "US", "country"))
+        InternationalAddress("123 Test Street", None, None, None, "US")
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 

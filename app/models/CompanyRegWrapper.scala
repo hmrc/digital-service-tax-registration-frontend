@@ -16,26 +16,15 @@
 
 package models
 
-import play.api.libs.json._
+import play.api.libs.json.{Json, OFormat}
 
-case class InternationalAddress(
-  line1: String,
-  line2: Option[String],
-  line3: Option[String],
-  line4: Option[String],
-  country: Country
-) {
+final case class CompanyRegWrapper(
+  company: Company,
+  utr: Option[String] = None,
+  safeId: Option[String] = None,
+  useSafeId: Boolean = false
+)
 
-  def asAddressLines: Seq[String] = Seq(
-    Some(line1),
-    line2,
-    line3,
-    line4,
-    Some(country.name)
-  ).flatten
-}
-
-object InternationalAddress {
-
-  implicit val format: OFormat[InternationalAddress] = Json.format
+object CompanyRegWrapper {
+  implicit val format: OFormat[CompanyRegWrapper] = Json.format[CompanyRegWrapper]
 }

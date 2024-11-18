@@ -29,6 +29,7 @@ class Navigator @Inject() extends NavigationUtils {
   private val normalRoutes: Page => UserAnswers => Option[Call] = {
     case GlobalRevenuesPage                            => ua => globalRevenues(ua)
     case UkRevenuesPage                                => ua => ukRevenues(ua)
+    case ConfirmCompanyDetailsPage                     => ua => confirmCompanyDetailsPage(ua)
     case CheckCompanyRegisteredOfficeAddressPage       => ua => checkCompanyRegisteredOfficeAddress(ua)
     case CheckCompanyRegisteredOfficePostcodePage      => ua => checkCompanyRegisteredOfficePostcode(ua)
     case CheckUtrPage                                  => ua => checkUtr(ua)

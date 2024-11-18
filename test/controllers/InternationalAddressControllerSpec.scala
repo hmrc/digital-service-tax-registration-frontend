@@ -26,7 +26,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.InternationalContactAddressPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -40,8 +39,8 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val country: Country                 = Country("Andorra", "AD", "country")
-  private val locations: Seq[Country]          = Seq(country)
+  private val countryCode: String              = "AD"
+  private val locations: Seq[Country]          = Seq(Country("Andorra", countryCode, "country"))
   private val formProvider                     = new InternationalAddressFormProvider()
   private val form: Form[InternationalAddress] = formProvider(locations)
 
@@ -56,17 +55,18 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
     routes.InternationalContactAddressController.onPageLoad(NormalMode).url
 
   val userAnswers: UserAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      InternationalContactAddressPage.toString -> Json.obj(
-        "line1"   -> "value 1",
-        "line2"   -> "value 2",
-        "line3"   -> "value 3",
-        "line4"   -> "value 4",
-        "country" -> Json.toJson(country)
-      )
+    userAnswersId
+  ).set(
+    InternationalContactAddressPage,
+    InternationalAddress(
+      "value 1",
+      Some("value 2"),
+      Some("value 3"),
+      Some("value 4"),
+      countryCode
     )
-  )
+  ).success
+    .value
 
   "InternationalContactAddress Controller" - {
 
@@ -101,7 +101,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
         contentAsString(result) mustEqual
           view(
-            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), country)),
+            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), countryCode)),
             selectOptions,
             NormalMode
           )(request, messages(application)).toString

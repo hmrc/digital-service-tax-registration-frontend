@@ -34,6 +34,17 @@ trait NavigationUtils {
       case false => routes.UkRevenueNotEligibleController.onPageLoad()
     }
 
+  def confirmCompanyDetailsPage(userAnswers: UserAnswers): Option[Call] = {
+    val companyDetailsAreSet: Boolean =
+      userAnswers.get(CompanyNamePage).isDefined && userAnswers.get(CompanyRegisteredOfficeUkAddressPage).isDefined
+
+    userAnswers.get(ConfirmCompanyDetailsPage) map {
+      case true if companyDetailsAreSet => routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
+      case true                         => routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      case false                        => routes.DetailsNotCorrectController.onPageLoad()
+    }
+  }
+
   def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
       case true  => routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)

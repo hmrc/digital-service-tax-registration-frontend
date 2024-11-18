@@ -18,10 +18,10 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.CheckContactAddressFormProvider
-import models.{Mode, UserAnswers}
 import models.requests.DataRequest
+import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CheckContactAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, InternationalContactAddressPage}
+import pages.{CheckContactAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, InternationalContactAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
