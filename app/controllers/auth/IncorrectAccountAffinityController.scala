@@ -30,6 +30,6 @@ class IncorrectAccountAffinityController @Inject() (
     with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = Action { implicit request =>
-    Ok(view())
+    Unauthorized(view())
   }
 }
