@@ -343,3 +343,19 @@ detailsNotCorrect.p1 = Make sure the user ID you entered is correct and try sign
 detailsNotCorrect.p2 = If you still need to update your company details, you need to 
 detailsNotCorrect.linkText = tell Companies House about the change to your company
 detailsNotCorrect.button = Finish and sign out
+
+incorrect-account-affinity.title = You cannot use this service
+incorrect-account-affinity.heading = You cannot use this service
+incorrect-account-affinity.signOut.reason = You signed in with the HMRC sign in details for an individual or agent. We have signed you out.
+incorrect-account-affinity.signIn.reason = To use this service, sign in with the HMRC sign in details for the company that is registering for the Digital Services Tax.
+
+incorrect-account-credRole.title = You cannot submit a Digital Services Tax return
+incorrect-account-credRole.heading1 = You cannot submit a Digital Services Tax return
+incorrect-account-credRole.heading2 = Digital Services Tax support team
+incorrect-account-credRole.heading3 = Email
+incorrect-account-credRole.errorLine1 = You must be an administrator of your organisation to submit a Digital Services Tax return.
+incorrect-account-credRole.errorLine2 = To become an administrator, speak to an existing administrator for your organisation.
+incorrect-account-credRole.errorLine3 = If your organisation does not have an administrator, contact the Digital Services Tax support team.
+incorrect-account-credRole.errorLine4 = We aim to respond within 15 working days.
+incorrect-account-credRole.link = Find out how to add a team member to your business tax account from Gov.uk (opens in a new tab)
+incorrect-account-credRole.email = ccgdstmailbox@hmrc.gov.uk

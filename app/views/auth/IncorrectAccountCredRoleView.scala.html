@@ -1,0 +1,55 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(
+    layout: templates.Layout
+)
+
+@()(implicit request: Request[_], messages: Messages)
+
+@layout(
+    pageTitle    = titleNoForm(messages("incorrect-account-credRole.title")),
+    showBackLink = false,
+    timeout      = false,
+    showSignOut  = false
+) {
+    <h1 class="govuk-heading-xl">@messages("incorrect-account-credRole.heading1")</h1>
+
+    <p class="govuk-body">@messages("incorrect-account-credRole.errorLine1")</p>
+    <p class="govuk-body">@messages("incorrect-account-credRole.errorLine2")</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li class="govuk-body">
+            <a class="govuk-link" href="https://www.gov.uk/guidance/manage-team-members-using-your-hmrc-business-tax-account" rel="noreferrer noopener" target="_blank">
+                <span aria-hidden="true">@messages("incorrect-account-credRole.link")</span>
+            </a>
+        </li>
+    </ul>
+
+    <p class="govuk-body" id="cred_role_p3">@messages("incorrect-account-credRole.errorLine3")</p>
+
+    <h2 class="govuk-heading-m" >@messages("incorrect-account-credRole.heading2")</h2>
+    <h3 class="govuk-heading-s">@messages("incorrect-account-credRole.heading3")</h3>
+
+    <ul class="govuk-list">
+        <li>
+            <a class="govuk-link" href="mailto:ccgdstmailbox@@hmrc.gov.uk" rel="noreferrer noopener" target="_blank" aria-label="DST Support team email link">
+                <span aria-hidden="true">@messages("incorrect-account-credRole.email")</span>
+            </a>
+        </li>
+        <li id="cred_role_p4">@messages("incorrect-account-credRole.errorLine4")</li>
+    </ul>
+}
