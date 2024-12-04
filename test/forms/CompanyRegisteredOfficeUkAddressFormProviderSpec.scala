@@ -16,96 +16,11 @@
 
 package forms
 
-import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
-import wolfendale.scalacheck.regexp.RegexpGen
+import forms.behaviours.AddressFieldBehaviours
 
-class CompanyRegisteredOfficeUkAddressFormProviderSpec extends StringFieldBehaviours {
-  val genAddress = RegexpGen.from("""^[a-zA-Z0-9'&.-]{1,30}$""".r.regex)
+class CompanyRegisteredOfficeUkAddressFormProviderSpec extends AddressFieldBehaviours {
 
-  val form = new CompanyRegisteredOfficeUkAddressFormProvider()()
-
-  ".buildingorstreet" - {
-    val fieldName   = "buildingorstreet"
-    val requiredKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet.required"
-    val lengthKey   = "companyRegisteredOfficeUkAddress.error.buildingorstreet.length"
-    val maxLength   = 35
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      genAddress
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
-
-  ".buildingorstreet2" - {
-
-    val fieldName = "buildingorstreet2"
-    val lengthKey = "companyRegisteredOfficeUkAddress.error.buildingorstreet2.length"
-    val maxLength = 35
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      genAddress
-    )
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
-  }
-
-  ".town" - {
-
-    val fieldName = "town"
-    val lengthKey = "companyRegisteredOfficeUkAddress.error.town.length"
-    val maxLength = 35
-
-    behave like fieldWithMaxLengthGeneratingFromRegex(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      """^[a-zA-Z]$""",
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
-  }
-
-  ".county" - {
-
-    val fieldName = "county"
-    val lengthKey = "companyRegisteredOfficeUkAddress.error.county.length"
-    val maxLength = 35
-
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      genAddress
-    )
-
-    behave like fieldWithMaxLengthGeneratingFromRegex(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      """^[a-zA-Z]$""",
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
+  "CompanyRegisteredOfficeUkAddressFormProvider must" - {
+    behave like ukAddressFields(new CompanyRegisteredOfficeUkAddressFormProvider()())
   }
 }

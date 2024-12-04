@@ -37,9 +37,7 @@
         <span class="govuk-caption-l">Contact person's details</span>
         <h1 class="govuk-heading-l">@messages("contactUkAddress.heading")</h1>
 
-        @ukAddress(
-            form = form
-        )
+        @ukAddress(form)
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))

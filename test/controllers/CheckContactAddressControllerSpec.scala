@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.CheckContactAddressFormProvider
-import models.{CompanyRegisteredOfficeUkAddress, InternationalAddress, NormalMode, UserAnswers}
+import models.{InternationalAddress, NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
@@ -87,7 +87,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val mockSessionRepository = mock[SessionRepository]
         val mockUserAnswers       = mock[UserAnswers]
 
-        val ukAddress = CompanyRegisteredOfficeUkAddress("123 Test Street", None, None, None, "TE5 5ST")
+        val ukAddress = UkAddress("123 Test Street", None, None, None, "TE5 5ST")
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -120,7 +120,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          verify(mockUserAnswers).set(eqTo(ContactUkAddressPage), eqTo(ukAddress.ToContactUKAddress))(any())
+          verify(mockUserAnswers).set(eqTo(ContactUkAddressPage), eqTo(ukAddress))(any())
         }
       }
     }

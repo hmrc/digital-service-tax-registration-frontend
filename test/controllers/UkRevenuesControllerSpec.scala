@@ -87,7 +87,8 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
         val mockService           = mock[DigitalServicesTaxService]
         val mockSessionRepository = mock[SessionRepository]
 
-        val company = Company("Big Corp", UkAddress("123 Test Street", None, None, None, "TE5 3ST"))
+        val ukAddress = UkAddress("123 Test Street", None, None, None, "TE5 3ST")
+        val company   = Company("Big Corp", ukAddress)
 
         when(mockService.getCompany(any(), any())) thenReturn Future.successful(Some(company))
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
@@ -121,7 +122,7 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
                   .set(CompanyNamePage, company.name)
                   .success
                   .value
-                  .set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress)
+                  .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
                   .success
                   .value,
                 "lastUpdated"
