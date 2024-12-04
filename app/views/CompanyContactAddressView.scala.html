@@ -15,7 +15,7 @@
  *@
 
 @import viewmodels.LegendSize
-@import models.CompanyRegisteredOfficeUkAddress
+@import models.UkAddress
 
 @this(
     layout: templates.Layout,
@@ -25,16 +25,10 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], address: CompanyRegisteredOfficeUkAddress, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], address: UkAddress, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @content=@{
-    val contentAddress = s"""${address.buildingorstreet}<br>
-    ${address.buildingorstreet2.fold("")(buildingorstreet2 => s"$buildingorstreet2<br>")}
-    ${address.town.fold("")(town => s"$town<br>")}
-    ${address.county.fold("")(county => s"$county<br>")}
-    ${address.postcode}<br>"""
-
-    HtmlContent(Html(contentAddress))
+    HtmlContent(Html(address.asAddressLines.map(x => s"$x<br>").mkString))
 }
 
 @layout(pageTitle = title(form, messages("companyContactAddress.title"))) {

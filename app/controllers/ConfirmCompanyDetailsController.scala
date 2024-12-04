@@ -78,8 +78,7 @@ class ConfirmCompanyDetailsController @Inject() (
     request: DataRequest[AnyContent]
   ): Result =
     (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage)) match {
-      case (Some(name), Some(address)) =>
-        f(Company(name, address.ToUKAddress)) // TODO change model to standardised Address
+      case (Some(name), Some(address)) => f(Company(name, address))
       case _                           => Redirect(navigator.nextPage(UkRevenuesPage, mode, request.userAnswers))
     }
 }

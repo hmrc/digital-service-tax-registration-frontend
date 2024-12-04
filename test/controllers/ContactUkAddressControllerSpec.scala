@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.ContactUkAddressFormProvider
-import models.{ContactUkAddress, NormalMode, UserAnswers}
+import models.{NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -38,13 +38,13 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider                 = new ContactUkAddressFormProvider()
-  val form: Form[ContactUkAddress] = formProvider()
+  val formProvider          = new ContactUkAddressFormProvider()
+  val form: Form[UkAddress] = formProvider()
 
   lazy val contactUkAddressRoute: String = routes.ContactUkAddressController.onPageLoad(NormalMode).url
 
   val userAnswers: UserAnswers = emptyUserAnswers
-    .set(ContactUkAddressPage, ContactUkAddress("Street 1", None, None, None, "BT15GB"))
+    .set(ContactUkAddressPage, UkAddress("Street 1", None, None, None, "BT15GB"))
     .success
     .value
 
@@ -79,7 +79,7 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(
-          form.fill(ContactUkAddress("Street 1", None, None, None, "BT15GB")),
+          form.fill(UkAddress("Street 1", None, None, None, "BT15GB")),
           NormalMode
         )(request, messages(application)).toString()
       }
@@ -102,7 +102,7 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, contactUkAddressRoute)
-            .withFormUrlEncodedBody(("building-or-street", "value 1"), ("postcode", "BT15GB"))
+            .withFormUrlEncodedBody(("line1", "value 1"), ("postcode", "BT15GB"))
 
         val result = route(application, request).value
 
@@ -118,9 +118,9 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, contactUkAddressRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+            .withFormUrlEncodedBody(("line1", "invalid value"))
 
-        val boundForm = form.bind(Map("value" -> "invalid value"))
+        val boundForm = form.bind(Map("line1" -> "invalid value"))
 
         val view = application.injector.instanceOf[ContactUkAddressView]
 
@@ -152,7 +152,7 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, contactUkAddressRoute)
-            .withFormUrlEncodedBody(("Building or street", "value 1"), ("Postcode", "value 2"))
+            .withFormUrlEncodedBody(("line1", "value 1"), ("postcode", "TE55ST"))
 
         val result = route(application, request).value
 

@@ -43,7 +43,8 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val confirmCompanyDetailsRoute: String = routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode).url
 
-  val company: Company = Company("Big Corp", UkAddress("123 Test Street", None, None, None, "TE5 3ST"))
+  val ukAddress        = UkAddress("123 Test Street", None, None, None, "TE5 3ST")
+  val company: Company = Company("Big Corp", ukAddress)
 
   def location(app: Application): Location = app.injector.instanceOf[Location]
 
@@ -53,7 +54,7 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
       .set(CompanyNamePage, company.name)
       .success
       .value
-      .set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress)
+      .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
       .success
       .value
 

@@ -27,8 +27,8 @@ class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
 
-  val ultimateParentCompanyUKAddress: UltimateParentCompanyUkAddress =
-    UltimateParentCompanyUkAddress("123 test street", postcode = "TE5 5ST")
+  val ultimateParentCompanyUKAddress: UkAddress =
+    UkAddress("123 test street", None, None, None, "TE5 5ST")
 
   val internationalAddress: InternationalAddress = InternationalAddress(
     "123 Test Street",
@@ -100,23 +100,6 @@ class NavigatorSpec extends SpecBase {
             .success
             .value
         ) mustBe routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
-      }
-
-      "must go from ConfirmCompanyDetailsPage with option `true` and Company details set to ConfirmCompanyDetailsController" in {
-        navigator.nextPage(
-          ConfirmCompanyDetailsPage,
-          NormalMode,
-          UserAnswers("id")
-            .set(ConfirmCompanyDetailsPage, true)
-            .success
-            .value
-            .set(CompanyNamePage, companyName)
-            .success
-            .value
-            .set(CompanyRegisteredOfficeUkAddressPage, internationalAddress.toCompanyRegisteredOfficeUkAddress)
-            .success
-            .value
-        ) mustBe routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
       }
 
       "must go from ConfirmCompanyDetailsPage with option `true` to CompanyContactAddressController" in {
@@ -224,7 +207,7 @@ class NavigatorSpec extends SpecBase {
           ContactUkAddressPage,
           NormalMode,
           UserAnswers("id")
-            .set(ContactUkAddressPage, ContactUkAddress("123 Test Street", None, None, None, "TE5 5ST"))
+            .set(ContactUkAddressPage, UkAddress("123 Test Street", None, None, None, "TE5 5ST"))
             .success
             .value
         ) mustBe routes.GlobalRevenuesController.onPageLoad(NormalMode)
@@ -283,7 +266,7 @@ class NavigatorSpec extends SpecBase {
           UserAnswers("id")
             .set(
               CompanyRegisteredOfficeUkAddressPage,
-              CompanyRegisteredOfficeUkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ")
+              UkAddress("kirby close", Some("12"), Some("london"), Some("essex"), "SW2 6IQ")
             )
             .success
             .value

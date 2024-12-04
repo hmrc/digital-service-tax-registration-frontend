@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import forms.UkRevenuesFormProvider
-import models.{Company, Mode, UserAnswers}
+import models.{Company, Mode, UkAddress, UserAnswers}
 import navigation.Navigator
 import pages.{CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, UkRevenuesPage}
 import play.api.data.Form
@@ -86,8 +86,9 @@ class UkRevenuesController @Inject() (
   }
 
   private def setCompanyAnswers(ua: UserAnswers, companyOpt: Option[Company]): Try[UserAnswers] =
-    companyOpt.fold(Try(ua)) { company =>
-      ua.set(CompanyNamePage, company.name)
-        .flatMap(_.set(CompanyRegisteredOfficeUkAddressPage, company.address.toCompanyRegisteredOfficeUkAddress))
+    companyOpt.map(x => (x.name, x.address)) match {
+      case Some((name, address: UkAddress)) =>
+        ua.set(CompanyNamePage, name).flatMap(_.set(CompanyRegisteredOfficeUkAddressPage, address))
+      case _                                => Try(ua)
     }
 }
