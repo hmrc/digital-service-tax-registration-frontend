@@ -29,7 +29,8 @@ trait AddressMappings extends Mappings {
 
   private def baseErrorString(line: String) = s"$errorKeyPrefix.error.$line"
 
-  private def normalizePostcode(postcode: String): String = if (postcode.matches(postcodeRegex)) postcode else postcode.replaceAll("\\s+", "")
+  private def normalizePostcode(postcode: String): String =
+    if (postcode.matches(postcodeRegex)) postcode else postcode.replaceAll("\\s+", "")
 
   protected def addressLineMapping(line: String): Mapping[String] =
     text(s"${baseErrorString(line)}.required")
@@ -47,7 +48,6 @@ trait AddressMappings extends Mappings {
 
   protected def countryMapping(location: Location): (String, Mapping[String]) =
     "country" -> text(s"${baseErrorString("country")}.required").verifying(countryConstraintExcludeUK(location))
-
 
   private def countryConstraintExcludeUK(location: Location): Constraint[String] =
     Constraint {

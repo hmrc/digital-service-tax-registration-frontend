@@ -32,7 +32,8 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
 
   val maxLength = 35
 
-  val addressLineGen: Gen[String] = RegexpGen.from(Address.addressRegex).suchThat(x => x.trim.nonEmpty && x.length <= maxLength)
+  val addressLineGen: Gen[String] =
+    RegexpGen.from(Address.addressRegex).suchThat(x => x.trim.nonEmpty && x.length <= maxLength)
 
   def ukAddressFields(form: Form[UkAddress]): Unit = {
 
@@ -94,8 +95,7 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
     }
   }
 
-  private def testOptionalAddressLine(form: Form[_], fieldName: String, prefix: String): Unit = {
-
+  private def testOptionalAddressLine(form: Form[_], fieldName: String, prefix: String): Unit =
     s".$fieldName must" - {
 
       behave like fieldThatBindsValidData(
@@ -118,7 +118,6 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
         lengthError = FormError(fieldName, lengthKey(prefix, fieldName), Seq(maxLength))
       )
     }
-  }
 
   private def testPostcodeField(form: Form[UkAddress], prefix: String): Unit = {
 
@@ -148,11 +147,10 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
     }
   }
 
-  private def testCountryField(form: Form[InternationalAddress], location: Location): Unit = {
-
+  private def testCountryField(form: Form[InternationalAddress], location: Location): Unit =
     ".country" - {
 
-      val fieldName   = "country"
+      val fieldName = "country"
 
       val formError = FormError(fieldName, requiredKey("internationalAddress", fieldName))
 
@@ -180,5 +178,4 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
         result.errors must contain only formError
       }
     }
-  }
 }
