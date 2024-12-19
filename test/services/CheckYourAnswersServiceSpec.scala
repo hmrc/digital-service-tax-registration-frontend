@@ -167,7 +167,7 @@ class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
 
         "when Company Registered Office Uk Address is set in user answers" in {
 
-          val address = UkAddress("123 Test Street", None, None, None, "TE55ST")
+          val address = CompanyRegisteredOfficeUkAddress("123 Test Street", None, None, None, "TE55ST")
 
           mockUserAnswers(CompanyRegisteredOfficeUkAddressPage, address)
 
@@ -181,7 +181,7 @@ class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
 
         "when Contact Uk Address is set in user answers" in {
 
-          val address = UkAddress("123 Test Street", None, None, None, "TE55ST")
+          val address = ContactUkAddress("123 Test Street", None, None, None, "TE55ST")
 
           mockUserAnswers(ContactUkAddressPage, address)
 
@@ -237,7 +237,7 @@ class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
 
         "when Ultimate Parent Company Uk Address is set in user answers" in {
 
-          val address = UkAddress("123 Test Street", None, None, None, "TE55ST")
+          val address = UltimateParentCompanyUkAddress("123 Test Street", postcode = "TE55ST")
 
           mockUserAnswers(UltimateParentCompanyUkAddressPage, address)
 

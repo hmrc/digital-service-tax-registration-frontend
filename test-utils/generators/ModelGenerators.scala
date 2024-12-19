@@ -17,9 +17,10 @@
 package generators
 
 import forms.mappings.Constraints
-import models._
+
+import models.CompanyRegisteredOfficeUkAddress
+import models.{ContactUkAddress, _}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen.alphaChar
 import org.scalacheck.{Arbitrary, Gen}
 import wolfendale.scalacheck.regexp.RegexpGen
 
@@ -33,9 +34,31 @@ trait ModelGenerators {
       } yield ContactPersonName(firstName, lastName)
     }
 
-  val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
+  implicit lazy val arbitraryUltimateParentCompanyUkAddress: Arbitrary[UltimateParentCompanyUkAddress] =
+    Arbitrary {
+      for {
+        buildingOrStreet <- arbitrary[String]
+        postcode         <- arbitrary[String]
+      } yield UltimateParentCompanyUkAddress(buildingOrStreet, None, None, None, postcode)
+    }
 
-  implicit lazy val arbitraryLocation: Arbitrary[Country] =
+  implicit lazy val arbitraryContactUkAddress: Arbitrary[ContactUkAddress] =
+    Arbitrary {
+      for {
+        buildingOrStreet <- arbitrary[String]
+        postcode         <- arbitrary[String]
+      } yield ContactUkAddress(buildingOrStreet, None, None, None, postcode)
+    }
+  val genCompanyName                                                       = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
+
+  implicit lazy val arbitraryCompanyRegisteredOfficeUkAddress: Arbitrary[CompanyRegisteredOfficeUkAddress] =
+    Arbitrary {
+      for {
+        buildingorstreet <- arbitrary[String]
+        postcode         <- arbitrary[String]
+      } yield CompanyRegisteredOfficeUkAddress(buildingorstreet, None, None, None, postcode)
+    }
+  implicit lazy val arbitraryLocation: Arbitrary[Country]                                                  =
     Arbitrary {
       for {
         name  <- Arbitrary.arbitrary[String]
@@ -62,14 +85,8 @@ trait ModelGenerators {
         line2       <- Arbitrary.arbitrary[Option[String]]
         line3       <- Arbitrary.arbitrary[Option[String]]
         line4       <- Arbitrary.arbitrary[Option[String]]
-        countryCode <- genCountryCode
+        countryCode <- Arbitrary.arbitrary[String]
       } yield InternationalAddress(line1, line2, line3, line4, countryCode)
     }
-
-  val genPostcode: Gen[String] = RegexpGen.from(Constraints.postcodeRegex)
-
-  val genCountryCode: Gen[String] = for {
-    char1 <- alphaChar
-    char2 <- alphaChar
-  } yield s"$char1$char2"
+  val genPostcode: Gen[String]                                                     = RegexpGen.from(Constraints.postcodeRegex.regex)
 }

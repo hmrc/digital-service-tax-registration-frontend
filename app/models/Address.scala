@@ -26,6 +26,9 @@ sealed trait Address {
   def line4: Option[String]
   def countryCode: String
   def postalCode: String
+  def toCompanyRegisteredOfficeUkAddress
+    : CompanyRegisteredOfficeUkAddress = // TODO remove when address models are standardised
+    CompanyRegisteredOfficeUkAddress(line1, line2, line3, line4, postalCode)
 }
 
 object Address {
@@ -79,7 +82,7 @@ object UkAddress {
   implicit val writes: OWrites[UkAddress] = Json.writes[UkAddress]
 }
 
-final case class InternationalAddress(
+final case class InternationalAddress( // TODO replace other International address
   line1: String,
   line2: Option[String],
   line3: Option[String],

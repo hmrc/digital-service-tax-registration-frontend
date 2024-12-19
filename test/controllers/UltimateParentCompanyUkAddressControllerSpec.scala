@@ -18,13 +18,14 @@ package controllers
 
 import base.SpecBase
 import forms.UltimateParentCompanyUkAddressFormProvider
-import models.{InternationalAddress, NormalMode, UkAddress, UserAnswers}
+import models.{InternationalAddress, NormalMode, UltimateParentCompanyUkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.inject.bind
+import play.api.libs.json.{JsString, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -41,21 +42,20 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
   val formProvider = new UltimateParentCompanyUkAddressFormProvider()
   val form         = formProvider()
 
-  lazy val ultimateParentCompanyUkAddressRoute =
+  lazy val ultimateParentCompanyUkAddressRoute  =
     routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode).url
-
   private val ultimateParentCompanyName: String = "UltimateParentName"
 
-  private val addressLine = "123 Test Street"
-  private val postcode    = "BT15GB"
-
-  val userAnswers = UserAnswers(userAnswersId)
-    .set(UltimateParentCompanyUkAddressPage, UkAddress(addressLine, None, None, None, postcode))
-    .success
-    .value
-    .set(UltimateParentCompanyNamePage, ultimateParentCompanyName)
-    .success
-    .value
+  val userAnswers = UserAnswers(
+    userAnswersId,
+    Json.obj(
+      UltimateParentCompanyUkAddressPage.toString -> Json.obj(
+        "buildingOrStreet" -> "value 1",
+        "postcode"         -> "BT15GB"
+      ),
+      UltimateParentCompanyNamePage.toString      -> JsString(ultimateParentCompanyName)
+    )
+  )
 
   "UltimateParentCompanyUkAddress Controller" - {
 
@@ -109,7 +109,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(
-          form.fill(UkAddress(addressLine, None, None, None, postcode)),
+          form.fill(UltimateParentCompanyUkAddress("value 1", None, None, None, "BT15GB")),
           NormalMode,
           ultimateParentCompanyName
         )(request, messages(application)).toString
@@ -133,7 +133,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
       running(application) {
         val request =
           FakeRequest(POST, ultimateParentCompanyUkAddressRoute)
-            .withFormUrlEncodedBody(("line1", addressLine), ("postcode", postcode))
+            .withFormUrlEncodedBody(("building-or-street", "value 1"), ("postcode", "BT15GB"))
 
         val result = route(application, request).value
 
@@ -154,7 +154,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
       when(mockUserAnswers.get(eqTo(UltimateParentCompanyInternationalAddressPage))(any()))
         .thenReturn(
-          Some(InternationalAddress(addressLine, None, None, None, "US"))
+          Some(InternationalAddress("123 Test Street", None, None, None, "US"))
         )
 
       when(mockUserAnswers.set(any(), any())(any()))
@@ -174,7 +174,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
       running(application) {
         val request =
           FakeRequest(POST, ultimateParentCompanyUkAddressRoute)
-            .withFormUrlEncodedBody(("line1", addressLine), ("postcode", postcode))
+            .withFormUrlEncodedBody(("building-or-street", "value 1"), ("postcode", "BT15GB"))
 
         val result = route(application, request).value
 
@@ -192,9 +192,9 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
       running(application) {
         val request =
           FakeRequest(POST, ultimateParentCompanyUkAddressRoute)
-            .withFormUrlEncodedBody(("line1", "invalid value"))
+            .withFormUrlEncodedBody(("value", "invalid value"))
 
-        val boundForm = form.bind(Map("line1" -> "invalid value"))
+        val boundForm = form.bind(Map("value" -> "invalid value"))
 
         val view = application.injector.instanceOf[UltimateParentCompanyUkAddressView]
 
@@ -226,7 +226,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
       running(application) {
         val request =
           FakeRequest(POST, ultimateParentCompanyUkAddressRoute)
-            .withFormUrlEncodedBody(("line1", addressLine), ("postcode", postcode))
+            .withFormUrlEncodedBody(("buildingOrStreet", "value 1"), ("postcode", "value 2"))
 
         val result = route(application, request).value
 
