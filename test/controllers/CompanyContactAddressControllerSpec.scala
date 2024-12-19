@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.CompanyContactAddressFormProvider
-import models.{CompanyRegisteredOfficeUkAddress, NormalMode, UserAnswers}
+import models.{NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CompanyRegisteredOfficeUkAddressPage
+import pages.{CompanyContactAddressPage, CompanyRegisteredOfficeUkAddressPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -39,9 +39,8 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider                            = new CompanyContactAddressFormProvider()
   val form                                    = formProvider()
-  val companyOfficeRegisterEmptyAddress       = CompanyRegisteredOfficeUkAddress("", Some(""), Some(""), Some(""), "")
-  val companyOfficeRegisterInformationAddress =
-    CompanyRegisteredOfficeUkAddress("kirby", Some(""), Some("london"), Some("essex"), "SW2 5IQ")
+  val companyOfficeRegisterEmptyAddress       = UkAddress("", Some(""), Some(""), Some(""), "")
+  val companyOfficeRegisterInformationAddress = UkAddress("kirby", Some(""), Some("london"), Some("essex"), "SW2 5IQ")
 
   lazy val companyContactAddressRoute = routes.CompanyContactAddressController.onPageLoad(NormalMode).url
 
@@ -77,6 +76,9 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         .set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterInformationAddress)
         .success
         .value
+        .set(CompanyContactAddressPage, true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -88,7 +90,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[CompanyContactAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, companyOfficeRegisterInformationAddress, NormalMode)(
+        contentAsString(result) mustEqual view(form.fill(true), companyOfficeRegisterInformationAddress, NormalMode)(
           request,
           messages(application)
         ).toString
@@ -149,17 +151,39 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to Journey Recovery for a GET when" - {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      "no address can be found" in {
 
-      running(application) {
-        val request = FakeRequest(GET, companyContactAddressRoute)
+        val userAnswers = UserAnswers(userAnswersId)
+          .set(CompanyContactAddressPage, true)
+          .success
+          .value
 
-        val result = route(application, request).value
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        running(application) {
+          val request = FakeRequest(GET, companyContactAddressRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, companyContactAddressRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
       }
     }
 

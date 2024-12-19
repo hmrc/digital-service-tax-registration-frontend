@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.UltimateParentCompanyUkAddressFormProvider
 
 import javax.inject.Inject
-import models.{Mode, UltimateParentCompanyUkAddress}
+import models.{Mode, UkAddress}
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
@@ -58,7 +58,7 @@ class UltimateParentCompanyUkAddressController @Inject() (
     renderPage(mode, preparedForm, Ok)
   }
 
-  private def renderPage(mode: Mode, form: Form[UltimateParentCompanyUkAddress], status: Status)(implicit
+  private def renderPage(mode: Mode, form: Form[UkAddress], status: Status)(implicit
     request: DataRequest[AnyContent]
   ): Result =
     request.userAnswers.get(UltimateParentCompanyNamePage) match {

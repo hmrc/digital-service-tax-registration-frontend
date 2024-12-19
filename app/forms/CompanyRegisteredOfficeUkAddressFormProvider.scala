@@ -16,50 +16,11 @@
 
 package forms
 
-import forms.mappings.Constraints.Address
+import models.UkAddress
+import play.api.data.Form
 
 import javax.inject.Inject
-import forms.mappings.Mappings
-import play.api.data.Form
-import play.api.data.Forms._
-import models.CompanyRegisteredOfficeUkAddress
 
-class CompanyRegisteredOfficeUkAddressFormProvider @Inject() extends Mappings {
-  private val maximumLength            = 35
-  private val buildingOrStreetRequired = "companyRegisteredOfficeUkAddress.error.buildingorstreet.required"
-
-  def apply(): Form[CompanyRegisteredOfficeUkAddress] = Form(
-    mapping(
-      "buildingorstreet"  -> text(buildingOrStreetRequired)
-        .verifying(
-          regexp(Address.addressRegex, "companyRegisteredOfficeUkAddress.error.buildingOrStreet.invalidChar"),
-          maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.buildingorstreet.length")
-        ),
-      "buildingorstreet2" -> optional(
-        text()
-          .verifying(
-            regexp(Address.addressRegex, "companyRegisteredOfficeUkAddress.error.buildingOrStreet2.invalidChar"),
-            maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.buildingorstreet2.length")
-          )
-      ),
-      "town"              -> optional(
-        text()
-          .verifying(
-            regexp(Address.addressRegex, "companyRegisteredOfficeUkAddress.error.town.invalidChar"),
-            maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.town.length")
-          )
-      ),
-      "county"            -> optional(
-        text()
-          .verifying(
-            regexp(Address.addressRegex, "companyRegisteredOfficeUkAddress.error.county.invalidChar"),
-            maxLength(maximumLength, "companyRegisteredOfficeUkAddress.error.county.length")
-          )
-      ),
-      "postcode"          -> text("contactUkAddress.error.postcode.required")
-        .verifying(postcode("company.registeredOffice.postcode.required"))
-    )(CompanyRegisteredOfficeUkAddress.apply)(x =>
-      Some((x.buildingorstreet, x.buildingorstreet2, x.town, x.county, x.postcode))
-    )
-  )
+class CompanyRegisteredOfficeUkAddressFormProvider @Inject() extends UkAddressFormProvider {
+  def apply(): Form[UkAddress] = createForm
 }

@@ -14,28 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json._
+import models.{InternationalAddress, Location}
+import play.api.data.Form
 
-case class ContactUkAddress(
-  buildingOrStreet: String,
-  buildingOrStreetLine2: Option[String] = None,
-  townOrCity: Option[String] = None,
-  county: Option[String] = None,
-  postcode: String
-) {
+import javax.inject.Inject
 
-  def asAddressLines: Seq[String] = Seq(
-    Some(buildingOrStreet),
-    buildingOrStreetLine2,
-    townOrCity,
-    county,
-    Some(postcode)
-  ).flatten
-}
-
-object ContactUkAddress {
-
-  implicit val format: OFormat[ContactUkAddress] = Json.format[ContactUkAddress]
+class InternationalContactAddressFormProvider @Inject() (val location: Location)
+    extends InternationalAddressFormProvider {
+  def apply(): Form[InternationalAddress] = createForm
 }

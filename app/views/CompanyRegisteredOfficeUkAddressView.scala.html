@@ -15,11 +15,13 @@
  *@
 
 @import viewmodels.InputWidth._
+@import components.UkAddress
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
+    ukAddress: UkAddress,
     govukInput: GovukInput,
     govukButton: GovukButton
 )
@@ -37,42 +39,7 @@
 
         <h1 class="govuk-heading-l">@messages("companyRegisteredOfficeUkAddress.heading") @companyName?</h1>
 
-        @govukInput(
-            InputViewModel(
-                field = form("buildingorstreet"),
-                label = LabelViewModel(messages("companyRegisteredOfficeUkAddress.buildingorstreet"))
-            )
-            .withWidth(Full)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("buildingorstreet2"),
-                label = LabelViewModel(messages("companyRegisteredOfficeUkAddress.buildingorstreet2"))
-            )
-            .withWidth(Full)
-        )
-        @govukInput(
-            InputViewModel(
-                field = form("town"),
-                label = LabelViewModel(messages("companyRegisteredOfficeUkAddress.town"))
-            )
-            .withWidth(TwoThirds)
-        )
-        @govukInput(
-            InputViewModel(
-                field = form("county"),
-                label = LabelViewModel(messages("companyRegisteredOfficeUkAddress.county"))
-            )
-            .withWidth(TwoThirds)
-        )
-        @govukInput(
-            InputViewModel(
-                field = form("postcode"),
-                label = LabelViewModel(messages("companyRegisteredOfficeUkAddress.postcode"))
-            )
-            .withWidth(Fixed10)
-        )
+        @ukAddress(form)
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))
