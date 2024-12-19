@@ -17,8 +17,8 @@
 package controllers
 
 import base.SpecBase
-import forms.InternationalAddressFormProvider
-import models.{Country, InternationalAddress, NormalMode, UltimateParentCompanyUkAddress, UserAnswers}
+import forms.InternationalContactAddressFormProvider
+import models.{InternationalAddress, Location, NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
@@ -40,10 +40,8 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val countryCode: String      = "AD"
-  private val locations: Seq[Country]  = Seq(Country("Andorra", countryCode, "country"))
-  val formProvider                     = new InternationalAddressFormProvider()
-  val form: Form[InternationalAddress] = formProvider(locations)
+  private val countryCode: String                          = "AD"
+  def form(location: Location): Form[InternationalAddress] = new InternationalContactAddressFormProvider(location)()
 
   private val selectOptions: Seq[SelectItem]    = Seq(
     SelectItem(Some(""), ""),
@@ -83,12 +81,13 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
       running(application) {
         val request = FakeRequest(GET, ultimateParentCompanyInternationalAddressRoute)
 
-        val view = application.injector.instanceOf[UltimateParentCompanyInternationalAddressView]
+        val location = application.injector.instanceOf[Location]
+        val view     = application.injector.instanceOf[UltimateParentCompanyInternationalAddressView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, selectOptions, ultimateParentCompanyName, NormalMode)(
+        contentAsString(result) mustEqual view(form(location), selectOptions, ultimateParentCompanyName, NormalMode)(
           request,
           messages(application)
         ).toString
@@ -118,14 +117,16 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
       running(application) {
         val request = FakeRequest(GET, ultimateParentCompanyInternationalAddressRoute)
 
-        val view = application.injector.instanceOf[UltimateParentCompanyInternationalAddressView]
+        val location = application.injector.instanceOf[Location]
+        val view     = application.injector.instanceOf[UltimateParentCompanyInternationalAddressView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
           view(
-            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), countryCode)),
+            form(location)
+              .fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), countryCode)),
             selectOptions,
             ultimateParentCompanyName,
             NormalMode
@@ -170,7 +171,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         .thenCallRealMethod()
 
       when(mockUserAnswers.get(eqTo(UltimateParentCompanyUkAddressPage))(any()))
-        .thenReturn(Some(UltimateParentCompanyUkAddress("123 Test Street", postcode = "TE5 5ST")))
+        .thenReturn(Some(UkAddress("123 Test Street", None, None, None, "TE5 5ST")))
 
       when(mockUserAnswers.remove(eqTo(UltimateParentCompanyUkAddressPage)))
         .thenReturn(Try(mockUserAnswers))
@@ -213,7 +214,9 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
           FakeRequest(POST, ultimateParentCompanyInternationalAddressRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
 
-        val boundForm = form.bind(Map("value" -> "invalid value"))
+        val location = application.injector.instanceOf[Location]
+
+        val boundForm = form(location).bind(Map("value" -> "invalid value"))
 
         val view = application.injector.instanceOf[UltimateParentCompanyInternationalAddressView]
 

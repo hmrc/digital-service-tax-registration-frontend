@@ -21,9 +21,7 @@
     govukFieldset: GovukFieldset
 )
 
-@(
-    form:Form[_]
-)(implicit messages: Messages)
+@(form: Form[_])(implicit messages: Messages)
 
 @govukFieldset(Fieldset(
     html = html
@@ -32,32 +30,32 @@
 @html = {
     @govukInput(
         InputViewModel(
-            field = form("building-or-street"),
-            label = LabelViewModel(messages("contactUkAddress.buildingOrStreet"))
+            field = form("line1"),
+            label = LabelViewModel(messages("ukAddress.line1"))
         )
         .withWidth(Full)
     )
 
     @govukInput(
         InputViewModel(
-            field = form("building-or-street-line-2"),
-            label = LabelViewModel(messages("contactUkAddress.buildingOrStreetLine2"))
+            field = form("line2"),
+            label = LabelViewModel(messages("ukAddress.line2"))
         )
         .withWidth(Full)
     )
 
     @govukInput(
         InputViewModel(
-            field = form("town-or-city"),
-            label = LabelViewModel(messages("contactUkAddress.townOrCity"))
+            field = form("line3"),
+            label = LabelViewModel(messages("ukAddress.line3"))
         )
         .withWidth(TwoThirds)
     )
 
     @govukInput(
         InputViewModel(
-            field = form("county"),
-            label = LabelViewModel(messages("contactUkAddress.county"))
+            field = form("line4"),
+            label = LabelViewModel(messages("ukAddress.line4"))
         )
         .withWidth(TwoThirds)
     )
@@ -65,7 +63,7 @@
     @govukInput(
         InputViewModel(
             field = form("postcode"),
-            label = LabelViewModel(messages("contactUkAddress.postcode"))
+            label = LabelViewModel(messages("ukAddress.postcode"))
         )
         .withWidth(Fixed10)
     )

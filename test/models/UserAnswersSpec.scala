@@ -39,7 +39,7 @@ class UserAnswersSpec extends SpecBase {
           .value
           .set(
             UltimateParentCompanyUkAddressPage,
-            UltimateParentCompanyUkAddress(
+            UkAddress(
               "123 Test Road",
               Some("Big District"),
               Some("Newcastle"),

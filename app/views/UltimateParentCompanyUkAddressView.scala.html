@@ -36,9 +36,7 @@
 
         <h1 class="govuk-heading-l">@messages("ultimateParentCompanyUkAddress.heading", companyName)</h1>
 
-        @ukAddress(
-            form = form
-        )
+        @ukAddress(form)
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))
