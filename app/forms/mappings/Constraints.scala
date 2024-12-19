@@ -122,7 +122,7 @@ trait Constraints {
       } else if (p.trim.isEmpty) {
         Invalid(ValidationError(emptyPostcodeErrorKey))
       } else {
-        postcodeRegex.r
+        postcodeRegex
           .findFirstMatchIn(p.trim.replaceAll("[ \\t]+", " "))
           .map(_ => Valid)
           .getOrElse(Invalid(ValidationError("error.invalid.postcode")))
@@ -140,13 +140,14 @@ trait Constraints {
 }
 
 object Constraints {
-  val postcodeRegex: String = """^[a-zA-Z]{1,2}[0-9][0-9a-zA-Z]?\s?[0-9][a-zA-Z]{2}$"""
+  val postcodeRegex: Regex = """^[a-zA-Z]{1,2}[0-9][0-9a-zA-Z]?\s?[0-9][a-zA-Z]{2}$""".r
   object CompanyName {
     val companyNameRegex: Regex = """^[a-zA-Z0-9 '&.-]{1,105}$""".r
     val maxLength               = 105
   }
 
   object Address {
-    val addressRegex = """^[A-Za-z0-9 \-,.&']{1,35}$"""
+    val addressRegex  = """^[A-Za-z0-9 \-,.&']*$"""
+    val maximumLength = 35
   }
 }

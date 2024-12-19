@@ -18,14 +18,14 @@ package controllers
 
 import base.SpecBase
 import forms.CompanyRegisteredOfficeUkAddressFormProvider
-import models.{NormalMode, UkAddress, UserAnswers}
+import models.{CompanyRegisteredOfficeUkAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.CompanyRegisteredOfficeUkAddressPage
-import play.api.data.Form
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -38,17 +38,24 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
 
   def onwardRoute = Call("GET", "/foo")
 
-  val form: Form[UkAddress] = new CompanyRegisteredOfficeUkAddressFormProvider()()
+  val formProvider = new CompanyRegisteredOfficeUkAddressFormProvider()
+  val form         = formProvider()
 
-  lazy val companyRegisteredOfficeUkAddressRoute: String =
+  lazy val companyRegisteredOfficeUkAddressRoute =
     routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode).url
 
-  val address: UkAddress = UkAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), "G1 4PD")
-
-  val userAnswers: UserAnswers = UserAnswers(userAnswersId)
-    .set(CompanyRegisteredOfficeUkAddressPage, address)
-    .success
-    .value
+  val userAnswers = UserAnswers(
+    userAnswersId,
+    Json.obj(
+      CompanyRegisteredOfficeUkAddressPage.toString -> Json.obj(
+        "buildingorstreet"  -> "value 1",
+        "buildingorstreet2" -> "value 2",
+        "town"              -> "value 3",
+        "county"            -> "value 4",
+        "postcode"          -> "G1 4PD"
+      )
+    )
+  )
 
   "CompanyRegisteredOfficeUkAddress Controller" - {
 
@@ -81,7 +88,15 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(
-          form.fill(address),
+          form.fill(
+            CompanyRegisteredOfficeUkAddress(
+              "value 1",
+              Option("value 2"),
+              Option("value 3"),
+              Option("value 4"),
+              "G1 4PD"
+            )
+          ),
           NormalMode
         )(request, messages(application)).toString
       }
@@ -105,11 +120,11 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
         val request =
           FakeRequest(POST, companyRegisteredOfficeUkAddressRoute)
             .withFormUrlEncodedBody(
-              ("line1", address.line1),
-              ("line2", address.line2.value),
-              ("line3", address.line3.value),
-              ("line4", address.line4.value),
-              ("postcode", address.postalCode)
+              ("buildingorstreet", "value 1"),
+              ("buildingorstreet2", "value 2"),
+              ("town", "value 3"),
+              ("county", "value 4"),
+              ("postcode", "G1 4PD")
             )
 
         val result = route(application, request).value
@@ -126,9 +141,9 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, companyRegisteredOfficeUkAddressRoute)
-            .withFormUrlEncodedBody(("line1", "invalid value"))
+            .withFormUrlEncodedBody(("value", "invalid value"))
 
-        val boundForm = form.bind(Map("line1" -> "invalid value"))
+        val boundForm = form.bind(Map("value" -> "invalid value"))
 
         val view = application.injector.instanceOf[CompanyRegisteredOfficeUkAddressView]
 
@@ -160,7 +175,7 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, companyRegisteredOfficeUkAddressRoute)
-            .withFormUrlEncodedBody(("line1", address.line1), ("postcode", address.postalCode))
+            .withFormUrlEncodedBody(("buildingorstreet", "value 1"), ("buildingorstreet2", "value 2"))
 
         val result = route(application, request).value
 

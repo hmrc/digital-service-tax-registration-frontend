@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions._
-import forms.InternationalContactAddressFormProvider
+import forms.InternationalAddressFormProvider
 
 import javax.inject.Inject
 import models.{InternationalAddress, Location, Mode}
@@ -40,14 +40,14 @@ class InternationalContactAddressController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   location: Location,
-  formProvider: InternationalContactAddressFormProvider,
+  formProvider: InternationalAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: InternationalContactAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form: Form[InternationalAddress] = formProvider()
+  val form: Form[InternationalAddress] = formProvider(location.countryListWithoutGB)
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {

@@ -17,8 +17,8 @@
 package controllers
 
 import base.SpecBase
-import forms.InternationalContactAddressFormProvider
-import models.{InternationalAddress, Location, NormalMode, UserAnswers}
+import forms.InternationalAddressFormProvider
+import models.{Country, InternationalAddress, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -39,10 +39,10 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val countryCode: String                                  = "AD"
-  private def form(location: Location): Form[InternationalAddress] = new InternationalContactAddressFormProvider(
-    location
-  )()
+  private val countryCode: String              = "AD"
+  private val locations: Seq[Country]          = Seq(Country("Andorra", countryCode, "country"))
+  private val formProvider                     = new InternationalAddressFormProvider()
+  private val form: Form[InternationalAddress] = formProvider(locations)
 
   private val selectOptions: Seq[SelectItem] = Seq(
     SelectItem(Some(""), ""),
@@ -77,16 +77,12 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request = FakeRequest(GET, internationalContactAddressRoute)
 
-        val location = application.injector.instanceOf[Location]
-        val view     = application.injector.instanceOf[InternationalContactAddressView]
+        val view = application.injector.instanceOf[InternationalContactAddressView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form(location), selectOptions, NormalMode)(
-          request,
-          messages(application)
-        ).toString
+        contentAsString(result) mustEqual view(form, selectOptions, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -97,8 +93,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request = FakeRequest(GET, internationalContactAddressRoute)
 
-        val location = application.injector.instanceOf[Location]
-        val view     = application.injector.instanceOf[InternationalContactAddressView]
+        val view = application.injector.instanceOf[InternationalContactAddressView]
 
         val result = route(application, request).value
 
@@ -106,8 +101,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
 
         contentAsString(result) mustEqual
           view(
-            form(location)
-              .fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), countryCode)),
+            form.fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), countryCode)),
             selectOptions,
             NormalMode
           )(request, messages(application)).toString
@@ -149,10 +143,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
           FakeRequest(POST, internationalContactAddressRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
 
-        val location = application.injector.instanceOf[Location]
-
-        val boundForm = form(location)
-          .bind(Map("value" -> "invalid value"))
+        val boundForm = form.bind(Map("value" -> "invalid value"))
 
         val view = application.injector.instanceOf[InternationalContactAddressView]
 

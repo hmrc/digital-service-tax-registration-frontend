@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.CompanyRegisteredOfficeUkAddress
-import play.api.libs.json.JsPath
+import play.api.libs.json._
 
-case object CompanyRegisteredOfficeUkAddressPage extends QuestionPage[CompanyRegisteredOfficeUkAddress] {
+case class UltimateParentCompanyUkAddress(
+  buildingOrStreet: String,
+  buildingOrStreetLine2: Option[String] = None,
+  townOrCity: Option[String] = None,
+  county: Option[String] = None,
+  postcode: String
+) {
 
-  override def path: JsPath = JsPath \ toString
+  def asAddressLines: Seq[String] = Seq(
+    Some(buildingOrStreet),
+    buildingOrStreetLine2,
+    townOrCity,
+    county,
+    Some(postcode)
+  ).flatten
+}
 
-  override def toString: String = "companyRegisteredOfficeUkAddress"
+object UltimateParentCompanyUkAddress {
+
+  implicit val format: OFormat[UltimateParentCompanyUkAddress] = Json.format
 }
