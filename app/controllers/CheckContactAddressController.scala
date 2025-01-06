@@ -78,7 +78,7 @@ class CheckContactAddressController @Inject() (
         request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage),
         request.userAnswers.get(InternationalContactAddressPage)
       ) match { // TODO get International address here when implemented
-        case (Some(addr), _) => request.userAnswers.set(ContactUkAddressPage, addr.ToContactUKAddress)
+        case (Some(addr), _) => request.userAnswers.set(ContactUkAddressPage, addr)
         case (_, Some(addr)) => Try(request.userAnswers) // TODO set International address here when implemented
         case (_, _)          => Try(request.userAnswers)
       }
