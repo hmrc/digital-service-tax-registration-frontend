@@ -251,18 +251,18 @@ checkUltimateGlobalParentCompanyInUk.error.required = Select yes if the register
 checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = Is the registered office address in the UK?
 checkUltimateGlobalParentCompanyInUk.change.hidden = CheckUltimateGlobalParentCompanyInUk
 
-liabilityStartDate.title = When did the company become liable for Digital Services Tax?
-liabilityStartDate.heading = When did the company become liable for Digital Services Tax?
-liabilityStartDate.heading.hint = Accounting period details
+liabilityStartDate.title = When did the {0} become liable for Digital Services Tax?
+liabilityStartDate.heading = When did the {0} become liable for Digital Services Tax?
+liabilityStartDate.error.required.all = Enter the date the {0} became liable for Digital Services Tax
+liabilityStartDate.error.required.two = The date the {2} became liable for Digital Services Tax must include a {0} and {1}
+liabilityStartDate.error.required = The date the {1} became liable for Digital Services Tax must include a {0}
+liabilityStartDate.error.invalid = The date the {0} became liable for Digital Services Tax must be a real date, like 31 7 2020
+liabilityStartDate.minimum.date = The date the {0} became liable for Digital Services Tax must be after 1 April 2020
+liabilityStartDate.maximum.date = The date the {0} became liable for Digital Services Tax must be earlier than {1}
+liabilityStartDate.heading.hint = Liability start date
 liabilityStartDate.hint = For example, 31 7 2020.
 liabilityStartDate.checkYourAnswersLabel = Liability start date
-liabilityStartDate.error.required.all = Enter the date the group became liable for Digital Services Tax
-liabilityStartDate.error.required.two = The date the group became liable for Digital Services Tax must include a {0} and {1}
-liabilityStartDate.error.required = The date the group became liable for Digital Services Tax must include a {0}
-liabilityStartDate.error.invalid = The date the group became liable for Digital Services Tax must be a real date, like 31 7 2020
 liabilityStartDate.change.hidden = LiabilityStartDate
-liabilityStartDate.minimum.date = The date the group became liable for Digital Services Tax must be after 1 April 2020
-liabilityStartDate.maximum.date = The date the group became liable for Digital Services Tax must be earlier than {0}
 
 contactPersonName.title = Who can we contact if we need to discuss your registration?
 contactPersonName.heading = Who can we contact if we need to discuss your registration?
@@ -287,7 +287,7 @@ contactPersonPhoneNumber.error.length = Phone number must be 24 characters or fe
 contactPersonPhoneNumber.error.invalid = Enter a phone number, like 01632 960 001, 07700 900 982 or 0044 808 157 0192
 contactPersonPhoneNumber.change.hidden = ContactPersonPhoneNumber
 
-accounting-period-end-date.heading=What is the end date of the company’s first accounting period for Digital Services Tax?
+accounting-period-end-date.heading=What is the end date of the {0}’s first accounting period for Digital Services Tax?
 accounting-period-end-date.heading.hint=Accounting period details
 accounting-period-end-date.hint=For example, 31 7 2020
 accounting-period-end-date.Date.day.heading=Day
@@ -298,8 +298,8 @@ accounting-period-end-date.fixed-maximum-date=The end date of the {0}’s first 
 accounting-period-end-date.minimum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be after 1 April 2020
 accounting-period-end-date.invalid=The date the {0} became liable must be a real date, like  31 7 2020
 accounting-period-end-date.empty=Enter the end date of the {0}’s first accounting period for Digital Services Tax
-accounting-period-end-date.required=The end date of the {0}’s first accounting period for Digital Services Tax must include a {1}
-accounting-period-end-date.two-required=The end date of the {0}’s first accounting period for Digital Services Tax must include a {1} and {2}
+accounting-period-end-date.required=The end date of the {1}’s first accounting period for Digital Services Tax must include a {0}
+accounting-period-end-date.two-required=The end date of the {2}’s first accounting period for Digital Services Tax must include a {0} and {1}
 accounting-period-end-date.checkYourAnswersLabel = First accounting period end date
 accounting-period-end-date.change.hidden = accounting period end date
 

@@ -17,15 +17,14 @@
 package controllers
 
 import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import forms.LiabilityStartDateFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.LiabilityStartDatePage
+import pages.{CheckIfGroupPage, LiabilityStartDatePage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -40,8 +39,8 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
 
   private implicit val messages: Messages = stubMessages()
 
-  private val formProvider = new LiabilityStartDateFormProvider()
-  private def form         = formProvider()
+  private val formProvider           = new LiabilityStartDateFormProvider()
+  private def form(isGroup: Boolean) = formProvider(isGroup)
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -66,7 +65,9 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = UserAnswers(userAnswersId).set(CheckIfGroupPage, true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val result = route(application, getRequest()).value
@@ -74,13 +75,22 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[LiabilityStartDateView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(getRequest(), messages(application)).toString
+        contentAsString(result) mustEqual view(form(true), NormalMode, isGroup = true)(
+          getRequest(),
+          messages(application)
+        ).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(LiabilityStartDatePage, validAnswer).success.value
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(LiabilityStartDatePage, validAnswer)
+        .success
+        .value
+        .set(CheckIfGroupPage, false)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -90,7 +100,7 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, getRequest()).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(
+        contentAsString(result) mustEqual view(form(false).fill(validAnswer), NormalMode, isGroup = false)(
           getRequest(),
           messages(application)
         ).toString
@@ -103,8 +113,10 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
+      val userAnswers = UserAnswers(userAnswersId).set(CheckIfGroupPage, false).success.value
+
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -121,45 +133,93 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = UserAnswers(userAnswersId).set(CheckIfGroupPage, true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, liabilityStartDateRoute)
           .withFormUrlEncodedBody(("value", "invalid value"))
 
       running(application) {
-        val boundForm = form.bind(Map("value" -> "invalid value"))
+        val boundForm = form(true).bind(Map("value" -> "invalid value"))
 
         val view = application.injector.instanceOf[LiabilityStartDateView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, isGroup = true)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to Journey Recovery for a GET" - {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      "when cached answer is unavailable in onPageLoad" in {
 
-      running(application) {
-        val result = route(application, getRequest()).value
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        running(application) {
+          val result = route(application, getRequest()).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val result = route(application, getRequest()).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+    "must redirect to Journey Recovery for a POST" - {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      "when cached answer is unavailable in onSubmit" in {
 
-      running(application) {
-        val result = route(application, postRequest()).value
+        val mockSessionRepository = mock[SessionRepository]
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+            .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+            .build()
+
+        running(application) {
+          val result = route(application, postRequest()).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController
+            .onPageLoad(
+            )
+            .url
+
+          verifyNoInteractions(mockSessionRepository)
+        }
+      }
+
+      "if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val result = route(application, postRequest()).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
       }
     }
   }

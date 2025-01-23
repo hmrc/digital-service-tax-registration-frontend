@@ -63,7 +63,10 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[AccountingPeriodEndDateView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, isGroup = true)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -79,7 +82,7 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(LocalDate.of(2022, 9, 9)), NormalMode)(
+        contentAsString(result) mustEqual view(form.fill(LocalDate.of(2022, 9, 9)), NormalMode, isGroup = true)(
           request,
           messages(application)
         ).toString
@@ -130,39 +133,89 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, isGroup = true)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to Journey Recovery for a GET" - {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      "if 'Check If Group' answer is not in cache" in {
 
-      running(application) {
-        val request = FakeRequest(GET, apRoute)
+        val application = applicationBuilder(Option(emptyUserAnswers)).build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, apRoute)
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, apRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+    "must redirect to Journey Recovery for a POST" - {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      "if 'Check If Group' answer is not in cache" in {
 
-      running(application) {
-        val request = FakeRequest(POST, apRoute).withFormUrlEncodedBody(
-          s"$accountingPeriodEndDateKey.day"   -> "9",
-          s"$accountingPeriodEndDateKey.month" -> "9",
-          s"$accountingPeriodEndDateKey.year"  -> "2022"
-        )
+        val mockSessionRepository = mock[SessionRepository]
 
-        val result = route(application, request).value
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        val application =
+          applicationBuilder(userAnswers = Option(emptyUserAnswers))
+            .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, apRoute)
+              .withFormUrlEncodedBody(
+                s"$accountingPeriodEndDateKey.day"   -> "9",
+                s"$accountingPeriodEndDateKey.month" -> "9",
+                s"$accountingPeriodEndDateKey.year"  -> "2022"
+              )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(POST, apRoute).withFormUrlEncodedBody(
+            s"$accountingPeriodEndDateKey.day"   -> "9",
+            s"$accountingPeriodEndDateKey.month" -> "9",
+            s"$accountingPeriodEndDateKey.year"  -> "2022"
+          )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
       }
     }
   }

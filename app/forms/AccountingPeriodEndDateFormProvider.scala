@@ -22,10 +22,14 @@ import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.i18n.Messages
 
-import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, ZoneId}
 import javax.inject.Inject
 
 class AccountingPeriodEndDateFormProvider @Inject() extends Mappings {
+
+  import MaxDate._
+
   private val accountingPeriodEndDateKey = "accounting-period-end-date"
 
   def apply(isGroup: Boolean, liabilityStartDate: LocalDate)(implicit messages: Messages): Form[LocalDate] = {
@@ -40,16 +44,26 @@ class AccountingPeriodEndDateFormProvider @Inject() extends Mappings {
         args = Seq(entityType)
       )
         .verifying(minDate(DST_EPOCH, s"$accountingPeriodEndDateKey.minimum-date", entityType))
-        .verifying(maxAccountingPeriodEndDate(liabilityStartDate, entityType))
+        .verifying(maxAccountingPeriodEndDate(liabilityStartDate, entityType, liabilityStartDate.textFormat))
     )
   }
 
   private def maxAccountingPeriodEndDate(liabilityStartDate: LocalDate, args: Any*): Constraint[LocalDate] =
     Constraint {
-      case ap if liabilityStartDate == DST_EPOCH && ap.isAfter(liabilityStartDate.plusYears(1).minusDays(1)) =>
+      case ap if liabilityStartDate == DST_EPOCH && ap.isAfter(liabilityStartDate.maxDate) =>
         Invalid(s"$accountingPeriodEndDateKey.fixed-maximum-date", args: _*)
-      case ap if ap.isAfter(liabilityStartDate.plusYears(1).minusDays(1))                                    =>
+      case ap if ap.isAfter(liabilityStartDate.maxDate)                                    =>
         Invalid(s"$accountingPeriodEndDateKey.maximum-date", args: _*)
-      case _                                                                                                 => Valid
+      case _                                                                               => Valid
     }
+}
+
+object MaxDate {
+
+  implicit class MaxDateHelper(date: LocalDate) {
+
+    def maxDate: LocalDate = date.plusYears(1).minusDays(1)
+
+    def textFormat: String = maxDate.format(DateTimeFormatter.ofPattern("d MMMM y").withZone(ZoneId.of("UTC")))
+  }
 }

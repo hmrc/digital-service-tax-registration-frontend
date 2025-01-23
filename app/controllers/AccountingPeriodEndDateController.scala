@@ -50,10 +50,10 @@ class AccountingPeriodEndDateController @Inject() (
       .flatMap { isGroup =>
         request.userAnswers.get(LiabilityStartDatePage).map { liabilityStartDate =>
           val form = formProvider(isGroup, liabilityStartDate)
-          request.userAnswers.get(AccountingPeriodEndDatePage).fold(form)(ap => form.fill(ap))
+          view(request.userAnswers.get(AccountingPeriodEndDatePage).fold(form)(ap => form.fill(ap)), mode, isGroup)
         }
       }
-      .fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(preparedForm => Ok(view(preparedForm, mode)))
+      .fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(Ok(_))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -65,7 +65,7 @@ class AccountingPeriodEndDateController @Inject() (
             formProvider(isGroup, liabilityStartDate)
               .bindFromRequest()
               .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, isGroup))),
                 accountingPeriodEndDate =>
                   for {
                     updatedAnswers <-

@@ -18,10 +18,11 @@ package controllers
 
 import controllers.actions._
 import forms.LiabilityStartDateFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.LiabilityStartDatePage
+import pages.{CheckIfGroupPage, LiabilityStartDatePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -45,29 +46,28 @@ class LiabilityStartDateController @Inject() (
     with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val form = formProvider()
-
-    val preparedForm = request.userAnswers.get(LiabilityStartDatePage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+    (request.userAnswers.get(CheckIfGroupPage), request.userAnswers.get(LiabilityStartDatePage)) match {
+      case (Some(isGroup), Some(date)) => Ok(view(formProvider(isGroup).fill(date), mode, isGroup))
+      case (Some(isGroup), None)       => Ok(view(formProvider(isGroup), mode, isGroup))
+      case _                           => Redirect(routes.JourneyRecoveryController.onPageLoad())
     }
-
-    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      val form = formProvider()
-
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(LiabilityStartDatePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(LiabilityStartDatePage, mode, updatedAnswers))
-        )
+      request.userAnswers
+        .get(CheckIfGroupPage)
+        .fold(Future.successful(Redirect(routes.JourneyRecoveryController.onPageLoad()))) { isGroup =>
+          formProvider(isGroup)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, isGroup))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(LiabilityStartDatePage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(LiabilityStartDatePage, mode, updatedAnswers))
+            )
+        }
   }
 }

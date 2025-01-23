@@ -56,16 +56,20 @@ class AccountingPeriodEndDateFormProviderSpec extends DateBehaviours with Option
           checkDateAgainst(
             form,
             givenLiabilityStartDate.plusYears(1).plusDays(2),
-            apFormError("maximum-date")
+            apFormError("maximum-date", Some("13 June 2023"))
           )
         }
 
         "dates more than 1 year after the liability date & the liability date is the 1st April 2020" in {
-          val form: Form[LocalDate] = new AccountingPeriodEndDateFormProvider()(true, DST_EPOCH)
+          val form: Form[LocalDate] = new AccountingPeriodEndDateFormProvider()(false, DST_EPOCH)
           checkDateAgainst(
             form,
             DST_EPOCH.plusYears(1).plusDays(2),
-            apFormError("fixed-maximum-date")
+            FormError(
+              s"$accountingPeriodEndDateKey",
+              s"$accountingPeriodEndDateKey.fixed-maximum-date",
+              Seq("company", "31 March 2021")
+            )
           )
         }
       }
@@ -80,8 +84,12 @@ class AccountingPeriodEndDateFormProviderSpec extends DateBehaviours with Option
     }
   }
 
-  private def apFormError(errorMsgSuffix: String): FormError =
-    FormError(s"$accountingPeriodEndDateKey", s"$accountingPeriodEndDateKey.$errorMsgSuffix", Seq("group"))
+  private def apFormError(errorMsgSuffix: String, date: Option[String] = None): FormError =
+    FormError(
+      s"$accountingPeriodEndDateKey",
+      s"$accountingPeriodEndDateKey.$errorMsgSuffix",
+      Seq(Some("group"), date).flatten
+    )
 
   private def checkDateAgainst(form: Form[LocalDate], apEndDate: LocalDate, formError: FormError): Assertion = {
     val data = Map(
