@@ -25,7 +25,7 @@ import play.api.test.Helpers.stubMessages
 class LiabilityStartDateFormProviderSpec extends DateBehaviours {
 
   private implicit val messages: Messages = stubMessages()
-  private val form                        = new LiabilityStartDateFormProvider()()
+  private val form                        = new LiabilityStartDateFormProvider()(true)
 
   ".value" - {
 
@@ -36,6 +36,6 @@ class LiabilityStartDateFormProviderSpec extends DateBehaviours {
 
     behave like dateField(form, "value", validData)
 
-    behave like mandatoryDateField(form, "value", "liabilityStartDate.error.required.all")
+    behave like mandatoryDateField(form, "value", "liabilityStartDate.error.required.all", Seq("group"))
   }
 }

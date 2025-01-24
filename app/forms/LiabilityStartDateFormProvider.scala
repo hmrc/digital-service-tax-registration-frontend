@@ -27,26 +27,32 @@ import javax.inject.Inject
 
 class LiabilityStartDateFormProvider @Inject() extends Mappings {
 
-  val minimumDateKey = "liabilityStartDate.minimum.date"
-  val maximumDate    = LocalDate.now().plusYears(1)
-  val maximumDateKey = "liabilityStartDate.maximum.date"
+  private val minimumDateKey = "liabilityStartDate.minimum.date"
+  private val maximumDate    = LocalDate.now().plusYears(1)
+  private val maximumDateKey = "liabilityStartDate.maximum.date"
 
-  def apply()(implicit messages: Messages): Form[LocalDate] =
+  def apply(isGroup: Boolean)(implicit messages: Messages): Form[LocalDate] = {
+
+    val key = if (isGroup) "group" else "company"
+
     Form(
       "value" -> localDate(
         invalidKey = "liabilityStartDate.error.invalid",
         allRequiredKey = "liabilityStartDate.error.required.all",
         twoRequiredKey = "liabilityStartDate.error.required.two",
-        requiredKey = "liabilityStartDate.error.required"
-      ).verifying(minDate(DST_EPOCH, minimumDateKey))
+        requiredKey = "liabilityStartDate.error.required",
+        args = Seq(key)
+      ).verifying(minDate(DST_EPOCH, minimumDateKey, key))
         .verifying(
           maxDate(
             maximumDate,
             messages(
               maximumDateKey,
+              key,
               maximumDate.format(DateTimeFormatter.ofPattern("d MMMM y").withZone(ZoneId.of("UTC")))
             )
           )
         )
     )
+  }
 }

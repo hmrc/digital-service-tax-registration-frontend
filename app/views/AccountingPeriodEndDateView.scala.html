@@ -27,9 +27,11 @@
     govukDateInput: GovukDateInput
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, isGroup: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("accountingPeriodEndDate.title"))) {
+@msg = @{if(isGroup) "group" else "company"}
+
+@layout(pageTitle = title(form, messages("accounting-period-end-date.heading", msg))) {
 
     @formHelper(action = routes.AccountingPeriodEndDateController.onSubmit(mode), Symbol("autocomplete") -> "on") {
         @if(form.errors.nonEmpty) {
@@ -41,7 +43,7 @@
         @govukDateInput(
             DateViewModel(
                 field  = form("accounting-period-end-date"),
-                legend = LegendViewModel(messages("accounting-period-end-date.heading")).asPageHeading(LegendSize.Large)
+                legend = LegendViewModel(messages("accounting-period-end-date.heading", msg)).asPageHeading(LegendSize.Large)
             )
             .withHint(HintViewModel(messages("accounting-period-end-date.hint")))
         )
