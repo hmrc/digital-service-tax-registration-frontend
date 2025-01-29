@@ -17,10 +17,11 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.CompanyRegWrapper
-import uk.gov.hmrc.http.HeaderCarrier
+import models.{CompanyRegWrapper, Registration}
+import play.api.libs.json.Json
+import uk.gov.hmrc.http.HttpReadsInstances.{readEitherOf, readFromJson}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.StringContextOps
 
 import java.net.URL
 import javax.inject.Inject
@@ -28,10 +29,28 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DigitalServicesTaxConnector @Inject() (http: HttpClientV2, appConfig: FrontendAppConfig) {
 
-  private def backendUrl = s"${appConfig.dstBackendBaseUrl}/digital-services-tax"
+  private val backendUrl = s"${appConfig.dstBackendBaseUrl}/digital-services-tax"
 
   def lookupCompany(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[CompanyRegWrapper]] = {
     val url: URL = url"$backendUrl/lookup-company"
     http.get(url).execute[Option[CompanyRegWrapper]]
   }
+
+  def lookupCompany(utr: String, postcode: String)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[Option[CompanyRegWrapper]] = {
+    val url: URL = url"$backendUrl/lookup-company/$utr/$postcode"
+    http.get(url).execute[Option[CompanyRegWrapper]]
+  }
+
+  def submitRegistration(reg: Registration)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
+    http
+      .post(url"$backendUrl/registration")
+      .withBody(Json.toJson(reg))
+      .execute[Either[UpstreamErrorResponse, HttpResponse]]
+      .map {
+        case Right(value) => value
+        case Left(e)      => throw e
+      }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,19 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import base.SpecBase
+import org.scalatestplus.mockito.MockitoSugar
 
-final case class CompanyRegWrapper(
-  company: Company,
-  utr: Option[String] = None,
-  safeId: Option[String] = None,
-  useSafeId: Boolean = false
-)
+class RegistrationSpec extends SpecBase with MockitoSugar {
 
-object CompanyRegWrapper {
+  "Registration" - {
 
-  def getFromUserAnswers(ua: UserAnswers, useSafeId: Boolean = false): Option[CompanyRegWrapper] =
-    for {
-      company <- Company.getFromUserAnswers(ua)
-    } yield CompanyRegWrapper(company, useSafeId = useSafeId)
+    "when .fromUserAnswers is called" - {
 
-  implicit val format: OFormat[CompanyRegWrapper] = Json.format[CompanyRegWrapper]
+      "must return Registration" - {
+
+
+      }
+    }
+  }
 }

@@ -34,7 +34,8 @@ class LocationSpec extends AnyFlatSpec with Matchers with MockitoSugar with Befo
   val env: Environment             = mock[Environment]
 
   override def beforeEach(): Unit = {
-    reset(appConfig, env)
+    reset(appConfig)
+    reset(env)
     super.beforeEach()
   }
 

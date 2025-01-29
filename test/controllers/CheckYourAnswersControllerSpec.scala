@@ -18,10 +18,11 @@ package controllers
 
 import base.SpecBase
 import controllers.actions.{DataRequiredActionImpl, FakeDataRetrievalAction, FakeIdentifierAction}
-import models.{Location, UserAnswers}
+import models.{Location, Registration, UserAnswers}
 import models.requests.DataRequest
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{reset, verifyNoInteractions, when}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
@@ -29,15 +30,16 @@ import play.api.libs.json._
 import play.api.mvc.AnyContent
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers, Injecting}
-import services.CheckYourAnswersService
+import services.{CheckYourAnswersService, DigitalServicesTaxService}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
+import uk.gov.hmrc.http.HttpResponse
 import viewmodels.checkAnswers._
 import views.html.CheckYourAnswersView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Injecting {
+class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with BeforeAndAfterEach with Injecting {
 
   val childCompanyName  = "Child Company Ltd"
   val parentCompanyName = "Parent Company Inc"
@@ -91,7 +93,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Inj
 
   implicit lazy val app: Application = applicationBuilder(Some(userAnswers)).build()
 
-  val mockService: CheckYourAnswersService = mock[CheckYourAnswersService]
+  val mockCyaService: CheckYourAnswersService   = mock[CheckYourAnswersService]
+  val mockDstService: DigitalServicesTaxService = mock[DigitalServicesTaxService]
 
   val view: CheckYourAnswersView = inject[CheckYourAnswersView]
 
@@ -101,7 +104,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Inj
     new FakeDataRetrievalAction(Some(userAnswers)),
     new DataRequiredActionImpl,
     Helpers.stubMessagesControllerComponents(),
-    mockService,
+    mockCyaService,
+    mockDstService,
     view
   )
 
@@ -144,6 +148,12 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Inj
       )
     )
 
+  override def beforeEach(): Unit = {
+    reset(mockDstService)
+    reset(mockCyaService)
+    super.beforeEach()
+  }
+
   "CheckYourAnswers Controller" - {
 
     "when handling a GET request" - {
@@ -152,13 +162,13 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Inj
 
         implicit val request = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
-        when(mockService.getSummaryForView(any(), any()))
+        when(mockCyaService.getSummaryForView(any(), any()))
           .thenReturn(Future.successful(Some(summaryLists)))
 
-        when(mockService.getChildCompanyName(any()))
+        when(mockCyaService.getChildCompanyName(any()))
           .thenReturn(Future.successful(Some(childCompanyName)))
 
-        when(mockService.getParentCompanyName(any()))
+        when(mockCyaService.getParentCompanyName(any()))
           .thenReturn(Future.successful(Some(parentCompanyName)))
 
         val result = controller.onPageLoad()(request)
@@ -173,13 +183,13 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Inj
 
           implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
-          when(mockService.getSummaryForView(any(), any()))
+          when(mockCyaService.getSummaryForView(any(), any()))
             .thenReturn(Future.successful(None))
 
-          when(mockService.getChildCompanyName(any()))
+          when(mockCyaService.getChildCompanyName(any()))
             .thenReturn(Future.successful(Some(childCompanyName)))
 
-          when(mockService.getParentCompanyName(any()))
+          when(mockCyaService.getParentCompanyName(any()))
             .thenReturn(Future.successful(Some(parentCompanyName)))
 
           val result = controller.onPageLoad()(request)
@@ -192,13 +202,32 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Inj
 
           implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
-          when(mockService.getSummaryForView(any(), any()))
+          when(mockCyaService.getSummaryForView(any(), any()))
             .thenReturn(Future.successful(Some(summaryLists)))
 
-          when(mockService.getChildCompanyName(any()))
+          when(mockCyaService.getChildCompanyName(any()))
             .thenReturn(Future.successful(None))
 
-          when(mockService.getParentCompanyName(any()))
+          when(mockCyaService.getParentCompanyName(any()))
+            .thenReturn(Future.successful(Some(parentCompanyName)))
+
+          val result = controller.onPageLoad()(request)
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustBe routes.JourneyRecoveryController.onPageLoad().url
+        }
+
+        "when service fails to return both summary lists and the child company name" in {
+
+          implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+
+          when(mockCyaService.getSummaryForView(any(), any()))
+            .thenReturn(Future.successful(None))
+
+          when(mockCyaService.getChildCompanyName(any()))
+            .thenReturn(Future.successful(None))
+
+          when(mockCyaService.getParentCompanyName(any()))
             .thenReturn(Future.successful(Some(parentCompanyName)))
 
           val result = controller.onPageLoad()(request)
@@ -209,6 +238,64 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Inj
       }
     }
 
-    "handling a post request" in pending
+    "handling a post request" - {
+
+      "must redirect" - {
+
+        "to registration complete when submission is successful" in {
+
+          implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+
+          val mockRegistration = mock[Registration]
+
+          when(mockCyaService.buildRegistration(any(), any()))
+            .thenReturn(Future.successful(Some(mockRegistration)))
+
+          when(mockDstService.submitRegistration(eqTo(mockRegistration))(any(), any()))
+            .thenReturn(Future.successful(HttpResponse(OK, "{}")))
+
+          val result = controller.onSubmit()(request)
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustBe routes.RegistrationController.registrationComplete.url
+        }
+
+        "to register action method" - {
+
+          "when a non-200 response is received upon submission" in {
+
+            implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+
+            val mockRegistration = mock[Registration]
+
+            when(mockCyaService.buildRegistration(any(), any()))
+              .thenReturn(Future.successful(Some(mockRegistration)))
+
+            when(mockDstService.submitRegistration(eqTo(mockRegistration))(any(), any()))
+              .thenReturn(Future.successful(HttpResponse(BAD_REQUEST, "{}")))
+
+            val result = controller.onSubmit()(request)
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustBe routes.RegistrationController.registerAction.url
+          }
+
+          "when registration cannot be built from user answers" in {
+
+            implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+
+            when(mockCyaService.buildRegistration(any(), any()))
+              .thenReturn(Future.successful(None))
+
+            val result = controller.onSubmit()(request)
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustBe routes.RegistrationController.registerAction.url
+
+            verifyNoInteractions(mockDstService)
+          }
+        }
+      }
+    }
   }
 }

@@ -17,29 +17,33 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, urlEqualTo}
-import models.{Company, CompanyRegWrapper, UkAddress}
+import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.http.Fault
+import generators.ModelGenerators
 import org.scalatest.OptionValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.Application
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK}
+import play.api.http.Status.OK
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
 class DigitalServicesTaxConnectorISpec
-  extends AnyFreeSpec
+    extends AnyFreeSpec
     with Matchers
     with WireMockHelper
     with ScalaFutures
     with IntegrationPatience
     with OptionValues
-    with MockitoSugar {
+    with MockitoSugar
+    with ScalaCheckDrivenPropertyChecks
+    with ModelGenerators {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
@@ -59,35 +63,25 @@ class DigitalServicesTaxConnectorISpec
 
       "must return expected object when 200 is received" in {
 
-        val wrapper = CompanyRegWrapper(
-          Company(
-            "Big Corp",
-            UkAddress("123 Test Street", Some("Business Park"), Some("Long Road"), Some("London"), "XX1 1XX")
-          ),
-          Some("1111111111"),
-          Some("12415GFEWSDG"),
-          useSafeId = true
-        )
+        forAll(genCompanyRegWrapper) { wrapper =>
 
-        server.stubFor(
-          WireMock.get(urlEqualTo(url))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(Json.toJson(wrapper).toString())
-            )
-        )
+          server.stubFor(
+            WireMock.get(url)
+              .willReturn(
+                ok(Json.toJson(wrapper).toString())
+              )
+          )
 
-        connector.lookupCompany.futureValue mustBe Some(wrapper)
+          connector.lookupCompany.futureValue mustBe Some(wrapper)
+        }
       }
 
       "must return None when 404 is received" in {
 
         server.stubFor(
-          WireMock.get(urlEqualTo(url))
+          WireMock.get(url)
             .willReturn(
-              aResponse()
-                .withStatus(NOT_FOUND)
+              notFound()
             )
         )
 
@@ -97,15 +91,131 @@ class DigitalServicesTaxConnectorISpec
       "must throw when 500 is received" in {
 
         server.stubFor(
-          WireMock.get(urlEqualTo(url))
+          WireMock.get(url)
             .willReturn(
-              aResponse()
-                .withStatus(INTERNAL_SERVER_ERROR)
+              serverError()
             )
         )
 
-        an[Exception] mustBe thrownBy { // TODO get working with UpstreamErrorResponse
+        an[Exception] mustBe thrownBy {
           connector.lookupCompany.futureValue
+        }
+      }
+    }
+
+    "when .lookupCompany with UTR and Postcode is called" - {
+
+      val utr = "1111111111"
+      val postcode = "TE35ST"
+      val url = s"/digital-services-tax/lookup-company/$utr/$postcode"
+
+      def app: Application =
+        new GuiceApplicationBuilder()
+          .configure("microservice.services.digital-services-tax.port" -> server.port)
+          .build()
+
+      lazy val connector: DigitalServicesTaxConnector = app.injector.instanceOf[DigitalServicesTaxConnector]
+
+      "must return expected object when 200 is received" in {
+
+        forAll(genCompanyRegWrapper) { wrapper =>
+          server.stubFor(
+            WireMock.get(url)
+              .willReturn(
+                ok(Json.toJson(wrapper).toString())
+              )
+          )
+
+          connector.lookupCompany(utr, postcode).futureValue mustBe Some(wrapper)
+        }
+      }
+
+      "must return None when 404 is received" in {
+
+        server.stubFor(
+          WireMock.get(url)
+            .willReturn(
+              notFound()
+            )
+        )
+
+        connector.lookupCompany(utr, postcode).futureValue mustBe None
+      }
+
+      "must throw when 500 is received" in {
+
+        server.stubFor(
+          WireMock.get(url)
+            .willReturn(
+              serverError()
+            )
+        )
+
+        an[Exception] mustBe thrownBy {
+          connector.lookupCompany(utr, postcode).futureValue
+        }
+      }
+    }
+
+    "when .submitRegistration is called" - {
+
+      val url = "/digital-services-tax/registration"
+
+      def app: Application =
+        new GuiceApplicationBuilder()
+          .configure("microservice.services.digital-services-tax.port" -> server.port)
+          .build()
+
+      lazy val connector: DigitalServicesTaxConnector = app.injector.instanceOf[DigitalServicesTaxConnector]
+
+      "must handle a successful response" in {
+
+        forAll(genRegistration) { reg =>
+          server.stubFor(
+            WireMock.post(url)
+              .willReturn(
+                ok("{}")
+              )
+          )
+
+          connector.submitRegistration(reg).futureValue.status mustBe OK
+        }
+      }
+
+      "must throw" - {
+
+        "in the case of a failed response" in {
+
+          forAll(genRegistration) { reg =>
+            server.stubFor(
+              WireMock.post(url)
+                .willReturn(
+                  badRequest()
+                    .withBody("{}")
+                )
+            )
+
+            an[Exception] mustBe thrownBy {
+              connector.submitRegistration(reg).futureValue
+            }
+          }
+        }
+
+        "in the case of an error" in {
+
+          forAll(genRegistration) { reg =>
+            server.stubFor(
+              WireMock.post(url)
+                .willReturn(
+                  aResponse()
+                    .withFault(Fault.MALFORMED_RESPONSE_CHUNK)
+                )
+            )
+
+            an[Exception] mustBe thrownBy {
+              connector.submitRegistration(reg).futureValue
+            }
+          }
         }
       }
     }

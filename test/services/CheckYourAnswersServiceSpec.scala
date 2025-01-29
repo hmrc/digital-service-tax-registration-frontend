@@ -18,12 +18,14 @@ package services
 
 import base.SpecBase
 import controllers.routes
+import generators.ModelGenerators
 import models._
 import models.requests.DataRequest
-import org.mockito.ArgumentMatchers.{eq => eqTo}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, when}
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import pages._
 import play.api.i18n.Messages
 import play.api.libs.json.Writes
@@ -33,23 +35,31 @@ import play.twirl.api.HtmlFormat
 import queries.Settable
 import repositories.SessionRepository
 import uk.gov.hmrc.govukfrontend.views.Aliases._
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
+class CheckYourAnswersServiceSpec
+    extends SpecBase
+    with MockitoSugar
+    with ScalaCheckDrivenPropertyChecks
+    with ModelGenerators {
 
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
-  val mockLocation: Location                   = mock[Location]
+  val mockDstService: DigitalServicesTaxService = mock[DigitalServicesTaxService]
+  val mockSessionRepository: SessionRepository  = mock[SessionRepository]
+  val mockLocation: Location                    = mock[Location]
 
-  val serviceUnderTest = new CheckYourAnswersService(mockSessionRepository, mockLocation)
+  val serviceUnderTest = new CheckYourAnswersService(mockDstService, mockSessionRepository, mockLocation)
 
   val companyName = "Company Ltd"
 
   implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, emptyUserAnswers)
+  implicit val hc: HeaderCarrier                = HeaderCarrierConverter.fromRequest(request)
 
   def mockUserAnswers[A](page: Settable[A], value: A)(implicit
     writes: Writes[A]
@@ -374,6 +384,111 @@ class CheckYourAnswersServiceSpec extends SpecBase with MockitoSugar {
               ValueViewModel("20 February 2023"),
               routes.AccountingPeriodEndDateController.onPageLoad(CheckMode).url
             )
+        }
+      }
+    }
+
+    "when .buildRegistration is called" - {
+
+      "return a Registration" - {
+
+        "when user answers contains everything to instantiate Registration" in {
+
+          def addAlternativeAddressToUserAnswers(userAnswers: UserAnswers, alternativeAddress: Address): UserAnswers =
+            alternativeAddress match {
+              case ukAddress: UkAddress                       =>
+                userAnswers.set(ContactUkAddressPage, ukAddress).success.value
+              case internationalAddress: InternationalAddress =>
+                userAnswers.set(InternationalContactAddressPage, internationalAddress).success.value
+            }
+
+          def addParentCompanyToUserAnswers(userAnswers: UserAnswers, parentCompany: Company): UserAnswers =
+            parentCompany.address match {
+              case ukAddress: UkAddress                       =>
+                userAnswers
+                  .set(UltimateParentCompanyNamePage, parentCompany.name)
+                  .success
+                  .value
+                  .set(CheckUltimateGlobalParentCompanyInUkPage, true)
+                  .success
+                  .value
+                  .set(UltimateParentCompanyUkAddressPage, ukAddress)
+                  .success
+                  .value
+              case internationalAddress: InternationalAddress =>
+                userAnswers
+                  .set(UltimateParentCompanyNamePage, parentCompany.name)
+                  .success
+                  .value
+                  .set(CheckUltimateGlobalParentCompanyInUkPage, false)
+                  .success
+                  .value
+                  .set(UltimateParentCompanyInternationalAddressPage, internationalAddress)
+                  .success
+                  .value
+            }
+
+          forAll(genRegistration) { registration =>
+            when(mockDstService.lookupCompany(any[HeaderCarrier], any[ExecutionContext]))
+              .thenReturn(Future.successful(Some(registration.companyReg)))
+
+            val baseUserAnswers = UserAnswers(userAnswersId)
+              .set(
+                ContactPersonNamePage,
+                ContactPersonName(registration.contact.forename, registration.contact.surname)
+              )
+              .success
+              .value
+              .set(ContactPersonPhoneNumberPage, registration.contact.phoneNumber)
+              .success
+              .value
+              .set(ContactPersonEmailAddressPage, registration.contact.email)
+              .success
+              .value
+              .set(LiabilityStartDatePage, registration.dateLiable)
+              .success
+              .value
+              .set(AccountingPeriodEndDatePage, registration.accountingPeriodEnd)
+              .success
+              .value
+
+            val userAnswers = (registration.alternativeContact, registration.ultimateParent) match {
+              case (Some(altContact), Some(parentCompany)) =>
+                addParentCompanyToUserAnswers(
+                  addAlternativeAddressToUserAnswers(baseUserAnswers, altContact),
+                  parentCompany
+                )
+              case (Some(altContact), None)                =>
+                addAlternativeAddressToUserAnswers(baseUserAnswers, altContact)
+              case (None, Some(parentCompany))             =>
+                addParentCompanyToUserAnswers(baseUserAnswers, parentCompany)
+              case _                                       => baseUserAnswers
+            }
+
+            when(mockSessionRepository.get(eqTo(userAnswersId)))
+              .thenReturn(Future.successful(Some(userAnswers)))
+
+            serviceUnderTest.buildRegistration.futureValue mustBe Some(registration)
+          }
+        }
+      }
+
+      "return None" - {
+
+        "when Registration cannot be instantiated from user answers" in {
+
+          when(mockSessionRepository.get(eqTo(userAnswersId)))
+            .thenReturn(Future.successful(Some(UserAnswers(userAnswersId))))
+
+          serviceUnderTest.buildRegistration.futureValue mustBe None
+        }
+
+        "when user answers is not set in mongo" in {
+
+          when(mockSessionRepository.get(eqTo(userAnswersId)))
+            .thenReturn(Future.successful(None))
+
+          serviceUnderTest.buildRegistration.futureValue mustBe None
         }
       }
     }
