@@ -43,8 +43,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   val findLostUtr: String          = configuration.get[String]("urls.findLostUtr")
   val vatRegisteringGroups: String = configuration.get[String]("urls.vatRegisteringGroups")
 
-  private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
-  val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/digital-service-tax-registration-frontend"
+  private val exitSurveyBaseUrl: String = configuration.get[String]("feedback-frontend.url")
+  val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/digital-service-tax-registration-frontend"
 
   val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("features.welsh-translation")
