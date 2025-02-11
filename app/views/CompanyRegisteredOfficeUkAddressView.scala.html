@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import viewmodels.InputWidth._
 @import components.UkAddress
 
 @this(
@@ -26,9 +25,9 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], mode: Mode, companyName :Option[String] =None)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, companyName: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("companyRegisteredOfficeUkAddress.title"))) {
+@layout(pageTitle = title(form, messages("companyRegisteredOfficeUkAddress.title", companyName))) {
 
     @formHelper(action = routes.CompanyRegisteredOfficeUkAddressController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
@@ -37,7 +36,7 @@
         }
         <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("companyRegisteredOfficeUkAddress.subHeading")</h2>
 
-        <h1 class="govuk-heading-l">@messages("companyRegisteredOfficeUkAddress.heading") @companyName?</h1>
+        <h1 class="govuk-heading-l">@messages("companyRegisteredOfficeUkAddress.heading", companyName)</h1>
 
         @ukAddress(form)
 

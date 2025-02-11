@@ -23,12 +23,12 @@ import services.DigitalServicesTaxService
 
 import javax.inject.Inject
 
-class RegistrationController @Inject()(
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        service: DigitalServicesTaxService
-                                      ) {
+class RegistrationController @Inject() (
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  service: DigitalServicesTaxService
+) {
 
   def registrationComplete: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     Ok("Success")

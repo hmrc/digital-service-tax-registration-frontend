@@ -71,6 +71,9 @@ trait NavigationUtils {
   def contactUkAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(ContactUkAddressPage).map(_ => routes.GlobalRevenuesController.onPageLoad(NormalMode))
 
+  def contactInternationalAddress(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(InternationalContactAddressPage).map(_ => routes.CheckIfGroupController.onPageLoad(NormalMode))
+
   def companyRegisteredOfficeUkAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CompanyRegisteredOfficeUkAddressPage).map { _ =>
       routes.CompanyContactAddressController.onPageLoad(NormalMode)
@@ -85,7 +88,7 @@ trait NavigationUtils {
   def checkIfGroup(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckIfGroupPage).map {
       case true  => routes.UltimateParentCompanyNameController.onPageLoad(NormalMode)
-      case false => ??? // todo page needs to be implemented contact-details
+      case false => routes.ContactPersonNameController.onPageLoad(NormalMode)
     }
 
   def checkIfGroupCheckMode(userAnswers: UserAnswers): Call =
@@ -109,7 +112,7 @@ trait NavigationUtils {
   def companyContactAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CompanyContactAddressPage).map {
       case true  => routes.CheckIfGroupController.onPageLoad(NormalMode)
-      case false => ??? // TODO page needs to  be implemented
+      case false => routes.CheckContactAddressController.onPageLoad(NormalMode)
     }
 
   def ultimateParentCompanyUkAddressPage(userAnswers: UserAnswers): Option[Call] =

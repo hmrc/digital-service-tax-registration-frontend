@@ -25,19 +25,27 @@ import queries.Settable
 
 class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks with ModelGenerators {
 
-  def completeUKUserAnswers(companyName: String, ukAddress: UkAddress): UserAnswers = {
+  def completeUKUserAnswers(companyName: String, ukAddress: UkAddress): UserAnswers =
     UserAnswers("id")
-      .set(CompanyNamePage, companyName).success.value
-      .set(CheckCompanyRegisteredOfficeAddressPage, true).success.value
-      .set(CompanyRegisteredOfficeUkAddressPage, ukAddress).success.value
-  }
+      .set(CompanyNamePage, companyName)
+      .success
+      .value
+      .set(CheckCompanyRegisteredOfficeAddressPage, true)
+      .success
+      .value
+      .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
+      .success
+      .value
 
-  def completeInternationalUserAnswers(companyName: String, internationalAddress: InternationalAddress): UserAnswers = {
+  def completeInternationalUserAnswers(companyName: String, internationalAddress: InternationalAddress): UserAnswers =
     UserAnswers("id")
-      .set(CompanyNamePage, companyName).success.value
-      .set(CheckCompanyRegisteredOfficeAddressPage, false).success.value
-      //TODO Add International Company Address here when it is implemented
-  }
+      .set(CompanyNamePage, companyName)
+      .success
+      .value
+      .set(CheckCompanyRegisteredOfficeAddressPage, false)
+      .success
+      .value
+  // TODO Add International Company Address here when it is implemented
 
   "CompanyRegWrapper" - {
 
@@ -46,10 +54,12 @@ class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks
       "must bundle a UK company from user answers and use safe ID flag" in {
 
         forAll(genCompany.suchThat(_.address.isInstanceOf[UkAddress]), Gen.oneOf(true, false)) { (company, useSafeId) =>
-
-          CompanyRegWrapper.getFromUserAnswers(
-            completeUKUserAnswers(company.name, company.address.asInstanceOf[UkAddress]), useSafeId
-          ).value mustBe CompanyRegWrapper(company, useSafeId = useSafeId)
+          CompanyRegWrapper
+            .getFromUserAnswers(
+              completeUKUserAnswers(company.name, company.address.asInstanceOf[UkAddress]),
+              useSafeId
+            )
+            .value mustBe CompanyRegWrapper(company, useSafeId = useSafeId)
         }
       }
 
@@ -66,7 +76,6 @@ class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks
           )
 
           specParams foreach { x =>
-
             s"${x._1} is missing from user answers" in {
               forAll(genCompanyName, arbitraryUkAddress.arbitrary) { (name, address) =>
                 val userAnswers = completeUKUserAnswers(name, address).remove(x._2).success.value
@@ -81,11 +90,13 @@ class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks
           val specParams = Seq[(String, Settable[_])](
             ("'company name'", CompanyNamePage),
             ("'is address in the UK'", CheckCompanyRegisteredOfficeAddressPage),
-            ("'International address'", CompanyRegisteredOfficeUkAddressPage) // TODO change to International address page when implemented
+            (
+              "'International address'",
+              CompanyRegisteredOfficeUkAddressPage
+            ) // TODO change to International address page when implemented
           )
 
           specParams foreach { x =>
-
             s"${x._1} is missing from user answers" in {
               forAll(genCompanyName, arbitraryInternationalAddress.arbitrary) { (name, address) =>
                 val userAnswers = completeInternationalUserAnswers(name, address).remove(x._2).success.value

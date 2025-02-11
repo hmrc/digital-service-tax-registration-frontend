@@ -20,11 +20,11 @@ import pages.{ContactPersonEmailAddressPage, ContactPersonNamePage, ContactPerso
 import play.api.libs.json.{Json, OFormat}
 
 final case class ContactDetails(
-                                 forename: String,
-                                 surname: String,
-                                 phoneNumber: String,
-                                 email: String
-                               )
+  forename: String,
+  surname: String,
+  phoneNumber: String,
+  email: String
+)
 
 object ContactDetails {
 

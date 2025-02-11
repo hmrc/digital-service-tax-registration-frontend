@@ -33,18 +33,23 @@ class ContactDetailsSpec extends SpecBase {
       )
 
       val contactPerson = ContactPersonName("John", "Smith")
-      val phoneNumber = "071234567890"
-      val email = "test@test.com"
+      val phoneNumber   = "071234567890"
+      val email         = "test@test.com"
 
       val completeUserAnswers = UserAnswers("id")
-        .set(ContactPersonNamePage, contactPerson).success.value
-        .set(ContactPersonPhoneNumberPage, phoneNumber).success.value
-        .set(ContactPersonEmailAddressPage, email).success.value
+        .set(ContactPersonNamePage, contactPerson)
+        .success
+        .value
+        .set(ContactPersonPhoneNumberPage, phoneNumber)
+        .success
+        .value
+        .set(ContactPersonEmailAddressPage, email)
+        .success
+        .value
 
       "must return None when" - {
 
         specParams foreach { x =>
-
           s"${x._1} is missing from User Answers" in {
             val userAnswers = completeUserAnswers.remove(x._2).success.value
             assert(ContactDetails.getFromUserAnswers(userAnswers).isEmpty)

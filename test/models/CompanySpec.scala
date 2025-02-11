@@ -24,30 +24,54 @@ import queries.Settable
 
 class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with ModelGenerators {
 
-  def completeUKUserAnswers(companyName: String, ukAddress: UkAddress, isParentCompany: Boolean = false): UserAnswers = {
+  def completeUKUserAnswers(
+    companyName: String,
+    ukAddress: UkAddress,
+    isParentCompany: Boolean = false
+  ): UserAnswers = {
 
-    val nameKey = if(isParentCompany) UltimateParentCompanyNamePage else CompanyNamePage
-    val isUkKey = if(isParentCompany) CheckUltimateGlobalParentCompanyInUkPage else CheckCompanyRegisteredOfficeAddressPage
-    val addressKey = if(isParentCompany) UltimateParentCompanyUkAddressPage else CompanyRegisteredOfficeUkAddressPage
-
-    UserAnswers("id")
-      .set(nameKey, companyName).success.value
-      .set(isUkKey, true).success.value
-      .set(addressKey, ukAddress).success.value
-  }
-
-  def completeInternationalUserAnswers(companyName: String, internationalAddress: InternationalAddress, isParentCompany: Boolean = false): UserAnswers = {
-
-    val nameKey = if(isParentCompany) UltimateParentCompanyNamePage else CompanyNamePage
-    val isUkKey = if(isParentCompany) CheckUltimateGlobalParentCompanyInUkPage else CheckCompanyRegisteredOfficeAddressPage
-    val addressKey = if(isParentCompany) UltimateParentCompanyInternationalAddressPage else UltimateParentCompanyInternationalAddressPage //TODO change else option to International address page when implemented
+    val nameKey    = if (isParentCompany) UltimateParentCompanyNamePage else CompanyNamePage
+    val isUkKey    =
+      if (isParentCompany) CheckUltimateGlobalParentCompanyInUkPage else CheckCompanyRegisteredOfficeAddressPage
+    val addressKey = if (isParentCompany) UltimateParentCompanyUkAddressPage else CompanyRegisteredOfficeUkAddressPage
 
     UserAnswers("id")
-      .set(nameKey, companyName).success.value
-      .set(isUkKey, false).success.value
-      .set(addressKey, internationalAddress).success.value
+      .set(nameKey, companyName)
+      .success
+      .value
+      .set(isUkKey, true)
+      .success
+      .value
+      .set(addressKey, ukAddress)
+      .success
+      .value
   }
 
+  def completeInternationalUserAnswers(
+    companyName: String,
+    internationalAddress: InternationalAddress,
+    isParentCompany: Boolean = false
+  ): UserAnswers = {
+
+    val nameKey    = if (isParentCompany) UltimateParentCompanyNamePage else CompanyNamePage
+    val isUkKey    =
+      if (isParentCompany) CheckUltimateGlobalParentCompanyInUkPage else CheckCompanyRegisteredOfficeAddressPage
+    val addressKey =
+      if (isParentCompany) UltimateParentCompanyInternationalAddressPage
+      else
+        UltimateParentCompanyInternationalAddressPage // TODO change else option to International address page when implemented
+
+    UserAnswers("id")
+      .set(nameKey, companyName)
+      .success
+      .value
+      .set(isUkKey, false)
+      .success
+      .value
+      .set(addressKey, internationalAddress)
+      .success
+      .value
+  }
 
   "Company" - {
 
@@ -75,7 +99,6 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
           )
 
           specParams foreach { x =>
-
             s"${x._1} is missing from user answers" in {
               forAll(genCompanyName, arbitraryUkAddress.arbitrary) { (name, address) =>
                 val userAnswers = completeUKUserAnswers(name, address).remove(x._2).success.value
@@ -90,11 +113,13 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
           val specParams = Seq[(String, Settable[_])](
             ("'company name'", CompanyNamePage),
             ("'is address in the UK'", CheckCompanyRegisteredOfficeAddressPage),
-            ("'International address'", CompanyRegisteredOfficeUkAddressPage) // TODO change to International address page when implemented
+            (
+              "'International address'",
+              CompanyRegisteredOfficeUkAddressPage
+            ) // TODO change to International address page when implemented
           )
 
           specParams foreach { x =>
-
             s"${x._1} is missing from user answers" in {
               forAll(genCompanyName, arbitraryInternationalAddress.arbitrary) { (name, address) =>
                 val userAnswers = completeInternationalUserAnswers(name, address).remove(x._2).success.value
@@ -112,13 +137,17 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
 
         "when a UK Company is set in user answers" in {
           forAll(genCompanyName, arbitraryUkAddress.arbitrary) { (name, address) =>
-            Company.getParentCompanyFromUserAnswers(completeUKUserAnswers(name, address, isParentCompany = true)).value mustBe Company(name, address)
+            Company
+              .getParentCompanyFromUserAnswers(completeUKUserAnswers(name, address, isParentCompany = true))
+              .value mustBe Company(name, address)
           }
         }
 
         "when an International Company is set in user answers" in {
           forAll(genCompanyName, arbitraryInternationalAddress.arbitrary) { (name, address) =>
-            Company.getParentCompanyFromUserAnswers(completeInternationalUserAnswers(name, address, isParentCompany = true)).value mustBe Company(name, address)
+            Company
+              .getParentCompanyFromUserAnswers(completeInternationalUserAnswers(name, address, isParentCompany = true))
+              .value mustBe Company(name, address)
           }
         }
       }
@@ -134,7 +163,6 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
           )
 
           specParams foreach { x =>
-
             s"${x._1} is missing from user answers" in {
               forAll(genCompanyName, arbitraryInternationalAddress.arbitrary) { (name, address) =>
                 val userAnswers = completeInternationalUserAnswers(name, address).remove(x._2).success.value
@@ -153,7 +181,6 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
           )
 
           specParams foreach { x =>
-
             s"${x._1} is missing from user answers" in {
               forAll(genCompanyName, arbitraryInternationalAddress.arbitrary) { (name, address) =>
                 val userAnswers = completeInternationalUserAnswers(name, address).remove(x._2).success.value

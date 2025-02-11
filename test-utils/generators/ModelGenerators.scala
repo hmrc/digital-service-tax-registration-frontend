@@ -81,7 +81,8 @@ trait ModelGenerators {
   val genCompany: Gen[Company] =
     for {
       name    <- genCompanyName
-      address <- Gen.oneOf(arbitraryUkAddress.arbitrary, arbitraryInternationalAddress.arbitrary)
+//      address <- Gen.oneOf(arbitraryUkAddress.arbitrary, arbitraryInternationalAddress.arbitrary) TODO use when International address is supported
+      address <- arbitraryUkAddress.arbitrary
     } yield Company(name, address)
 
   val genCompanyRegWrapper: Gen[CompanyRegWrapper] =
