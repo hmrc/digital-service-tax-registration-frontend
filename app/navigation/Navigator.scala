@@ -38,6 +38,7 @@ class Navigator @Inject() extends NavigationUtils {
     case CheckContactAddressPage                       => ua => checkContactAddress(ua)
     case CompanyContactAddressPage                     => ua => companyContactAddress(ua)
     case ContactUkAddressPage                          => ua => contactUkAddress(ua)
+    case InternationalContactAddressPage               => ua => contactInternationalAddress(ua)
     case CompanyRegisteredOfficeUkAddressPage          => ua => companyRegisteredOfficeUkAddress(ua)
     case CheckIfGroupPage                              => ua => checkIfGroup(ua)
     case UltimateParentCompanyNamePage                 => ua => ultimateParentCompanyNamePage(ua)

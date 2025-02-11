@@ -17,11 +17,14 @@
 package generators
 
 import forms.mappings.Constraints
+import models.DataValues.DST_EPOCH
 import models._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen.alphaChar
+import org.scalacheck.Gen.{alphaChar, alphaNumStr, alphaStr, numStr}
 import org.scalacheck.{Arbitrary, Gen}
 import wolfendale.scalacheck.regexp.RegexpGen
+
+import java.time.{Instant, LocalDate, ZoneOffset}
 
 trait ModelGenerators {
 
@@ -33,7 +36,7 @@ trait ModelGenerators {
       } yield ContactPersonName(firstName, lastName)
     }
 
-  val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex)
+  val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex).suchThat(_.nonEmpty)
 
   implicit lazy val arbitraryLocation: Arbitrary[Country] =
     Arbitrary {
@@ -44,13 +47,15 @@ trait ModelGenerators {
       } yield Country(name, code.mkString, type1)
     }
 
+  private val nonEmptyStringGen = alphaStr.suchThat(_.nonEmpty)
+
   implicit lazy val arbitraryUkAddress: Arbitrary[UkAddress] =
     Arbitrary {
       for {
-        line1    <- arbitrary[String]
-        line2    <- arbitrary[Option[String]]
-        line3    <- arbitrary[Option[String]]
-        line4    <- arbitrary[Option[String]]
+        line1    <- nonEmptyStringGen
+        line2    <- Gen.option(nonEmptyStringGen)
+        line3    <- Gen.option(nonEmptyStringGen)
+        line4    <- Gen.option(nonEmptyStringGen)
         postcode <- genPostcode
       } yield UkAddress(line1, line2, line3, line4, postcode)
     }
@@ -58,10 +63,10 @@ trait ModelGenerators {
   implicit lazy val arbitraryInternationalAddress: Arbitrary[InternationalAddress] =
     Arbitrary {
       for {
-        line1       <- Arbitrary.arbitrary[String]
-        line2       <- Arbitrary.arbitrary[Option[String]]
-        line3       <- Arbitrary.arbitrary[Option[String]]
-        line4       <- Arbitrary.arbitrary[Option[String]]
+        line1       <- nonEmptyStringGen
+        line2       <- Gen.option(nonEmptyStringGen)
+        line3       <- Gen.option(nonEmptyStringGen)
+        line4       <- Gen.option(nonEmptyStringGen)
         countryCode <- genCountryCode
       } yield InternationalAddress(line1, line2, line3, line4, countryCode)
     }
@@ -72,4 +77,67 @@ trait ModelGenerators {
     char1 <- alphaChar
     char2 <- alphaChar
   } yield s"$char1$char2"
+
+  val genCompany: Gen[Company] =
+    for {
+      name    <- genCompanyName
+//      address <- Gen.oneOf(arbitraryUkAddress.arbitrary, arbitraryInternationalAddress.arbitrary) TODO use when International address is supported
+      address <- arbitraryUkAddress.arbitrary
+    } yield Company(name, address)
+
+  val genCompanyRegWrapper: Gen[CompanyRegWrapper] =
+    for {
+      company   <- genCompany
+      utr       <- Gen.option(numStr.suchThat(_.nonEmpty))
+      safeId    <- Gen.option(alphaNumStr.suchThat(_.nonEmpty))
+      useSafeId <- Gen.oneOf(true, false)
+    } yield CompanyRegWrapper(
+      company,
+      utr,
+      safeId,
+      useSafeId
+    )
+
+  val genEmail: Gen[String] =
+    for {
+      username  <- Gen.alphaNumStr.suchThat(_.nonEmpty)
+      domain    <- nonEmptyStringGen
+      topDomain <- Gen.oneOf("com", "gov.uk", "co.uk", "net", "org", "io")
+    } yield s"$username@$domain.$topDomain"
+
+  val genContactDetails: Gen[ContactDetails] =
+    for {
+      name    <- arbitraryContactPersonName.arbitrary
+      phoneNo <- Gen.numStr.suchThat(_.nonEmpty)
+      email   <- genEmail
+    } yield ContactDetails(name.firstName, name.lastName, phoneNo, email)
+
+  val genRegistration: Gen[Registration] = {
+
+    val datesBetween: Gen[LocalDate] = {
+
+      def toMillis(date: LocalDate): Long = date.atStartOfDay.atZone(ZoneOffset.UTC).toInstant.toEpochMilli
+
+      Gen.choose(toMillis(DST_EPOCH), toMillis(LocalDate.now(ZoneOffset.UTC))).map { millis =>
+        Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).toLocalDate
+      }
+    }
+
+    for {
+      companyReg          <- genCompanyRegWrapper
+      alternativeContact  <- Gen.option(Gen.oneOf(arbitraryUkAddress.arbitrary, arbitraryInternationalAddress.arbitrary))
+      ultimateParent      <- Gen.option(genCompany)
+      contact             <- genContactDetails
+      dateLiable          <- datesBetween
+      accountingPeriodEnd <- Gen.choose(DST_EPOCH.plusDays(1), dateLiable.plusYears(1)).suchThat(_ => true)
+    } yield Registration(
+      companyReg,
+      alternativeContact,
+      ultimateParent,
+      contact,
+      dateLiable,
+      accountingPeriodEnd,
+      None
+    )
+  }
 }

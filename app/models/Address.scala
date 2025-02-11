@@ -17,7 +17,8 @@
 package models
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{Json, OWrites, Reads, __}
+import play.api.libs.json.JsonConfiguration.Aux
+import play.api.libs.json._
 
 sealed trait Address {
   def line1: String
@@ -52,6 +53,16 @@ object Address {
       case (Some(postcode), Some("GB")) => UkAddress(line1, line2, line3, line4, postcode)
       case _                            => throw new IllegalArgumentException("Could not instantiate Address from Json")
     }
+
+  // This is necessary to match the `_type` discriminator in the backend Registration reads
+  implicit val cfg: Aux[Json.MacroOptions] = JsonConfiguration(
+    typeNaming = JsonNaming {
+      case name if name.contains("InternationalAddress") =>
+        "uk.gov.hmrc.digitalservicestax.data.ForeignAddress"
+      case ukName                                        =>
+        s"uk.gov.hmrc.digitalservicestax.data.UkAddress"
+    }
+  )
 
   implicit val writes: OWrites[Address] = Json.writes[Address]
 }
@@ -98,6 +109,7 @@ final case class InternationalAddress(
 }
 
 object InternationalAddress {
+
   implicit val reads: Reads[InternationalAddress]    = Json.reads[InternationalAddress]
   implicit val writes: OWrites[InternationalAddress] = Json.writes[InternationalAddress]
 }

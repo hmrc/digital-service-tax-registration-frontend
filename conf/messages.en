@@ -183,8 +183,8 @@ ukAddress.error.line4.invalid = County must only include letters a to z, numbers
 ukAddress.error.postcode.required = Enter the postcode
 ukAddress.error.postcode.invalid = Enter a real postcode
 
-companyRegisteredOfficeUkAddress.title = companyRegisteredOfficeUkAddress
-companyRegisteredOfficeUkAddress.heading = Where is the registered office address of
+companyRegisteredOfficeUkAddress.title = Where is the registered office address of {0}?
+companyRegisteredOfficeUkAddress.heading = Where is the registered office address of {0}?
 companyRegisteredOfficeUkAddress.subHeading =Your company details
 companyRegisteredOfficeUkAddress.checkYourAnswersLabel = Registered Office address
 companyRegisteredOfficeUkAddress.buildingorstreet.change.hidden = buildingorstreet

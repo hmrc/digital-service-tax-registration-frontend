@@ -17,8 +17,8 @@
 package services
 
 import connectors.DigitalServicesTaxConnector
-import models.{Company, CompanyRegWrapper}
-import uk.gov.hmrc.http.HeaderCarrier
+import models.{Company, CompanyRegWrapper, Registration}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,6 +28,17 @@ class DigitalServicesTaxService @Inject() (backendConnector: DigitalServicesTaxC
   def getCompany(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Company]] =
     lookupCompany.map(_.map(_.company))
 
-  private def lookupCompany(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[CompanyRegWrapper]] =
+  def lookupCompany(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[CompanyRegWrapper]] =
     backendConnector.lookupCompany
+
+  def lookupCompany(utr: String, postcode: String)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[Option[CompanyRegWrapper]] =
+    backendConnector.lookupCompany(utr, postcode)
+
+  def submitRegistration(
+    registration: Registration
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
+    backendConnector.submitRegistration(registration)
 }

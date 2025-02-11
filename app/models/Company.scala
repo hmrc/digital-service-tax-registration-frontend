@@ -16,12 +16,45 @@
 
 package models
 
+import pages._
 import play.api.libs.json.{Json, OFormat}
 
 case class Company(
   name: String,
   address: Address
 )
-object Company {
+
+object Company { // TODO try to combine the below methods and have a flag to indicate parent company?
+
+  def getFromUserAnswers(ua: UserAnswers): Option[Company] = {
+
+    def addressOpt(isUk: Boolean): Option[Address] = if (isUk) {
+      ua.get(CompanyRegisteredOfficeUkAddressPage)
+    } else {
+      None // TODO implement International Address answer here
+    }
+
+    for {
+      name    <- ua.get(CompanyNamePage)
+      isUk    <- ua.get(CheckCompanyRegisteredOfficeAddressPage)
+      address <- addressOpt(isUk)
+    } yield Company(name, address)
+  }
+
+  def getParentCompanyFromUserAnswers(ua: UserAnswers): Option[Company] = {
+
+    def addressOpt(isUk: Boolean): Option[Address] = if (isUk) {
+      ua.get(UltimateParentCompanyUkAddressPage)
+    } else {
+      ua.get(UltimateParentCompanyInternationalAddressPage)
+    }
+
+    for {
+      name    <- ua.get(UltimateParentCompanyNamePage)
+      isUk    <- ua.get(CheckUltimateGlobalParentCompanyInUkPage)
+      address <- addressOpt(isUk)
+    } yield Company(name, address)
+  }
+
   implicit val format: OFormat[Company] = Json.format[Company]
 }

@@ -47,7 +47,7 @@
         </ul>
     }
 
-   @formHelper(controllers.routes.CheckYourAnswersController.onPageLoad()) {
+   @formHelper(controllers.routes.CheckYourAnswersController.onSubmit()) {
        @govukButton(
            ButtonViewModel(messages("checkYourAnswers.button"))
        )

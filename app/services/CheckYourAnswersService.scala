@@ -16,21 +16,26 @@
 
 package services
 
-import models.{Location, UserAnswers}
 import models.requests.DataRequest
+import models.{Location, Registration, UserAnswers}
 import pages.{CompanyNamePage, UltimateParentCompanyNamePage}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import queries.Gettable
 import repositories.SessionRepository
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
+import uk.gov.hmrc.http.HeaderCarrier
 import viewmodels.checkAnswers._
 import viewmodels.govuk.summarylist._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersService @Inject() (sessionRepository: SessionRepository, location: Location)(implicit
+class CheckYourAnswersService @Inject() (
+  digitalServicesTaxService: DigitalServicesTaxService,
+  sessionRepository: SessionRepository,
+  location: Location
+)(implicit
   ec: ExecutionContext
 ) {
 
@@ -54,6 +59,13 @@ class CheckYourAnswersService @Inject() (sessionRepository: SessionRepository, l
         ) collect { case (key, Some(value)) =>
           (key, value)
         }
+      }
+    }
+
+  def buildRegistration(implicit request: DataRequest[_], hc: HeaderCarrier): Future[Option[Registration]] =
+    sessionRepository.get(request.userId) flatMap { userAnswersOpt =>
+      userAnswersOpt.fold(Future.successful[Option[Registration]](None)) { ua =>
+        Registration.fromUserAnswers(ua, digitalServicesTaxService)
       }
     }
 

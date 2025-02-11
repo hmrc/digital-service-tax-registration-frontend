@@ -20,12 +20,12 @@ import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.CheckYourAnswersService
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import services.{CheckYourAnswersService, DigitalServicesTaxService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CheckYourAnswersView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
@@ -34,6 +34,7 @@ class CheckYourAnswersController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   checkYourAnswersService: CheckYourAnswersService,
+  service: DigitalServicesTaxService,
   view: CheckYourAnswersView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -48,22 +49,25 @@ class CheckYourAnswersController @Inject() (
     } yield (summaryLists, childCompanyName) match {
       case (Some(list), Some(childCompany)) =>
         Ok(view(list, childCompany, parentCompanyName))
-      case (None, Some(_))                  =>
-        logger.warn("Could not retrieve summary lists from User Answers")
-        Redirect(routes.JourneyRecoveryController.onPageLoad())
-      case (Some(_), None)                  =>
-        logger.warn("Could not retrieve child company name from User Answers")
+      case _                                =>
+        // $COVERAGE-OFF$
+        logger.warn("Failed to retrieve answers from cache, redirecting to journey recovery")
+        // $COVERAGE-ON$
         Redirect(routes.JourneyRecoveryController.onPageLoad())
     }
   }
 
-  def onSubmit() = (identify andThen getData andThen requireData) { implicit request =>
-    /*
-     * TODO:
-     * - Implement submit registration
-     * - Check existing frontend for model and connector setup
-     */
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    def redirect: Result = Redirect(routes.RegistrationController.registerAction)
 
-    ???
+    checkYourAnswersService.buildRegistration
+      .flatMap {
+        _.fold(Future.successful(redirect)) {
+          service.submitRegistration(_) map {
+            case s if s.status == OK => Redirect(routes.RegistrationController.registrationComplete)
+            case _                   => redirect
+          }
+        }
+      }
   }
 }

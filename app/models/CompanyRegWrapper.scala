@@ -26,5 +26,11 @@ final case class CompanyRegWrapper(
 )
 
 object CompanyRegWrapper {
+
+  def getFromUserAnswers(ua: UserAnswers, useSafeId: Boolean = false): Option[CompanyRegWrapper] =
+    for {
+      company <- Company.getFromUserAnswers(ua)
+    } yield CompanyRegWrapper(company, useSafeId = useSafeId)
+
   implicit val format: OFormat[CompanyRegWrapper] = Json.format[CompanyRegWrapper]
 }

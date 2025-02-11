@@ -18,17 +18,17 @@ package controllers
 
 import controllers.actions._
 import forms.CompanyRegisteredOfficeUkAddressFormProvider
-
-import javax.inject.Inject
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.{CompanyNamePage, CompanyRegisteredOfficeUkAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CompanyRegisteredOfficeUkAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CompanyRegisteredOfficeUkAddressController @Inject() (
@@ -48,13 +48,9 @@ class CompanyRegisteredOfficeUkAddressController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+    getViewOrRedirect { name =>
+      Ok(view(request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage).fold(form)(form.fill), mode, name))
     }
-
-    val companyName: Option[String] = request.userAnswers.get(CompanyNamePage)
-    Ok(view(preparedForm, mode, companyName))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -62,7 +58,7 @@ class CompanyRegisteredOfficeUkAddressController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+          formWithErrors => Future.successful(getViewOrRedirect(name => BadRequest(view(formWithErrors, mode, name)))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(CompanyRegisteredOfficeUkAddressPage, value))
@@ -70,4 +66,7 @@ class CompanyRegisteredOfficeUkAddressController @Inject() (
             } yield Redirect(navigator.nextPage(CompanyRegisteredOfficeUkAddressPage, mode, updatedAnswers))
         )
   }
+
+  private def getViewOrRedirect(r: String => Result)(implicit request: DataRequest[_]): Result =
+    request.userAnswers.get(CompanyNamePage).fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(r)
 }

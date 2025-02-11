@@ -27,7 +27,7 @@ class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
 
-  val ultimateParentCompanyUKAddress: UkAddress =
+  val ukAddress: UkAddress =
     UkAddress("123 test street", None, None, None, "TE5 5ST")
 
   val internationalAddress: InternationalAddress = InternationalAddress(
@@ -102,12 +102,46 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
       }
 
-      "must go from ConfirmCompanyDetailsPage with option `true` to CompanyContactAddressController" in {
+      "must go from ConfirmCompanyDetailsPage with option `true` with a Company Name and UK Office to ConfirmCompanyDetailsController" in {
         navigator.nextPage(
           ConfirmCompanyDetailsPage,
           NormalMode,
           UserAnswers("id")
             .set(ConfirmCompanyDetailsPage, true)
+            .success
+            .value
+            .set(CompanyNamePage, companyName)
+            .success
+            .value
+            .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
+            .success
+            .value
+        ) mustBe routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
+      }
+
+      "must go from ConfirmCompanyDetailsPage with option `true` with no Company Name to CompanyContactAddressController" in {
+        navigator.nextPage(
+          ConfirmCompanyDetailsPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(ConfirmCompanyDetailsPage, true)
+            .success
+            .value
+            .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
+            .success
+            .value
+        ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      }
+
+      "must go from ConfirmCompanyDetailsPage with option `true` with no UK office to CompanyContactAddressController" in {
+        navigator.nextPage(
+          ConfirmCompanyDetailsPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(ConfirmCompanyDetailsPage, true)
+            .success
+            .value
+            .set(CompanyNamePage, companyName)
             .success
             .value
         ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
@@ -207,10 +241,21 @@ class NavigatorSpec extends SpecBase {
           ContactUkAddressPage,
           NormalMode,
           UserAnswers("id")
-            .set(ContactUkAddressPage, UkAddress("123 Test Street", None, None, None, "TE5 5ST"))
+            .set(ContactUkAddressPage, ukAddress)
             .success
             .value
         ) mustBe routes.GlobalRevenuesController.onPageLoad(NormalMode)
+      }
+
+      "must go from ContactInternationalAddress Page to CheckIfGroup page" in {
+        navigator.nextPage(
+          InternationalContactAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(InternationalContactAddressPage, internationalAddress)
+            .success
+            .value
+        ) mustBe routes.CheckIfGroupController.onPageLoad(NormalMode)
       }
 
       "must go from a CheckContactAddressPage to contact-uk-address page" in {
@@ -248,7 +293,7 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CheckIfGroupController.onPageLoad(NormalMode)
       }
 
-      "must go from CheckIfGroupPage to ultimate-parent-company-name page" in {
+      "must go from CheckIfGroupPage to ultimate-parent-company-name page if answered `true`" in {
         navigator.nextPage(
           CheckIfGroupPage,
           NormalMode,
@@ -257,6 +302,17 @@ class NavigatorSpec extends SpecBase {
             .success
             .value
         ) mustBe routes.UltimateParentCompanyNameController.onPageLoad(NormalMode)
+      }
+
+      "must go from CheckIfGroupPage to ContactPersonName page if answer is false" in {
+        navigator.nextPage(
+          CheckIfGroupPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CheckIfGroupPage, false)
+            .success
+            .value
+        ) mustBe routes.ContactPersonNameController.onPageLoad(NormalMode)
       }
 
       "must go from CompanyRegisteredOfficeAddressPage to CompanyContactAddressPage" in {
@@ -289,7 +345,16 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CheckIfGroupController.onPageLoad(NormalMode)
       }
 
-      "must go from a CompanyContactAddressPage with option `false` to TODO page" in pending
+      "must go from a CompanyContactAddressPage with option `false` to CheckContactAddress page" in {
+        navigator.nextPage(
+          CompanyContactAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CompanyContactAddressPage, false)
+            .success
+            .value
+        ) mustBe routes.CheckContactAddressController.onPageLoad(NormalMode)
+      }
 
       "must go from CheckIfGroupPage to a TODO contact-details page" in pending
 
@@ -333,7 +398,7 @@ class NavigatorSpec extends SpecBase {
           UserAnswers("id")
             .set(
               UltimateParentCompanyUkAddressPage,
-              ultimateParentCompanyUKAddress
+              ukAddress
             )
             .success
             .value
@@ -495,7 +560,7 @@ class NavigatorSpec extends SpecBase {
                 .set(CheckUltimateGlobalParentCompanyInUkPage, true)
                 .success
                 .value
-                .set(UltimateParentCompanyUkAddressPage, ultimateParentCompanyUKAddress)
+                .set(UltimateParentCompanyUkAddressPage, ukAddress)
                 .success
                 .value
             ) mustBe routes.CheckYourAnswersController.onPageLoad()
