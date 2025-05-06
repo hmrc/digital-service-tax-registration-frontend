@@ -18,8 +18,6 @@ package pages
 
 import play.api.libs.json.JsPath
 
-import java.time.LocalDate
-
 case object RegistrationCompletePage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString

@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.{JourneyRecoveryStartAgainView, RegistrationCompleteView, RegistrationSentView, UkRevenueNotEligibleView}
+import views.html.{RegistrationCompleteView, RegistrationSentView}
 
 class RegistrationControllerSpec extends SpecBase {
 
@@ -69,8 +69,6 @@ class RegistrationControllerSpec extends SpecBase {
         val request = FakeRequest(GET, routes.RegistrationController.registerAction.url)
 
         val result = route(application, request).value
-
-        val view = application.injector.instanceOf[JourneyRecoveryStartAgainView]
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result) mustBe Some(routes.JourneyRecoveryController.onPageLoad().url)
