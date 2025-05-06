@@ -18,6 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import pages.{CompanyNamePage, ContactPersonEmailAddressPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -43,13 +44,18 @@ class CheckYourAnswersController @Inject() (
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     for {
-      summaryLists      <- checkYourAnswersService.getSummaryForView
-      childCompanyName  <- checkYourAnswersService.getChildCompanyName
-      parentCompanyName <- checkYourAnswersService.getParentCompanyName
-    } yield (summaryLists, childCompanyName) match {
-      case (Some(list), Some(childCompany)) =>
-        Ok(view(list, childCompany, parentCompanyName))
-      case _                                =>
+      summaryLists            <- checkYourAnswersService.getSummaryForView
+      childCompanyName        <- checkYourAnswersService.getChildCompanyName
+      parentCompanyName       <- checkYourAnswersService.getParentCompanyName
+      isRegistrationCompleted <- checkYourAnswersService.isRegistrationCompleted
+    } yield (summaryLists, childCompanyName, isRegistrationCompleted) match {
+      case (Some(list), Some(childCompany), Some(isRegistrationCompleted)) =>
+        if (!isRegistrationCompleted) {
+          Ok(view(list, childCompany, parentCompanyName))
+        } else {
+          Redirect(routes.RegistrationController.registrationComplete)
+        }
+      case _                                                               =>
         // $COVERAGE-OFF$
         logger.warn("Failed to retrieve answers from cache, redirecting to journey recovery")
         // $COVERAGE-ON$
@@ -64,7 +70,16 @@ class CheckYourAnswersController @Inject() (
       .flatMap {
         _.fold(Future.successful(redirect)) {
           service.submitRegistration(_) map {
-            case s if s.status == OK => Redirect(routes.RegistrationController.registrationComplete)
+            case s if s.status == OK =>
+              (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
+                case (Some(companyName), Some(contactPersonEmailAddressPage)) =>
+                  Redirect(routes.RegistrationController.registrationSent(companyName, contactPersonEmailAddressPage))
+                case _                                                        =>
+                  // $COVERAGE-OFF$
+                  logger.warn("Failed to retrieve answers from cache, redirecting to application complete anyway")
+                  // $COVERAGE-ON$
+                  Redirect(routes.RegistrationController.registrationComplete)
+              }
             case _                   => redirect
           }
         }

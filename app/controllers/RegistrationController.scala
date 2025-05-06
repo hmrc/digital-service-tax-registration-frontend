@@ -17,24 +17,44 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import play.api.mvc.{Action, AnyContent}
-import play.api.mvc.Results.{Ok, Redirect}
-import services.DigitalServicesTaxService
+import pages.RegistrationCompletePage
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.RegistrationCompleteView
+import views.html.RegistrationSentView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class RegistrationController @Inject() (
+  override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  service: DigitalServicesTaxService
-) {
+  val controllerComponents: MessagesControllerComponents,
+  registrationCompleteView: RegistrationCompleteView,
+  registrationSentView: RegistrationSentView,
+  sessionRepository: SessionRepository
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
-  def registrationComplete: Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Ok("Success")
+  def registerAction(): Action[AnyContent] = (identify andThen getData andThen requireData) {
+    Redirect(routes.JourneyRecoveryController.onPageLoad())
   }
 
-  def registerAction(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    Redirect(routes.JourneyRecoveryController.onPageLoad())
+  def registrationSent(companyName: String, contactPersonalEmailAddress: String): Action[AnyContent] =
+    (identify andThen getData andThen requireData).async { implicit request =>
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCompletePage, true))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Ok(registrationSentView(companyName, contactPersonalEmailAddress))
+    }
+
+  def registrationComplete(): Action[AnyContent] = (identify andThen getData) { implicit request =>
+    sessionRepository.clear(request.userId)
+    Ok(registrationCompleteView())
   }
 }

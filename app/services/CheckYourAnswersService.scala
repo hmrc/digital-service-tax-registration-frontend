@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package services
 
 import models.requests.DataRequest
 import models.{Location, Registration, UserAnswers}
-import pages.{CompanyNamePage, UltimateParentCompanyNamePage}
+import pages.{CompanyNamePage, RegistrationCompletePage, UltimateParentCompanyNamePage}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import queries.Gettable
@@ -44,6 +44,9 @@ class CheckYourAnswersService @Inject() (
 
   def getParentCompanyName(implicit request: DataRequest[_]): Future[Option[String]] =
     retrieveFromUserAnswers(UltimateParentCompanyNamePage)
+
+  def isRegistrationCompleted(implicit request: DataRequest[_]): Future[Option[Boolean]] =
+    sessionRepository.get(request.userId).map(_.flatMap(_.get(RegistrationCompletePage).orElse(Option(false))))
 
   def getSummaryForView(implicit
     request: DataRequest[_],

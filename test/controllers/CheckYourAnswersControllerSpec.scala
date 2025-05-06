@@ -87,7 +87,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
         "contactPersonPhoneNumber"                  -> JsString("0044 808 157 0192"),
         "contactPersonEmailAddress"                 -> JsString("john.smith@gmail.com"),
         "liabilityStartDate"                        -> JsString("2022-12-12"),
-        "accountingPeriodEndDate"                   -> JsString("2023-12-11")
+        "accountingPeriodEndDate"                   -> JsString("2023-12-11"),
+        "registrationComplete"                      -> JsBoolean(false)
       )
     )
 
@@ -171,6 +172,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
         when(mockCyaService.getParentCompanyName(any()))
           .thenReturn(Future.successful(Some(parentCompanyName)))
 
+        when(mockCyaService.isRegistrationCompleted(any()))
+          .thenReturn(Future.successful(Some(false)))
+
         val result = controller.onPageLoad()(request)
 
         status(result) mustEqual OK
@@ -192,6 +196,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
           when(mockCyaService.getParentCompanyName(any()))
             .thenReturn(Future.successful(Some(parentCompanyName)))
 
+          when(mockCyaService.isRegistrationCompleted(any()))
+            .thenReturn(Future.successful(Some(false)))
+
           val result = controller.onPageLoad()(request)
 
           status(result) mustEqual SEE_OTHER
@@ -210,6 +217,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
           when(mockCyaService.getParentCompanyName(any()))
             .thenReturn(Future.successful(Some(parentCompanyName)))
+
+          when(mockCyaService.isRegistrationCompleted(any()))
+            .thenReturn(Future.successful(Some(false)))
 
           val result = controller.onPageLoad()(request)
 
@@ -230,6 +240,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
           when(mockCyaService.getParentCompanyName(any()))
             .thenReturn(Future.successful(Some(parentCompanyName)))
 
+          when(mockCyaService.isRegistrationCompleted(any()))
+            .thenReturn(Future.successful(Some(false)))
+
           val result = controller.onPageLoad()(request)
 
           status(result) mustEqual SEE_OTHER
@@ -247,6 +260,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
           implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
           val mockRegistration = mock[Registration]
+          val fakeCompanyName  = "Fake CompanyName"
+          val fakeContactEmail = "fake.email.email.com"
 
           when(mockCyaService.buildRegistration(any(), any()))
             .thenReturn(Future.successful(Some(mockRegistration)))
@@ -257,7 +272,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
           val result = controller.onSubmit()(request)
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustBe routes.RegistrationController.registrationComplete.url
+          redirectLocation(result).value must startWith(
+            routes.RegistrationController.registrationSent(fakeCompanyName, fakeContactEmail).toString.split("\\?")(0)
+          )
         }
 
         "to register action method" - {

@@ -84,6 +84,34 @@ class CheckYourAnswersServiceSpec
 
     when(mockLocation.name(eqTo("US"))).thenReturn("United States")
 
+    "when .isRegistrationCompleted is called" - {
+
+      "must return the true if populated" in {
+
+        mockUserAnswers(RegistrationCompletePage, true)
+
+        serviceUnderTest.isRegistrationCompleted.futureValue mustBe Some(true)
+      }
+
+      "must return false" - {
+        "when it is not set in user answers" in {
+
+          when(mockSessionRepository.get(eqTo(userAnswersId)))
+            .thenReturn(Future.successful(Some(emptyUserAnswers)))
+
+          serviceUnderTest.isRegistrationCompleted.futureValue mustBe Some(false)
+        }
+
+        "when user answers are not present" in {
+
+          when(mockSessionRepository.get(eqTo(userAnswersId)))
+            .thenReturn(Future.successful(None))
+
+          serviceUnderTest.isRegistrationCompleted.futureValue mustBe None
+        }
+      }
+    }
+
     "when .getChildCompanyName is called" - {
 
       "must return the name if populated" in {

@@ -150,8 +150,9 @@ POST       /check-your-answers                                  controllers.Chec
 GET        /check-your-answers                                  controllers.CheckYourAnswersController.onPageLoad()
 POST       /check-your-answers                                  controllers.CheckYourAnswersController.onSubmit()
 
-GET        /registration-sent                                   controllers.RegistrationController.registrationComplete
+GET        /registration-sent                                   controllers.RegistrationController.registrationSent(companyName: String, contactPersonalEmailAddress: String)
 GET        /registration-action                                 controllers.RegistrationController.registerAction
+GET        /registration-complete                               controllers.RegistrationController.registrationComplete
 
 GET        /incorrect-account-cred-role                         controllers.auth.IncorrectAccountCredRoleController.onPageLoad()
 GET        /incorrect-account-affinity                          controllers.auth.IncorrectAccountAffinityController.onPageLoad()
