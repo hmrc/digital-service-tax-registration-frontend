@@ -27,6 +27,12 @@ error.title.prefix = Error:
 error.prefix = Error
 error.summary.title = There is a problem
 
+#Common
+common.feedback.title = Before you go
+common.feedback.p1 = Your feedback helps us make our service better.
+common.feedback.link = Take a short survey
+common.feedback.p2 = to share your feedback on this service.
+
 checkYourAnswers.title = Check your answers before sending your application
 checkYourAnswers.heading = Check your answers before sending your application
 checkYourAnswers.summary.subheading.responsibleMember= Responsible member details
@@ -340,3 +346,21 @@ incorrect-account-credRole.errorLine3 = If your organisation does not have an ad
 incorrect-account-credRole.errorLine4 = We aim to respond within 15 working days.
 incorrect-account-credRole.link = Find out how to add a team member to your business tax account from Gov.uk (opens in a new tab)
 incorrect-account-credRole.email = ccgdstmailbox@hmrc.gov.uk
+
+registration-complete.title = Application Complete
+registration-complete.heading = Application Complete
+registration-complete.p1 = Your session has been cleared because you completed your application.
+registration-complete.button = Start Again
+
+registration-sent.heading=Registration sent
+registration-sent.detail=We received your registration for {0} for the Digital Services Tax
+registration-sent.email= We have sent a confirmation email to {0}.
+registration-sent.what-happens-next.title=What happens next
+registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to {0} in the next 24 hours.
+registration-sent.help-using-this-service.title=Help using this service
+registration-sent.print-save=Print or save this page
+registration-sent.help-using-this-service.p1=For help with payments and returns, <a href="{0}" class="govuk-link">check the Digital Services Tax guidance</a>.
+registration-sent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
+registration-sent.help-using-this-service.list.1=do not receive your registration number
+registration-sent.help-using-this-service.list.2=need to change your registered details
+registration-sent.ccm-email=If you do not know who your CCM is, or do not have one, email: {0}.
