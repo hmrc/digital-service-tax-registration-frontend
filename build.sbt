@@ -10,7 +10,7 @@ ThisBuild / scalaVersion := "2.13.16"
 
 lazy val microservice = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
-  .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+  .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(inConfig(Test)(testSettings): _*)
   .settings(ThisBuild / useSuperShell := false)
   .settings(
@@ -39,7 +39,6 @@ lazy val microservice = (project in file("."))
     ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq(
       "-feature",
-      "-rootdir",
       baseDirectory.value.getCanonicalPath,
       "-Wconf:cat=deprecation:ws,cat=feature:ws,cat=optimizer:ws,src=target/.*:s"
     ),
@@ -49,9 +48,11 @@ lazy val microservice = (project in file("."))
     // concatenate js
     Concat.groups := Seq(
       "javascripts/application.js" ->
-        group(Seq(
-          "javascripts/app.js"
-        ))
+        group(
+          Seq(
+            "javascripts/app.js"
+          )
+        )
     ),
     pipelineStages := Seq(digest),
     Assets / pipelineStages := Seq(concat)
