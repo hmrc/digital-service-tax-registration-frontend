@@ -69,7 +69,7 @@ trait NavigationUtils {
     }
 
   def contactUkAddress(userAnswers: UserAnswers): Option[Call] =
-    userAnswers.get(ContactUkAddressPage).map(_ => routes.GlobalRevenuesController.onPageLoad(NormalMode))
+    userAnswers.get(ContactUkAddressPage).map(_ => routes.CheckIfGroupController.onPageLoad(NormalMode))
 
   def contactInternationalAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(InternationalContactAddressPage).map(_ => routes.CheckIfGroupController.onPageLoad(NormalMode))

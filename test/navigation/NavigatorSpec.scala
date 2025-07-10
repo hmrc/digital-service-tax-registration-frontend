@@ -244,7 +244,7 @@ class NavigatorSpec extends SpecBase {
             .set(ContactUkAddressPage, ukAddress)
             .success
             .value
-        ) mustBe routes.GlobalRevenuesController.onPageLoad(NormalMode)
+        ) mustBe routes.CheckIfGroupController.onPageLoad(NormalMode)
       }
 
       "must go from ContactInternationalAddress Page to CheckIfGroup page" in {
