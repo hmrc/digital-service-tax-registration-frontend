@@ -81,7 +81,8 @@
         serviceUrl  = Some(routes.IndexController.onPageLoad().url),
         signOutUrl  = if(showSignOut) Some(controllers.auth.routes.AuthController.signOut().url) else None,
         phaseBanner = Some(alphaBanner(appConfig.feedbackUrl)),
-        isWelshTranslationAvailable = appConfig.languageTranslationEnabled
+        isWelshTranslationAvailable = appConfig.languageTranslationEnabled,
+        displayHmrcBanner = true,
     )),
     beforeContentBlock = Some(beforeContent),
     footerBlock        = Some(hmrcStandardFooter()),
