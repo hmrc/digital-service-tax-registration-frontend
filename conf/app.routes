@@ -88,6 +88,12 @@ POST       /company-registered-office-uk-address                controllers.Comp
 GET        /edit/company-registered-office-uk-address           controllers.CompanyRegisteredOfficeUkAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /edit/company-registered-office-uk-address           controllers.CompanyRegisteredOfficeUkAddressController.onSubmit(mode: Mode = CheckMode)
 
+GET        /company-registered-office-international-address                controllers.CompanyRegisteredOfficeInternationalAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /company-registered-office-international-address                controllers.CompanyRegisteredOfficeInternationalAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /edit/company-registered-office-international-address           controllers.CompanyRegisteredOfficeInternationalAddressController.onPageLoad(mode: Mode = CheckMode)
+POST       /edit/company-registered-office-international-address           controllers.CompanyRegisteredOfficeInternationalAddressController.onSubmit(mode: Mode = CheckMode)
+
+
 GET        /check-if-group                                      controllers.CheckIfGroupController.onPageLoad(mode: Mode = NormalMode)
 POST       /check-if-group                                      controllers.CheckIfGroupController.onSubmit(mode: Mode = NormalMode)
 GET        /edit/check-if-group                                 controllers.CheckIfGroupController.onPageLoad(mode: Mode = CheckMode)

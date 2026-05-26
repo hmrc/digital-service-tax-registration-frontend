@@ -24,14 +24,14 @@ case class Company(
   address: Address
 )
 
-object Company { // TODO try to combine the below methods and have a flag to indicate parent company?
+object Company {
 
   def getFromUserAnswers(ua: UserAnswers): Option[Company] = {
 
     def addressOpt(isUk: Boolean): Option[Address] = if (isUk) {
       ua.get(CompanyRegisteredOfficeUkAddressPage)
     } else {
-      None // TODO implement International Address answer here
+      ua.get(CompanyRegisteredOfficeInternationalAddressPage)
     }
 
     for {

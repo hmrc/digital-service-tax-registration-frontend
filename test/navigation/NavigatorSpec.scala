@@ -18,8 +18,8 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import pages._
 import models._
+import pages._
 
 import java.time.LocalDate
 
@@ -224,17 +224,34 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
       }
 
-      "must got from CompanyNamePage to CompanyRegisteredOfficeUkAddress Page" in {
+      "must go from CompanyNamePage to CompanyRegisteredOfficeUkAddress Page if Uk address is selected" in {
         navigator.nextPage(
           CompanyNamePage,
           NormalMode,
           UserAnswers("id")
             .set(CompanyNamePage, companyName)
+            .get
+            .set(CheckCompanyRegisteredOfficeAddressPage, true)
             .success
             .value
         ) mustBe routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode)
 
       }
+
+      "must go from CompanyNamePage to CompanyRegisteredOfficeInternationalAddressController Page " +
+        "if International Address is selected" in {
+          navigator.nextPage(
+            CompanyNamePage,
+            NormalMode,
+            UserAnswers("id")
+              .set(CompanyNamePage, companyName)
+              .get
+              .set(CheckCompanyRegisteredOfficeAddressPage, false)
+              .success
+              .value
+          ) mustBe routes.CompanyRegisteredOfficeInternationalAddressController.onPageLoad(NormalMode)
+
+        }
 
       "must go from ContactUkAddress Page to GlobalRevenues page" in {
         navigator.nextPage(
@@ -280,7 +297,19 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.InternationalContactAddressController.onPageLoad(NormalMode)
       }
 
-      "must go from a CompanyContactAddressPage to a TODO-company-contact-address page" in pending
+      "must go from CompanyRegisteredOfficeInternationalAddressPage to CompanyContactAddressPage" in {
+        navigator.nextPage(
+          CompanyRegisteredOfficeInternationalAddressPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(
+              CompanyRegisteredOfficeInternationalAddressPage,
+              InternationalAddress("Line 1", Some("line 2"), Some("line 3"), Some("line 4"), "AD")
+            )
+            .success
+            .value
+        ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      }
 
       "must go from CompanyContactAddress Page to CheckIfGroup page" in {
         navigator.nextPage(
@@ -328,8 +357,6 @@ class NavigatorSpec extends SpecBase {
             .value
         ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
       }
-
-      "must go from a CheckContactAddressPage to a TODO-contact-international-address page" in pending
 
       "must go from a CompanyContactAddress Page with option `true` to CheckIfGroup page" in {
         navigator.nextPage(

@@ -141,7 +141,7 @@ corporationTaxEnterUtr.title = Company's Corporation Tax Unique Taxpayer Referen
 corporationTaxEnterUtr.heading = Company’s Corporation Tax Unique Taxpayer Reference (UTR)
 corporationTaxEnterUtr.heading.hint= Your company details
 corporationTaxEnterUtr.subheading.hint = \
-    <br><h3 class="govuk-heading-m">What is your company’s Corporation Tax UTR?</h3>\
+    <br><h2 class="govuk-heading-m">What is your company’s Corporation Tax UTR?</h2>\
     <p>Your UTR can be 10 or 13 digits long.<p>
 corporationTaxEnterUtr.checkYourAnswersLabel = corporationTaxEnterUtr
 corporationTaxEnterUtr.error.required = Enter the company’s Corporation Tax Unique Taxpayer Reference
@@ -195,6 +195,13 @@ companyRegisteredOfficeUkAddress.subHeading =Your company details
 companyRegisteredOfficeUkAddress.checkYourAnswersLabel = Registered Office address
 companyRegisteredOfficeUkAddress.buildingorstreet.change.hidden = buildingorstreet
 companyRegisteredOfficeUkAddress.buildingorstreet2.change.hidden = buildingorstreet2
+
+companyRegisteredOfficeInternationalAddress.title = Where is the registered office address of {0}?
+companyRegisteredOfficeInternationalAddress.heading = Where is the registered office address of {0}?
+companyRegisteredOfficeInternationalAddress.subHeading =Your company details
+companyRegisteredOfficeInternationalAddress.checkYourAnswersLabel = Registered Office address
+companyRegisteredOfficeInternationalAddress.buildingorstreet.change.hidden = buildingorstreet
+companyRegisteredOfficeInternationalAddress.buildingorstreet2.change.hidden = buildingorstreet2
 
 checkIfGroup.checkYourAnswersLabel = Is the company you are registering part of a group?
 checkIfGroup.change.hidden = CheckIfGroup

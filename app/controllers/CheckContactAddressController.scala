@@ -21,7 +21,8 @@ import forms.CheckContactAddressFormProvider
 import models.requests.DataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{CheckContactAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, InternationalContactAddressPage}
+import pages.{CheckContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, InternationalContactAddressPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,7 +47,7 @@ class CheckContactAddressController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(CheckContactAddressPage) match {
@@ -76,10 +77,10 @@ class CheckContactAddressController @Inject() (
     if (answer) {
       (
         request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage),
-        request.userAnswers.get(InternationalContactAddressPage)
-      ) match { // TODO get International address here when implemented
+        request.userAnswers.get(CompanyRegisteredOfficeInternationalAddressPage)
+      ) match {
         case (Some(addr), _) => request.userAnswers.set(ContactUkAddressPage, addr)
-        case (_, Some(addr)) => Try(request.userAnswers) // TODO set International address here when implemented
+        case (_, Some(addr)) => request.userAnswers.set(CompanyRegisteredOfficeInternationalAddressPage, addr)
         case (_, _)          => Try(request.userAnswers)
       }
     } else {

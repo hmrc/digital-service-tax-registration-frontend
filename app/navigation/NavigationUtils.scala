@@ -64,8 +64,9 @@ trait NavigationUtils {
     userAnswers.get(CorporationTaxEnterUtrPage).map(_ => routes.CompanyNameController.onPageLoad(NormalMode))
 
   def companyNamePage(userAnswers: UserAnswers): Option[Call] =
-    userAnswers.get(CompanyNamePage).map { _ =>
-      routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode)
+    userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
+      case true  => routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(NormalMode)
+      case false => routes.CompanyRegisteredOfficeInternationalAddressController.onPageLoad(NormalMode)
     }
 
   def contactUkAddress(userAnswers: UserAnswers): Option[Call] =
@@ -76,6 +77,11 @@ trait NavigationUtils {
 
   def companyRegisteredOfficeUkAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CompanyRegisteredOfficeUkAddressPage).map { _ =>
+      routes.CompanyContactAddressController.onPageLoad(NormalMode)
+    }
+
+  def companyRegisteredOfficeInternationalAddress(userAnswers: UserAnswers): Option[Call] =
+    userAnswers.get(CompanyRegisteredOfficeInternationalAddressPage).map { _ =>
       routes.CompanyContactAddressController.onPageLoad(NormalMode)
     }
 

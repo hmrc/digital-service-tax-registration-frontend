@@ -36,7 +36,7 @@ trait ModelGenerators {
       } yield ContactPersonName(firstName, lastName)
     }
 
-  val genCompanyName = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex).suchThat(_.nonEmpty)
+  val genCompanyName: Gen[String] = RegexpGen.from(Constraints.CompanyName.companyNameRegex.regex).suchThat(_.nonEmpty)
 
   implicit lazy val arbitraryLocation: Arbitrary[Country] =
     Arbitrary {
@@ -81,8 +81,7 @@ trait ModelGenerators {
   val genCompany: Gen[Company] =
     for {
       name    <- genCompanyName
-//      address <- Gen.oneOf(arbitraryUkAddress.arbitrary, arbitraryInternationalAddress.arbitrary) TODO use when International address is supported
-      address <- arbitraryUkAddress.arbitrary
+      address <- Gen.oneOf(arbitraryUkAddress.arbitrary, arbitraryInternationalAddress.arbitrary)
     } yield Company(name, address)
 
   val genCompanyRegWrapper: Gen[CompanyRegWrapper] =
