@@ -20,7 +20,7 @@ import base.SpecBase
 import generators.ModelGenerators
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyNamePage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage}
 import queries.Settable
 
 class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks with ModelGenerators {
@@ -45,7 +45,9 @@ class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks
       .set(CheckCompanyRegisteredOfficeAddressPage, false)
       .success
       .value
-  // TODO Add International Company Address here when it is implemented
+      .set(CompanyRegisteredOfficeInternationalAddressPage, internationalAddress)
+      .success
+      .value
 
   "CompanyRegWrapper" - {
 
@@ -92,8 +94,8 @@ class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks
             ("'is address in the UK'", CheckCompanyRegisteredOfficeAddressPage),
             (
               "'International address'",
-              CompanyRegisteredOfficeUkAddressPage
-            ) // TODO change to International address page when implemented
+              CompanyRegisteredOfficeInternationalAddressPage
+            )
           )
 
           specParams foreach { x =>

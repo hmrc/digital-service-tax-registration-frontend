@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CheckContactAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, InternationalContactAddressPage}
+import pages.{CheckContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, InternationalContactAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -95,9 +95,8 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
           .thenReturn(Some(ukAddress))
 
         when(
-          mockUserAnswers.get(eqTo(InternationalContactAddressPage))(any())
-        ) // TODO change to correct page when it is implemented
-          .thenReturn(None)
+          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(any())
+        ).thenReturn(None)
 
         when(mockUserAnswers.set(any(), any())(any()))
           .thenReturn(Try(mockUserAnswers))

@@ -21,7 +21,7 @@ import forms.CompanyContactAddressFormProvider
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{CompanyContactAddressPage, CompanyRegisteredOfficeUkAddressPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -31,6 +31,7 @@ import views.html.CompanyContactAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import models.Location
 
 class CompanyContactAddressController @Inject() (
   override val messagesApi: MessagesApi,
@@ -41,7 +42,8 @@ class CompanyContactAddressController @Inject() (
   requireData: DataRequiredAction,
   formProvider: CompanyContactAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CompanyContactAddressView
+  view: CompanyContactAddressView,
+  location: Location
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -57,9 +59,18 @@ class CompanyContactAddressController @Inject() (
   }
 
   private def renderPage(mode: Mode, form: Form[Boolean], status: Status)(implicit request: DataRequest[AnyContent]) =
-    request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage) match {
-      case Some(address) => status(view(form, address, mode))
-      case _             => Redirect(routes.JourneyRecoveryController.onPageLoad())
+    request.userAnswers.get(CheckCompanyRegisteredOfficeAddressPage) match {
+      case Some(true)  =>
+        request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage) match {
+          case Some(address) => status(view(form, address.asAddressLines, mode))
+          case _             => Redirect(routes.JourneyRecoveryController.onPageLoad())
+        }
+      case Some(false) =>
+        request.userAnswers.get(CompanyRegisteredOfficeInternationalAddressPage) match {
+          case Some(address) => status(view(form, address.asAddressLines(location), mode))
+          case _             => Redirect(routes.JourneyRecoveryController.onPageLoad())
+        }
+      case _           => Redirect(routes.JourneyRecoveryController.onPageLoad())
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

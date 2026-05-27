@@ -59,7 +59,7 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
     val addressKey =
       if (isParentCompany) UltimateParentCompanyInternationalAddressPage
       else
-        UltimateParentCompanyInternationalAddressPage // TODO change else option to International address page when implemented
+        CompanyRegisteredOfficeInternationalAddressPage
 
     UserAnswers("id")
       .set(nameKey, companyName)
@@ -115,8 +115,8 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
             ("'is address in the UK'", CheckCompanyRegisteredOfficeAddressPage),
             (
               "'International address'",
-              CompanyRegisteredOfficeUkAddressPage
-            ) // TODO change to International address page when implemented
+              CompanyRegisteredOfficeInternationalAddressPage
+            )
           )
 
           specParams foreach { x =>

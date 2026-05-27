@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.CompanyContactAddressFormProvider
-import models.{NormalMode, UkAddress, UserAnswers}
+import models.{InternationalAddress, NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CompanyContactAddressPage, CompanyRegisteredOfficeUkAddressPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -37,10 +37,17 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider                            = new CompanyContactAddressFormProvider()
-  val form                                    = formProvider()
-  val companyOfficeRegisterEmptyAddress       = UkAddress("", Some(""), Some(""), Some(""), "")
-  val companyOfficeRegisterInformationAddress = UkAddress("kirby", Some(""), Some("london"), Some("essex"), "SW2 5IQ")
+  val formProvider                                   = new CompanyContactAddressFormProvider()
+  val form                                           = formProvider()
+  val companyOfficeRegisterEmptyAddress              = UkAddress("", Some(""), Some(""), Some(""), "")
+  val companyOfficeRegisterEmptyInternationalAddress = InternationalAddress("", Some(""), Some(""), Some(""), "unknown")
+  val companyOfficeRegisterInformationAddress        = UkAddress("kirby", Some(""), Some("london"), Some("essex"), "SW2 5IQ")
+
+  private def addressLines(address: UkAddress): Seq[String] =
+    Seq(address.line1) ++ address.line2.toSeq ++ address.line3.toSeq ++ address.line4.toSeq ++ Seq(address.postalCode)
+
+  private def addressLinesInternational(address: InternationalAddress): Seq[String] =
+    Seq(address.line1) ++ address.line2.toSeq ++ address.line3.toSeq ++ address.line4.toSeq ++ Seq(address.countryCode)
 
   lazy val companyContactAddressRoute = routes.CompanyContactAddressController.onPageLoad(NormalMode).url
 
@@ -50,6 +57,8 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers = UserAnswers(userAnswersId)
         .set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterEmptyAddress)
+        .get
+        .set(CheckCompanyRegisteredOfficeAddressPage, true)
         .success
         .value
 
@@ -63,7 +72,37 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[CompanyContactAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, companyOfficeRegisterEmptyAddress, NormalMode)(
+        contentAsString(result) mustEqual view(form, addressLines(companyOfficeRegisterEmptyAddress), NormalMode)(
+          request,
+          messages(application)
+        ).toString
+      }
+    }
+
+    "must return OK and the correct view if International Address is provided for a GET" in {
+
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(CompanyRegisteredOfficeInternationalAddressPage, companyOfficeRegisterEmptyInternationalAddress)
+        .get
+        .set(CheckCompanyRegisteredOfficeAddressPage, false)
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, companyContactAddressRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[CompanyContactAddressView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(
+          form,
+          addressLinesInternational(companyOfficeRegisterEmptyInternationalAddress),
+          NormalMode
+        )(
           request,
           messages(application)
         ).toString
@@ -76,6 +115,8 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         .set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterInformationAddress)
         .success
         .value
+        .set(CheckCompanyRegisteredOfficeAddressPage, true)
+        .get
         .set(CompanyContactAddressPage, true)
         .success
         .value
@@ -90,7 +131,11 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[CompanyContactAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), companyOfficeRegisterInformationAddress, NormalMode)(
+        contentAsString(result) mustEqual view(
+          form.fill(true),
+          addressLines(companyOfficeRegisterInformationAddress),
+          NormalMode
+        )(
           request,
           messages(application)
         ).toString
@@ -127,6 +172,8 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers = UserAnswers(userAnswersId)
         .set(CompanyRegisteredOfficeUkAddressPage, companyOfficeRegisterEmptyAddress)
+        .get
+        .set(CheckCompanyRegisteredOfficeAddressPage, true)
         .success
         .value
 
@@ -144,7 +191,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, companyOfficeRegisterEmptyAddress, NormalMode)(
+        contentAsString(result) mustEqual view(boundForm, addressLines(companyOfficeRegisterEmptyAddress), NormalMode)(
           request,
           messages(application)
         ).toString
