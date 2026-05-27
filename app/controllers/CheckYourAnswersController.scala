@@ -17,7 +17,7 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import pages.{CompanyNamePage, ContactPersonEmailAddressPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -33,6 +33,7 @@ class CheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   checkYourAnswersService: CheckYourAnswersService,
   service: DigitalServicesTaxService,
@@ -42,25 +43,26 @@ class CheckYourAnswersController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    for {
-      summaryLists            <- checkYourAnswersService.getSummaryForView
-      childCompanyName        <- checkYourAnswersService.getChildCompanyName
-      parentCompanyName       <- checkYourAnswersService.getParentCompanyName
-      isRegistrationCompleted <- checkYourAnswersService.isRegistrationCompleted
-    } yield (summaryLists, childCompanyName, isRegistrationCompleted) match {
-      case (Some(list), Some(childCompany), Some(isRegistrationCompleted)) =>
-        if (!isRegistrationCompleted) {
-          Ok(view(list, childCompany, parentCompanyName))
-        } else {
-          Redirect(routes.RegistrationController.registrationComplete)
-        }
-      case _                                                               =>
-        // $COVERAGE-OFF$
-        logger.warn("Failed to retrieve answers from cache, redirecting to journey recovery")
-        // $COVERAGE-ON$
-        Redirect(routes.JourneyRecoveryController.onPageLoad())
-    }
+  def onPageLoad(): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData).async {
+    implicit request =>
+      for {
+        summaryLists            <- checkYourAnswersService.getSummaryForView
+        childCompanyName        <- checkYourAnswersService.getChildCompanyName
+        parentCompanyName       <- checkYourAnswersService.getParentCompanyName
+        isRegistrationCompleted <- checkYourAnswersService.isRegistrationCompleted
+      } yield (summaryLists, childCompanyName, isRegistrationCompleted) match {
+        case (Some(list), Some(childCompany), Some(isRegistrationCompleted)) =>
+          if (!isRegistrationCompleted) {
+            Ok(view(list, childCompany, parentCompanyName))
+          } else {
+            Redirect(routes.RegistrationController.registrationComplete)
+          }
+        case _                                                               =>
+          // $COVERAGE-OFF$
+          logger.warn("Failed to retrieve answers from cache, redirecting to journey recovery")
+          // $COVERAGE-ON$
+          Redirect(routes.JourneyRecoveryController.onPageLoad())
+      }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>

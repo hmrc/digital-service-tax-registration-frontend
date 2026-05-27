@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.AccountingPeriodEndDateFormProvider
 import models.Mode
 import navigation.Navigator
@@ -37,6 +37,7 @@ class AccountingPeriodEndDateController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   val formProvider: AccountingPeriodEndDateFormProvider,
   view: AccountingPeriodEndDateView
@@ -44,16 +45,17 @@ class AccountingPeriodEndDateController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    request.userAnswers
-      .get(CheckIfGroupPage)
-      .flatMap { isGroup =>
-        request.userAnswers.get(LiabilityStartDatePage).map { liabilityStartDate =>
-          val form = formProvider(isGroup, liabilityStartDate)
-          view(request.userAnswers.get(AccountingPeriodEndDatePage).fold(form)(ap => form.fill(ap)), mode, isGroup)
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      request.userAnswers
+        .get(CheckIfGroupPage)
+        .flatMap { isGroup =>
+          request.userAnswers.get(LiabilityStartDatePage).map { liabilityStartDate =>
+            val form = formProvider(isGroup, liabilityStartDate)
+            view(request.userAnswers.get(AccountingPeriodEndDatePage).fold(form)(ap => form.fill(ap)), mode, isGroup)
+          }
         }
-      }
-      .fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(Ok(_))
+        .fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(Ok(_))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

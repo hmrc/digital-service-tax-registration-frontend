@@ -38,6 +38,7 @@ class CheckUltimateGlobalParentCompanyInUkController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   formProvider: CheckUltimateGlobalParentCompanyInUkFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CheckUltimateGlobalParentCompanyInUkView
@@ -46,7 +47,7 @@ class CheckUltimateGlobalParentCompanyInUkController @Inject() (
     with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (identify andThen getData andThen requireData) { implicit request =>
+    (auth andThen identify andThen getData andThen requireData) { implicit request =>
       val ultimateCompanyName: String =
         request.userAnswers.get(UltimateParentCompanyNamePage).getOrElse("")
 

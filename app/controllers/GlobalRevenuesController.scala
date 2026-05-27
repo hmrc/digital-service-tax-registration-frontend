@@ -21,6 +21,7 @@ import forms.GlobalRevenuesFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.GlobalRevenuesPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,7 +37,7 @@ class GlobalRevenuesController @Inject() (
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  auth: Auth,
   formProvider: GlobalRevenuesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: GlobalRevenuesView
@@ -44,9 +45,9 @@ class GlobalRevenuesController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData) { implicit request =>
     val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(GlobalRevenuesPage) match {
       case None        => form
       case Some(value) => form.fill(value)
