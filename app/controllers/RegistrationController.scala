@@ -16,14 +16,13 @@
 
 package controllers
 
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import pages.RegistrationCompletePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.RegistrationCompleteView
-import views.html.RegistrationSentView
+import views.html.{RegistrationCompleteView, RegistrationSentView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,6 +32,7 @@ class RegistrationController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   registrationCompleteView: RegistrationCompleteView,
   registrationSentView: RegistrationSentView,
@@ -41,7 +41,7 @@ class RegistrationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def registerAction(): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def registerAction(): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
     Redirect(routes.JourneyRecoveryController.onPageLoad())
   }
 

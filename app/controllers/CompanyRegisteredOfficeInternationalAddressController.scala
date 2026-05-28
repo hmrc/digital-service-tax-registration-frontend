@@ -38,6 +38,7 @@ class CompanyRegisteredOfficeInternationalAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   location: Location,
   formProvider: CompanyRegisteredOfficeInternationalAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -48,17 +49,18 @@ class CompanyRegisteredOfficeInternationalAddressController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    getViewOrRedirect { name =>
-      Ok(
-        view(
-          request.userAnswers.get(CompanyRegisteredOfficeInternationalAddressPage).fold(form)(form.fill),
-          location.countrySelectList(form.data, location.countryListWithoutGB),
-          mode,
-          name
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      getViewOrRedirect { name =>
+        Ok(
+          view(
+            request.userAnswers.get(CompanyRegisteredOfficeInternationalAddressPage).fold(form)(form.fill),
+            location.countrySelectList(form.data, location.countryListWithoutGB),
+            mode,
+            name
+          )
         )
-      )
-    }
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

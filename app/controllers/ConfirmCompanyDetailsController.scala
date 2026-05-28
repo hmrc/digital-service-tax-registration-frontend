@@ -38,6 +38,7 @@ class ConfirmCompanyDetailsController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   formProvider: ConfirmCompanyDetailsFormProvider,
   val controllerComponents: MessagesControllerComponents,
   location: Location,
@@ -48,10 +49,11 @@ class ConfirmCompanyDetailsController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(ConfirmCompanyDetailsPage).fold(form)(form.fill)
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(ConfirmCompanyDetailsPage).fold(form)(form.fill)
 
-    renderViewOrRedirectIfNoCompany(mode, company => Ok(view(company, location, preparedForm, mode)))
+      renderViewOrRedirectIfNoCompany(mode, company => Ok(view(company, location, preparedForm, mode)))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

@@ -38,6 +38,7 @@ class LiabilityStartDateController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   formProvider: LiabilityStartDateFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: LiabilityStartDateView
@@ -45,12 +46,13 @@ class LiabilityStartDateController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    (request.userAnswers.get(CheckIfGroupPage), request.userAnswers.get(LiabilityStartDatePage)) match {
-      case (Some(isGroup), Some(date)) => Ok(view(formProvider(isGroup).fill(date), mode, isGroup))
-      case (Some(isGroup), None)       => Ok(view(formProvider(isGroup), mode, isGroup))
-      case _                           => Redirect(routes.JourneyRecoveryController.onPageLoad())
-    }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      (request.userAnswers.get(CheckIfGroupPage), request.userAnswers.get(LiabilityStartDatePage)) match {
+        case (Some(isGroup), Some(date)) => Ok(view(formProvider(isGroup).fill(date), mode, isGroup))
+        case (Some(isGroup), None)       => Ok(view(formProvider(isGroup), mode, isGroup))
+        case _                           => Redirect(routes.JourneyRecoveryController.onPageLoad())
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

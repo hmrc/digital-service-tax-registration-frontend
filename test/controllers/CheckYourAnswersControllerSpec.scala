@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import controllers.actions.{DataRequiredActionImpl, FakeDataRetrievalAction, FakeIdentifierAction}
+import controllers.actions.{DataRequiredActionImpl, FakeAuthorisedAction, FakeDataRetrievalAction, FakeIdentifierAction}
 import models.{Location, Registration, UserAnswers}
 import models.requests.DataRequest
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
@@ -104,6 +104,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
     inject[FakeIdentifierAction],
     new FakeDataRetrievalAction(Some(userAnswers)),
     new DataRequiredActionImpl,
+    inject[FakeAuthorisedAction],
     Helpers.stubMessagesControllerComponents(),
     mockCyaService,
     mockDstService,

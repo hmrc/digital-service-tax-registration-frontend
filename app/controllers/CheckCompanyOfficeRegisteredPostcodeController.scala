@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.CheckCompanyRegisteredOfficePostcodeFormProvider
 import models.Mode
 import navigation.Navigator
@@ -37,6 +37,7 @@ class CheckCompanyOfficeRegisteredPostcodeController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   formProvider: CheckCompanyRegisteredOfficePostcodeFormProvider,
   view: CheckCompanyRegisteredOfficePostcodeView
@@ -46,13 +47,14 @@ class CheckCompanyOfficeRegisteredPostcodeController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(CheckCompanyRegisteredOfficePostcodePage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(CheckCompanyRegisteredOfficePostcodePage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-    Ok(view(preparedForm, mode))
+      Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

@@ -16,11 +16,12 @@
 
 package controllers
 
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.ContactPersonEmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.{ContactPersonEmailAddressPage, ContactPersonNamePage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -37,6 +38,7 @@ class ContactPersonEmailAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   formProvider: ContactPersonEmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ContactPersonEmailAddressView
@@ -44,15 +46,16 @@ class ContactPersonEmailAddressController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(ContactPersonEmailAddressPage).fold(form)(form.fill)
-    request.userAnswers
-      .get(ContactPersonNamePage)
-      .fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(name =>
-        Ok(view(preparedForm, name.fullName, mode))
-      )
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(ContactPersonEmailAddressPage).fold(form)(form.fill)
+      request.userAnswers
+        .get(ContactPersonNamePage)
+        .fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(name =>
+          Ok(view(preparedForm, name.fullName, mode))
+        )
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

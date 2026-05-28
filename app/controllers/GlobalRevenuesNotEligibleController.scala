@@ -28,12 +28,13 @@ class GlobalRevenuesNotEligibleController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   view: GlobalRevenuesNotEligibleView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = (auth andThen identify andThen getData) { implicit request =>
     Ok(view())
   }
 }

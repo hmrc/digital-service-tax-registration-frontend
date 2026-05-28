@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import controllers.actions.{Auth, DataRetrievalAction, IdentifierAction}
 import forms.UkRevenuesFormProvider
 import models.{Company, Mode, UkAddress, UserAnswers}
 import navigation.Navigator
@@ -39,6 +39,7 @@ class UkRevenuesController @Inject() (
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
+  auth: Auth,
   formProvider: UkRevenuesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   backendService: DigitalServicesTaxService,
@@ -49,7 +50,7 @@ class UkRevenuesController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData) { implicit request =>
     val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(UkRevenuesPage) match {
       case None        => form
       case Some(value) => form.fill(value)

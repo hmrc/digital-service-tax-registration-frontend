@@ -38,6 +38,7 @@ class CheckUtrController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   formProvider: CheckUtrFormProvider,
+  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   view: CheckUtrView
 )(implicit ec: ExecutionContext)
@@ -46,13 +47,14 @@ class CheckUtrController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(CheckUtrPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(CheckUtrPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-    Ok(view(preparedForm, mode))
+      Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

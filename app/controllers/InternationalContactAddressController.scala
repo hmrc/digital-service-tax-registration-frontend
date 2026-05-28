@@ -39,6 +39,7 @@ class InternationalContactAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   location: Location,
   formProvider: InternationalContactAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -49,13 +50,14 @@ class InternationalContactAddressController @Inject() (
 
   val form: Form[InternationalAddress] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-    Ok(view(preparedForm, location.countrySelectList(form.data, location.countryListWithoutGB), mode))
+      Ok(view(preparedForm, location.countrySelectList(form.data, location.countryListWithoutGB), mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

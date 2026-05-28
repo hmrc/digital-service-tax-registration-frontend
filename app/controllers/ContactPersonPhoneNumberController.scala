@@ -40,6 +40,7 @@ class ContactPersonPhoneNumberController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  auth: Auth,
   formProvider: ContactPersonPhoneNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ContactPersonPhoneNumberView
@@ -49,11 +50,12 @@ class ContactPersonPhoneNumberController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(ContactPersonPhoneNumberPage).fold(form)(form.fill)
-    getNameOrRedirect { name =>
-      Ok(view(preparedForm, name, mode))
-    }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(ContactPersonPhoneNumberPage).fold(form)(form.fill)
+      getNameOrRedirect { name =>
+        Ok(view(preparedForm, name, mode))
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

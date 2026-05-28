@@ -22,9 +22,10 @@ import play.api.i18n.MessagesApi
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeAuthorisedAction(mcc: MessagesControllerComponents, val authConnector: AuthConnector)(implicit
+class FakeAuthorisedAction @Inject() (mcc: MessagesControllerComponents, val authConnector: AuthConnector)(implicit
   val appConfig: FrontendAppConfig,
   val executionContext: ExecutionContext,
   val messagesApi: MessagesApi

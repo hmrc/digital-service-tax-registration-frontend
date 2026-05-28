@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.IdentifierAction
+import controllers.actions.{Auth, IdentifierAction}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,25 +30,27 @@ import javax.inject.Inject
 class JourneyRecoveryController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   identify: IdentifierAction,
+  auth: Auth,
   continueView: JourneyRecoveryContinueView,
   startAgainView: JourneyRecoveryStartAgainView
 ) extends FrontendBaseController
     with I18nSupport
     with Logging {
 
-  def onPageLoad(continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = identify { implicit request =>
-    val safeUrl: Option[String] = continueUrl.flatMap { unsafeUrl =>
-      unsafeUrl.getEither(OnlyRelative) match {
-        case Right(safeUrl) =>
-          Some(safeUrl.url)
-        case Left(message)  =>
-          logger.info(message)
-          None
+  def onPageLoad(continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = (auth andThen identify) {
+    implicit request =>
+      val safeUrl: Option[String] = continueUrl.flatMap { unsafeUrl =>
+        unsafeUrl.getEither(OnlyRelative) match {
+          case Right(safeUrl) =>
+            Some(safeUrl.url)
+          case Left(message)  =>
+            logger.info(message)
+            None
+        }
       }
-    }
 
-    safeUrl
-      .map(url => Ok(continueView(url)))
-      .getOrElse(Ok(startAgainView()))
+      safeUrl
+        .map(url => Ok(continueView(url)))
+        .getOrElse(Ok(startAgainView()))
   }
 }
