@@ -360,6 +360,7 @@ registration-complete.p1 = Your session has been cleared because you completed y
 registration-complete.button = Start Again
 
 registration-sent.heading=Registration sent
+registration-sent.title=Registration sent
 registration-sent.detail=We received your registration for {0} for the Digital Services Tax
 registration-sent.email= We have sent a confirmation email to {0}.
 registration-sent.what-happens-next.title=What happens next

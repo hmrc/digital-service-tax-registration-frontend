@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CheckContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage, InternationalContactAddressPage}
+import pages.{CheckContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -124,7 +124,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to the next page when 'No' is submitted" in pendingUntilFixed {
+    "must redirect to the next page when 'No' is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val mockUserAnswers       = mock[UserAnswers]
@@ -138,12 +138,13 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
         .thenReturn(None)
 
       when(
-        mockUserAnswers.get(eqTo(InternationalContactAddressPage))(any())
-      ) // TODO change to correct page when it is implemented
+        mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(any())
+      )
         .thenReturn(Some(internationalAddress))
 
       when(mockUserAnswers.set(any(), any())(any()))
-        .thenCallRealMethod()
+        .thenReturn(Try(mockUserAnswers))
+
       val application =
         applicationBuilder(userAnswers = Some(mockUserAnswers))
           .overrides(
@@ -161,8 +162,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
-//        TODO - Verify correct page has been updated once it is implemented
-//        verify(mockUserAnswers).set(eqTo(ContactUkAddressPage), eqTo(internationalAddress))
+        verify(mockUserAnswers).set(eqTo(CheckContactAddressPage), eqTo(false))(any())
       }
     }
 

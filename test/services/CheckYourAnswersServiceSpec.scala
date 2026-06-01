@@ -207,13 +207,57 @@ class CheckYourAnswersServiceSpec
 
           val address = UkAddress("123 Test Street", None, None, None, "TE55ST")
 
-          mockUserAnswers(CompanyRegisteredOfficeUkAddressPage, address)
+          reset(mockSessionRepository)
+
+          when(mockSessionRepository.get(eqTo(userAnswersId)))
+            .thenReturn(
+              Future.successful(
+                Some(
+                  UserAnswers(userAnswersId)
+                    .set(CheckCompanyRegisteredOfficeAddressPage, true)
+                    .success
+                    .value
+                    .set(CompanyRegisteredOfficeUkAddressPage, address)
+                    .success
+                    .value
+                )
+              )
+            )
 
           serviceUnderTest.getSummaryForView.futureValue.value("responsibleMember") mustBe
             theCorrectSummaryListWithRow(
               "companyRegisteredOfficeUkAddress",
               asAddressValue(address.asAddressLines),
               routes.CompanyRegisteredOfficeUkAddressController.onPageLoad(CheckMode).url
+            )
+        }
+
+        "when Company Registered Office International Address is set in user answers" in {
+
+          val address = InternationalAddress("123 Test Street", None, None, None, "US")
+
+          reset(mockSessionRepository)
+
+          when(mockSessionRepository.get(eqTo(userAnswersId)))
+            .thenReturn(
+              Future.successful(
+                Some(
+                  UserAnswers(userAnswersId)
+                    .set(CheckCompanyRegisteredOfficeAddressPage, false)
+                    .success
+                    .value
+                    .set(CompanyRegisteredOfficeInternationalAddressPage, address)
+                    .success
+                    .value
+                )
+              )
+            )
+
+          serviceUnderTest.getSummaryForView.futureValue.value("responsibleMember") mustBe
+            theCorrectSummaryListWithRow(
+              "companyRegisteredOfficeInternationalAddress",
+              asAddressValue(address.asAddressLines(location = mockLocation)),
+              routes.CompanyRegisteredOfficeInternationalAddressController.onPageLoad(CheckMode).url
             )
         }
 
@@ -330,7 +374,7 @@ class CheckYourAnswersServiceSpec
             "ultimateParentCompanyName",
             "ultimateParentCompanyUkAddress",
             "ultimateParentCompanyInternationalAddress"
-          ) map { rowKey =>
+          ) map { _ =>
             val rowKeys = serviceUnderTest.getSummaryForView.futureValue.value.keys
             rowKeys mustNot contain("ultimateGlobalParent")
           }

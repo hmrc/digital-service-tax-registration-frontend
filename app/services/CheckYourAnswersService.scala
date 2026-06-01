@@ -76,7 +76,7 @@ class CheckYourAnswersService @Inject() (
     SummaryListViewModel(
       Seq(
         CompanyNameSummary.row(userAnswers),
-        CompanyRegisteredOfficeUkAddressSummary.row(userAnswers),
+        CompanyRegisteredOfficeAddressSummary.row(userAnswers, location),
         ContactUkAddressSummary.row(userAnswers),
         InternationalContactAddressSummary.row(userAnswers, location),
         CheckIfGroupSummary.row(userAnswers)
