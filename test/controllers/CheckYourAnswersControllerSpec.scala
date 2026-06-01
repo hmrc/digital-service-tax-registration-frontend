@@ -27,7 +27,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json._
-import play.api.mvc.AnyContent
+import play.api.mvc.{AnyContent, AnyContentAsEmpty}
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers, Injecting}
 import services.{CheckYourAnswersService, DigitalServicesTaxService}
@@ -122,7 +122,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
       "responsibleMember"       -> SummaryList(
         Seq(
           CompanyNameSummary.row(userAnswers),
-          CompanyRegisteredOfficeUkAddressSummary.row(userAnswers),
+          CompanyRegisteredOfficeAddressSummary.row(userAnswers, location),
           ContactUkAddressSummary.row(userAnswers),
           InternationalContactAddressSummary.row(userAnswers, location),
           CheckIfGroupSummary.row(userAnswers)
@@ -162,7 +162,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
       "must return OK and the correct view for a GET" in {
 
-        implicit val request = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+        implicit val request: DataRequest[AnyContentAsEmpty.type] =
+          DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
         when(mockCyaService.getSummaryForView(any(), any()))
           .thenReturn(Future.successful(Some(summaryLists)))
