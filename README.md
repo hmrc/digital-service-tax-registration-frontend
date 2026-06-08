@@ -14,15 +14,34 @@ This is the main frontend, currently containing the registration form.
 
 For details about the digital services tax see [the GOV.UK guidance](https://www.gov.uk/government/consultations/digital-services-tax-draft-guidance)
 
-## Running through service manager
-
+## Running the service
+### Service manager
 *You need to be on the VPN*
+Ensure your service manager config is up to date.
 
-Ensure your service manager config is up to date, and run the following command:
+The whole service can be started with:
 
 `sm2 --start DST_ALL`
 
-This will start all the required services
+or specifically for only the frontend
+
+`sm2 --start DST_FRONTEND`
+
+This will start all the required services.
+
+### Locally
+
+`sbt 'run 8740'` or `./run.sh`
+
+* Visit http://localhost:9949/auth-login-stub/gg-sign-in
+* You may need to add some user details to the form:
+#### DST Registration journey
+    * Affinity Group: Organisation
+    * Enrolment Key: IR-CT
+    * Identifier Name: UTR
+    * Identifier Value: 1111111000
+* Then enter a redirect url: http://localhost:8740/digital-services-tax
+* Press **Submit**.
 
 ## Running the tests
 
