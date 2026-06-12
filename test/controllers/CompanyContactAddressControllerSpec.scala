@@ -24,6 +24,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -38,7 +39,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider                                   = new CompanyContactAddressFormProvider()
-  val form                                           = formProvider()
+  val form: Form[Boolean]                            = formProvider()
   val companyOfficeRegisterEmptyAddress              = UkAddress("", Some(""), Some(""), Some(""), "")
   val companyOfficeRegisterEmptyInternationalAddress = InternationalAddress("", Some(""), Some(""), Some(""), "unknown")
   val companyOfficeRegisterInformationAddress        = UkAddress("kirby", Some(""), Some("london"), Some("essex"), "SW2 5IQ")
@@ -49,7 +50,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
   private def addressLinesInternational(address: InternationalAddress): Seq[String] =
     Seq(address.line1) ++ address.line2.toSeq ++ address.line3.toSeq ++ address.line4.toSeq ++ Seq(address.countryCode)
 
-  lazy val companyContactAddressRoute = routes.CompanyContactAddressController.onPageLoad(NormalMode).url
+  lazy val companyContactAddressRoute: String = routes.CompanyContactAddressController.onPageLoad(NormalMode).url
 
   "CompanyContactAddress Controller" - {
 
@@ -204,6 +205,44 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
         val userAnswers = UserAnswers(userAnswersId)
           .set(CompanyContactAddressPage, true)
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, companyContactAddressRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "no address can be found for for true in CheckCompanyRegisteredOfficeAddress" in {
+
+        val userAnswers = UserAnswers(userAnswersId)
+          .set(CheckCompanyRegisteredOfficeAddressPage, true)
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, companyContactAddressRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "no address can be found for for false in CheckCompanyRegisteredOfficeAddress" in {
+
+        val userAnswers = UserAnswers(userAnswersId)
+          .set(CheckCompanyRegisteredOfficeAddressPage, false)
           .success
           .value
 

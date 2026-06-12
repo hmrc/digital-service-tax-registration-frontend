@@ -30,20 +30,16 @@ trait NavigationUtils {
 
   def ukRevenues(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(UkRevenuesPage).map {
-      case true  => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
-      case false => routes.UkRevenueNotEligibleController.onPageLoad()
+      case true if companyDetailsAreSet(userAnswers) => routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
+      case true                                      => routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
+      case false                                     => routes.UkRevenueNotEligibleController.onPageLoad()
     }
 
-  def confirmCompanyDetailsPage(userAnswers: UserAnswers): Option[Call] = {
-    val companyDetailsAreSet: Boolean =
-      userAnswers.get(CompanyNamePage).isDefined && userAnswers.get(CompanyRegisteredOfficeUkAddressPage).isDefined
-
+  def confirmCompanyDetailsPage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(ConfirmCompanyDetailsPage) map {
-      case true if companyDetailsAreSet => routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
-      case true                         => routes.CompanyContactAddressController.onPageLoad(NormalMode)
-      case false                        => routes.DetailsNotCorrectController.onPageLoad()
+      case true  => routes.CompanyContactAddressController.onPageLoad(NormalMode)
+      case false => routes.DetailsNotCorrectController.onPageLoad()
     }
-  }
 
   def checkCompanyRegisteredOfficeAddress(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
@@ -61,7 +57,13 @@ trait NavigationUtils {
     }
 
   def corporationTaxEnterUtr(userAnswers: UserAnswers): Option[Call] =
-    userAnswers.get(CorporationTaxEnterUtrPage).map(_ => routes.CompanyNameController.onPageLoad(NormalMode))
+    if (companyDetailsAreSet(userAnswers)) {
+      userAnswers
+        .get(CorporationTaxEnterUtrPage)
+        .map(_ => routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode))
+    } else {
+      userAnswers.get(CorporationTaxEnterUtrPage).map(_ => routes.CompanyNameController.onPageLoad(NormalMode))
+    }
 
   def companyNamePage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(CheckCompanyRegisteredOfficeAddressPage).map {
@@ -181,4 +183,7 @@ trait NavigationUtils {
 
   def accountingPeriodEndDatePage(userAnswers: UserAnswers): Option[Call] =
     userAnswers.get(AccountingPeriodEndDatePage).map(_ => routes.CheckYourAnswersController.onPageLoad())
+
+  private def companyDetailsAreSet(userAnswers: UserAnswers) =
+    userAnswers.get(CompanyNamePage).isDefined && userAnswers.get(CompanyRegisteredOfficeUkAddressPage).isDefined
 }

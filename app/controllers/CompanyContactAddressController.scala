@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions._
 import forms.CompanyContactAddressFormProvider
-import models.Mode
+import models.{Location, Mode}
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage}
@@ -31,7 +31,6 @@ import views.html.CompanyContactAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import models.Location
 
 class CompanyContactAddressController @Inject() (
   override val messagesApi: MessagesApi,
@@ -49,7 +48,7 @@ class CompanyContactAddressController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
     implicit request =>

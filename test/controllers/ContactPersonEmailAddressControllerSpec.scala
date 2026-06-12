@@ -24,6 +24,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{ContactPersonEmailAddressPage, ContactPersonNamePage}
+import play.api.data.Form
 import play.api.http.Status.OK
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -41,8 +42,8 @@ class ContactPersonEmailAddressControllerSpec extends SpecBase with MockitoSugar
   lazy val contactPersonEmailAddressRoute: String =
     routes.ContactPersonEmailAddressController.onPageLoad(NormalMode).url
 
-  val formProvider = new ContactPersonEmailAddressFormProvider()
-  val form         = formProvider()
+  val formProvider       = new ContactPersonEmailAddressFormProvider()
+  val form: Form[String] = formProvider()
 
   val contactName: ContactPersonName   = ContactPersonName("Harry", "Spark")
   val userAnswersWithName: UserAnswers =
@@ -63,6 +64,28 @@ class ContactPersonEmailAddressControllerSpec extends SpecBase with MockitoSugar
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual view(form, contactName.fullName, NormalMode)(
+            request,
+            messages(application)
+          ).toString
+        }
+      }
+    }
+
+    "must return a Bad Request and errors" - {
+      "when invalid data is submitted" in {
+        val application = applicationBuilder(userAnswers = Option(userAnswersWithName)).build()
+
+        running(application) {
+          val request = FakeRequest(POST, contactPersonEmailAddressRoute).withFormUrlEncodedBody(("value", ""))
+
+          val boundForm = form.bind(Map("value" -> ""))
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[ContactPersonEmailAddressView]
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(boundForm, contactName.fullName, NormalMode)(
             request,
             messages(application)
           ).toString

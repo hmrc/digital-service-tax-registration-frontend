@@ -18,17 +18,20 @@ package controllers
 
 import controllers.actions._
 import forms.CorporationTaxEnterUtrFormProvider
-import javax.inject.Inject
-import models.Mode
+import models.{CompanyRegWrapper, Mode, NormalMode, UkAddress, UserAnswers}
 import navigation.Navigator
-import pages.CorporationTaxEnterUtrPage
+import pages._
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.DigitalServicesTaxService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CorporationTaxEnterUtrView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class CorporationTaxEnterUtrController @Inject() (
   override val messagesApi: MessagesApi,
@@ -40,12 +43,13 @@ class CorporationTaxEnterUtrController @Inject() (
   auth: Auth,
   formProvider: CorporationTaxEnterUtrFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorporationTaxEnterUtrView
+  view: CorporationTaxEnterUtrView,
+  service: DigitalServicesTaxService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
     implicit request =>
@@ -57,17 +61,38 @@ class CorporationTaxEnterUtrController @Inject() (
       Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CorporationTaxEnterUtrPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CorporationTaxEnterUtrPage, mode, updatedAnswers))
+            request.userAnswers.get(CheckCompanyRegisteredOfficePostcodePage) match {
+              case None           =>
+                Future
+                  .successful(Redirect(routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode)))
+              case Some(postcode) =>
+                for {
+                  ua             <- Future.fromTry(request.userAnswers.set(CorporationTaxEnterUtrPage, value))
+                  compRegWrapper <- service.lookupCompany(value, postcode)
+                  updatedAnswers <- Future.fromTry(setCompanyAnswers(ua, compRegWrapper))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(CorporationTaxEnterUtrPage, mode, updatedAnswers))
+            }
         )
   }
+
+  private def setCompanyAnswers(ua: UserAnswers, companyRegWrapper: Option[CompanyRegWrapper]): Try[UserAnswers] =
+    companyRegWrapper match {
+      case None             => Try(ua)
+      case Some(companyReg) =>
+        companyReg.company.address match {
+          case ukAddress: UkAddress =>
+            ua.set(CompanyNamePage, companyReg.company.name)
+              .flatMap(_.set(CompanyRegisteredOfficeUkAddressPage, ukAddress))
+              .flatMap(_.set(CheckCompanyRegisteredOfficeAddressPage, true))
+          case _                    => Try(ua)
+        }
+    }
 }

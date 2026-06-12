@@ -102,7 +102,24 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode)
       }
 
-      "must go from ConfirmCompanyDetailsPage with option `true` with a Company Name and UK Office to ConfirmCompanyDetailsController" in {
+      "must go from a UkRevenuesPage with option `true` and company details are set to ConfirmCompanyDetailsPage" in {
+        navigator.nextPage(
+          UkRevenuesPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(UkRevenuesPage, true)
+            .success
+            .value
+            .set(CompanyNamePage, companyName)
+            .success
+            .value
+            .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
+            .success
+            .value
+        ) mustBe routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
+      }
+
+      "must go from ConfirmCompanyDetailsPage with option `true` with a Company Name and UK Office to CompanyContactAddressPage" in {
         navigator.nextPage(
           ConfirmCompanyDetailsPage,
           NormalMode,
@@ -116,7 +133,7 @@ class NavigatorSpec extends SpecBase {
             .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
             .success
             .value
-        ) mustBe routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
+        ) mustBe routes.CompanyContactAddressController.onPageLoad(NormalMode)
       }
 
       "must go from ConfirmCompanyDetailsPage with option `true` with no Company Name to CompanyContactAddressController" in {
@@ -222,6 +239,23 @@ class NavigatorSpec extends SpecBase {
             .success
             .value
         ) mustBe routes.CompanyNameController.onPageLoad(NormalMode)
+      }
+
+      "must go from a CorporationTaxEnterUtr Page to ConfirmCompanyDetails page if Company Details are set" in {
+        navigator.nextPage(
+          CorporationTaxEnterUtrPage,
+          NormalMode,
+          UserAnswers("id")
+            .set(CorporationTaxEnterUtrPage, "1111110000")
+            .success
+            .value
+            .set(CompanyNamePage, companyName)
+            .success
+            .value
+            .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
+            .success
+            .value
+        ) mustBe routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode)
       }
 
       "must go from CompanyNamePage to CompanyRegisteredOfficeUkAddress Page if Uk address is selected" in {
