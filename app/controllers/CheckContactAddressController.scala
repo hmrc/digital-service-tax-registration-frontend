@@ -21,7 +21,7 @@ import forms.CheckContactAddressFormProvider
 import models.requests.DataRequest
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{CheckContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage}
+import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -82,7 +82,7 @@ class CheckContactAddressController @Inject() (
         request.userAnswers.get(CompanyRegisteredOfficeInternationalAddressPage)
       ) match {
         case (Some(addr), _) => request.userAnswers.set(ContactUkAddressPage, addr)
-        case (_, Some(addr)) => request.userAnswers.set(CompanyRegisteredOfficeInternationalAddressPage, addr)
+        case (_, Some(addr)) => request.userAnswers.set(InternationalContactAddressPage, addr)
         case (_, _)          => Try(request.userAnswers)
       }
     } else {

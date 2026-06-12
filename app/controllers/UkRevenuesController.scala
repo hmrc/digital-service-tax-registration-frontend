@@ -20,7 +20,7 @@ import controllers.actions.{Auth, DataRetrievalAction, IdentifierAction}
 import forms.UkRevenuesFormProvider
 import models.{Company, Mode, UkAddress, UserAnswers}
 import navigation.Navigator
-import pages.{CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, UkRevenuesPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, UkRevenuesPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -89,7 +89,9 @@ class UkRevenuesController @Inject() (
   private def setCompanyAnswers(ua: UserAnswers, companyOpt: Option[Company]): Try[UserAnswers] =
     companyOpt.map(x => (x.name, x.address)) match {
       case Some((name, address: UkAddress)) =>
-        ua.set(CompanyNamePage, name).flatMap(_.set(CompanyRegisteredOfficeUkAddressPage, address))
+        ua.set(CompanyNamePage, name)
+          .flatMap(_.set(CompanyRegisteredOfficeUkAddressPage, address))
+          .flatMap(_.set(CheckCompanyRegisteredOfficeAddressPage, true))
       case _                                => Try(ua)
     }
 }

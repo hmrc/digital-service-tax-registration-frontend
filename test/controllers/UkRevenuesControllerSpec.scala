@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, refEq}
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, UkRevenuesPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, UkRevenuesPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -123,6 +123,9 @@ class UkRevenuesControllerSpec extends SpecBase with MockitoSugar {
                   .success
                   .value
                   .set(CompanyRegisteredOfficeUkAddressPage, ukAddress)
+                  .success
+                  .value
+                  .set(CheckCompanyRegisteredOfficeAddressPage, true)
                   .success
                   .value,
                 "lastUpdated"

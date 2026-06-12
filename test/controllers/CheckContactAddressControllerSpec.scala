@@ -21,9 +21,9 @@ import forms.CheckContactAddressFormProvider
 import models.{InternationalAddress, NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CheckContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactUkAddressPage}
+import pages._
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -120,6 +120,87 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
           redirectLocation(result).value mustEqual onwardRoute.url
 
           verify(mockUserAnswers).set(eqTo(ContactUkAddressPage), eqTo(ukAddress))(any())
+        }
+      }
+
+      "when 'Yes' is submitted and Address is International" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+        val mockUserAnswers       = mock[UserAnswers]
+
+        val internationalAddress = InternationalAddress("123 Test Street", None, None, None, "US")
+
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(any()))
+          .thenReturn(None)
+
+        when(
+          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(any())
+        ).thenReturn(Some(internationalAddress))
+
+        when(mockUserAnswers.set(any(), any())(any()))
+          .thenReturn(Try(mockUserAnswers))
+
+        val application =
+          applicationBuilder(userAnswers = Some(mockUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, checkContactAddressRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+          verify(mockUserAnswers).set(eqTo(InternationalContactAddressPage), eqTo(internationalAddress))(any())
+        }
+      }
+
+      "when 'Yes' is submitted and Neither UK nor International Address is stored" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+        val mockUserAnswers       = mock[UserAnswers]
+
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(any()))
+          .thenReturn(None)
+
+        when(
+          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(any())
+        ).thenReturn(None)
+
+        when(mockUserAnswers.set(any(), any())(any()))
+          .thenReturn(Try(mockUserAnswers))
+
+        val application =
+          applicationBuilder(userAnswers = Some(mockUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, checkContactAddressRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+          verify(mockUserAnswers, never()).set(eqTo(InternationalContactAddressPage), any)(any())
+          verify(mockUserAnswers, never()).set(eqTo(ContactUkAddressPage), any)(any())
         }
       }
     }

@@ -18,20 +18,24 @@ package controllers
 
 import base.SpecBase
 import forms.CorporationTaxEnterUtrFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{Company, CompanyRegWrapper, InternationalAddress, NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CorporationTaxEnterUtrPage
+import pages._
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import services.DigitalServicesTaxService
+import uk.gov.hmrc.http.HeaderCarrier
 import views.html.CorporationTaxEnterUtrView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class CorporationTaxEnterUtrControllerSpec extends SpecBase with MockitoSugar {
 
@@ -81,14 +85,20 @@ class CorporationTaxEnterUtrControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
+      val mockDstService        = mock[DigitalServicesTaxService]
       val validUtr              = "1234567890"
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(
+        mockDstService.lookupCompany(any[String], any[String])(any[HeaderCarrier], any[ExecutionContext])
+      ) thenReturn Future.successful(None)
+      val userAnswers           = UserAnswers(userAnswersId).set(CheckCompanyRegisteredOfficePostcodePage, "NE11AA").success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[DigitalServicesTaxService].toInstance(mockDstService)
           )
           .build()
 
@@ -101,6 +111,126 @@ class CorporationTaxEnterUtrControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must save Company Details from Lookup when valid data is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val mockDstService        = mock[DigitalServicesTaxService]
+      val mockUserAnswers       = mock[UserAnswers]
+      val validUtr              = "1234567890"
+      val companyName           = "Company Name"
+      val ukAddress             = UkAddress("line 1", None, None, None, "NE11AA")
+      val companyRegWrapper     = CompanyRegWrapper(Company(companyName, ukAddress))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(
+        mockDstService.lookupCompany(any[String], any[String])(any[HeaderCarrier], any[ExecutionContext])
+      ) thenReturn Future.successful(Some(companyRegWrapper))
+
+      when(mockUserAnswers.get(CheckCompanyRegisteredOfficePostcodePage)).thenReturn(Some("NE11AA"))
+      when(mockUserAnswers.set(any(), any())(any())).thenReturn(Try(mockUserAnswers))
+
+      val application =
+        applicationBuilder(userAnswers = Some(mockUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[DigitalServicesTaxService].toInstance(mockDstService)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, corporationTaxEnterUtrRoute)
+            .withFormUrlEncodedBody(("value", validUtr))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        verify(mockUserAnswers).set(ArgumentMatchers.eq(CompanyNamePage), ArgumentMatchers.eq(companyName))(any())
+        verify(mockUserAnswers)
+          .set(ArgumentMatchers.eq(CompanyRegisteredOfficeUkAddressPage), ArgumentMatchers.eq(ukAddress))(any())
+        verify(mockUserAnswers)
+          .set(ArgumentMatchers.eq(CheckCompanyRegisteredOfficeAddressPage), ArgumentMatchers.eq(true))(any())
+      }
+    }
+
+    "must not save Company Details from Lookup when international address is returned" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val mockDstService        = mock[DigitalServicesTaxService]
+      val mockUserAnswers       = mock[UserAnswers]
+      val validUtr              = "1234567890"
+      val companyName           = "Company Name"
+      val internationalAddress  = InternationalAddress("line 1", None, None, None, "US")
+      val companyRegWrapper     = CompanyRegWrapper(Company(companyName, internationalAddress))
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(
+        mockDstService.lookupCompany(any[String], any[String])(any[HeaderCarrier], any[ExecutionContext])
+      ) thenReturn Future.successful(Some(companyRegWrapper))
+
+      when(mockUserAnswers.get(CheckCompanyRegisteredOfficePostcodePage)).thenReturn(Some("NE11AA"))
+      when(mockUserAnswers.set(any(), any())(any())).thenReturn(Try(mockUserAnswers))
+
+      val application =
+        applicationBuilder(userAnswers = Some(mockUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[DigitalServicesTaxService].toInstance(mockDstService)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, corporationTaxEnterUtrRoute)
+            .withFormUrlEncodedBody(("value", validUtr))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        verify(mockUserAnswers, never()).set(ArgumentMatchers.eq(CompanyNamePage), any)(any())
+        verify(mockUserAnswers, never()).set(ArgumentMatchers.eq(CompanyRegisteredOfficeUkAddressPage), any)(any())
+        verify(mockUserAnswers, never()).set(ArgumentMatchers.eq(CheckCompanyRegisteredOfficeAddressPage), any)(any())
+      }
+    }
+
+    "must redirect to CheckCompanyOfficeRegisteredPostcode page when postcode is missing" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val mockDstService        = mock[DigitalServicesTaxService]
+      val validUtr              = "1234567890"
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers = UserAnswers(userAnswersId).set(CheckCompanyRegisteredOfficeAddressPage, true).success.value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[DigitalServicesTaxService].toInstance(mockDstService)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, corporationTaxEnterUtrRoute)
+            .withFormUrlEncodedBody(("value", validUtr))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.CheckCompanyOfficeRegisteredPostcodeController
+          .onPageLoad(NormalMode)
+          .url
       }
     }
 
