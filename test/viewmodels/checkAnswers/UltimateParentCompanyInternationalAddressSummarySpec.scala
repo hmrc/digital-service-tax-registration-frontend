@@ -36,17 +36,18 @@ class UltimateParentCompanyInternationalAddressSummarySpec extends SpecBase {
     "row" - {
       "must return a row when the page contains an address" in {
         val mockLocation: Location = mock[Location]
-        val addr = InternationalAddress("123 Main Street", Some("Paris"), Some("Paris"), None, "FR")
-        val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyInternationalAddressPage, addr).success.value
+        val addr                   = InternationalAddress("123 Main Street", Some("Paris"), Some("Paris"), None, "FR")
+        val userAnswers            =
+          UserAnswers(userAnswersId).set(UltimateParentCompanyInternationalAddressPage, addr).success.value
         when(mockLocation.name(eqTo("FR"))).thenReturn("France")
-        val row = UltimateParentCompanyInternationalAddressSummary.row(userAnswers, mockLocation)
+        val row                    = UltimateParentCompanyInternationalAddressSummary.row(userAnswers, mockLocation)
         row mustBe defined
       }
 
       "must return None when the page does not contain an address" in {
-        val userAnswers = UserAnswers(userAnswersId)
+        val userAnswers            = UserAnswers(userAnswersId)
         val mockLocation: Location = mock[Location]
-        val row = UltimateParentCompanyInternationalAddressSummary.row(userAnswers, mockLocation)
+        val row                    = UltimateParentCompanyInternationalAddressSummary.row(userAnswers, mockLocation)
         row mustBe None
       }
     }

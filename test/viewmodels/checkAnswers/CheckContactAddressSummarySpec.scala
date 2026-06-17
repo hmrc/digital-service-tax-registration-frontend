@@ -34,19 +34,19 @@ class CheckContactAddressSummarySpec extends AnyFreeSpec with Matchers with TryV
     "row" - {
       "must return a row when the answer is true" in {
         val userAnswers = UserAnswers(userAnswersId).set(CheckContactAddressPage, true).success.value
-        val row = CheckContactAddressSummary.row(userAnswers)
+        val row         = CheckContactAddressSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return a row when the answer is false" in {
         val userAnswers = UserAnswers(userAnswersId).set(CheckContactAddressPage, false).success.value
-        val row = CheckContactAddressSummary.row(userAnswers)
+        val row         = CheckContactAddressSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain an answer" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = CheckContactAddressSummary.row(userAnswers)
+        val row         = CheckContactAddressSummary.row(userAnswers)
         row mustBe None
       }
     }

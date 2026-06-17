@@ -36,30 +36,37 @@ class CompanyRegisteredOfficeAddressSummarySpec extends AnyFreeSpec with Matcher
   "CompanyRegisteredOfficeAddressSummary" - {
     "row" - {
       "must return a row when the page contains UK address data" in {
-        val addr = UkAddress("10 Downing Street", Some("London"), Some("London"), None, "SW1A 2AA")
+        val addr        = UkAddress("10 Downing Street", Some("London"), Some("London"), None, "SW1A 2AA")
         val userAnswers = UserAnswers(userAnswersId)
-          .set(CheckCompanyRegisteredOfficeAddressPage, true).success.value
-          .set(CompanyRegisteredOfficeUkAddressPage, addr).success.value
-        val row = CompanyRegisteredOfficeAddressSummary.row(userAnswers, null)
+          .set(CheckCompanyRegisteredOfficeAddressPage, true)
+          .success
+          .value
+          .set(CompanyRegisteredOfficeUkAddressPage, addr)
+          .success
+          .value
+        val row         = CompanyRegisteredOfficeAddressSummary.row(userAnswers, null)
         row mustBe defined
       }
 
       "must return a row when the page contains International address data" in {
-        val addr = InternationalAddress("10 White house", Some("Line 2"), Some("Line 3"), Some("Line 3"), "FR")
+        val addr                   = InternationalAddress("10 White house", Some("Line 2"), Some("Line 3"), Some("Line 3"), "FR")
         val mockLocation: Location = mock[Location]
         when(mockLocation.name(eqTo("FR"))).thenReturn("France")
-        val userAnswers = UserAnswers(userAnswersId)
-          .set(CheckCompanyRegisteredOfficeAddressPage, false).success.value
-          .set(CompanyRegisteredOfficeInternationalAddressPage, addr).success.value
-        
-        
+        val userAnswers            = UserAnswers(userAnswersId)
+          .set(CheckCompanyRegisteredOfficeAddressPage, false)
+          .success
+          .value
+          .set(CompanyRegisteredOfficeInternationalAddressPage, addr)
+          .success
+          .value
+
         val row = CompanyRegisteredOfficeAddressSummary.row(userAnswers, mockLocation)
         row mustBe defined
       }
 
       "must return None when the page does not contain an answer" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = CompanyRegisteredOfficeAddressSummary.row(userAnswers, null)
+        val row         = CompanyRegisteredOfficeAddressSummary.row(userAnswers, null)
         row mustBe None
       }
     }

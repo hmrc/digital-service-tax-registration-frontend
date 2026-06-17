@@ -34,15 +34,15 @@ class AccountingPeriodEndDateSummarySpec extends AnyFreeSpec with Matchers with 
   "AccountingPeriodEndDateSummary" - {
     "row" - {
       "must return a row when the page contains a date" in {
-        val date = LocalDate.of(2024, 12, 31)
+        val date        = LocalDate.of(2024, 12, 31)
         val userAnswers = UserAnswers(userAnswersId).set(AccountingPeriodEndDatePage, date).success.value
-        val row = AccountingPeriodEndDateSummary.row(userAnswers)
+        val row         = AccountingPeriodEndDateSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain a date" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = AccountingPeriodEndDateSummary.row(userAnswers)
+        val row         = AccountingPeriodEndDateSummary.row(userAnswers)
         row mustBe None
       }
     }

@@ -34,13 +34,13 @@ class CompanyNameSummarySpec extends AnyFreeSpec with Matchers with TryValues {
     "row" - {
       "must return a row when the page contains a company name" in {
         val userAnswers = UserAnswers(userAnswersId).set(CompanyNamePage, "Test Company Ltd").success.value
-        val row = CompanyNameSummary.row(userAnswers)
+        val row         = CompanyNameSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain a company name" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = CompanyNameSummary.row(userAnswers)
+        val row         = CompanyNameSummary.row(userAnswers)
         row mustBe None
       }
     }

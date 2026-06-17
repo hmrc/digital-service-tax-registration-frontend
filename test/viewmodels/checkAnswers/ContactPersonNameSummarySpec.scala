@@ -33,14 +33,15 @@ class ContactPersonNameSummarySpec extends AnyFreeSpec with Matchers with TryVal
   "ContactPersonNameSummary" - {
     "row" - {
       "must return a row when the page contains a name" in {
-        val userAnswers = UserAnswers(userAnswersId).set(ContactPersonNamePage, ContactPersonName("John", "Doe")).success.value
-        val row = ContactPersonNameSummary.row(userAnswers)
+        val userAnswers =
+          UserAnswers(userAnswersId).set(ContactPersonNamePage, ContactPersonName("John", "Doe")).success.value
+        val row         = ContactPersonNameSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain a name" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = ContactPersonNameSummary.row(userAnswers)
+        val row         = ContactPersonNameSummary.row(userAnswers)
         row mustBe None
       }
     }

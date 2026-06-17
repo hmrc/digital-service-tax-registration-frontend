@@ -34,15 +34,15 @@ class LiabilityStartDateSummarySpec extends AnyFreeSpec with Matchers with TryVa
   "LiabilityStartDateSummary" - {
     "row" - {
       "must return a row when the page contains a date" in {
-        val date = LocalDate.of(2024, 1, 1)
+        val date        = LocalDate.of(2024, 1, 1)
         val userAnswers = UserAnswers(userAnswersId).set(LiabilityStartDatePage, date).success.value
-        val row = LiabilityStartDateSummary.row(userAnswers)
+        val row         = LiabilityStartDateSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain a date" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = LiabilityStartDateSummary.row(userAnswers)
+        val row         = LiabilityStartDateSummary.row(userAnswers)
         row mustBe None
       }
     }

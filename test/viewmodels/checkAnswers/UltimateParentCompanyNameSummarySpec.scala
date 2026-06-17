@@ -33,14 +33,15 @@ class UltimateParentCompanyNameSummarySpec extends AnyFreeSpec with Matchers wit
   "UltimateParentCompanyNameSummary" - {
     "row" - {
       "must return a row when the page contains a company name" in {
-        val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyNamePage, "Ultimate Parent Ltd").success.value
-        val row = UltimateParentCompanyNameSummary.row(userAnswers)
+        val userAnswers =
+          UserAnswers(userAnswersId).set(UltimateParentCompanyNamePage, "Ultimate Parent Ltd").success.value
+        val row         = UltimateParentCompanyNameSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain a company name" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = UltimateParentCompanyNameSummary.row(userAnswers)
+        val row         = UltimateParentCompanyNameSummary.row(userAnswers)
         row mustBe None
       }
     }

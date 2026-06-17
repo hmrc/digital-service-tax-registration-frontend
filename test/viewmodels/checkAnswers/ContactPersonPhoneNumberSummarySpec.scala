@@ -34,13 +34,13 @@ class ContactPersonPhoneNumberSummarySpec extends AnyFreeSpec with Matchers with
     "row" - {
       "must return a row when the page contains a phone number" in {
         val userAnswers = UserAnswers(userAnswersId).set(ContactPersonPhoneNumberPage, "01234567890").success.value
-        val row = ContactPersonPhoneNumberSummary.row(userAnswers)
+        val row         = ContactPersonPhoneNumberSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain a phone number" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = ContactPersonPhoneNumberSummary.row(userAnswers)
+        val row         = ContactPersonPhoneNumberSummary.row(userAnswers)
         row mustBe None
       }
     }

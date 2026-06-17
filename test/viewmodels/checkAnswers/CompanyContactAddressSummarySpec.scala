@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers
 
-import models.{UserAnswers, UkAddress}
+import models.{UkAddress, UserAnswers}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.i18n.Messages
@@ -34,19 +34,19 @@ class CompanyContactAddressSummarySpec extends AnyFreeSpec with Matchers with Tr
     "row" - {
       "must return a row when the answer is true" in {
         val userAnswers = UserAnswers(userAnswersId).set(CompanyContactAddressPage, true).success.value
-        val row = CompanyContactAddressSummary.row(userAnswers)
+        val row         = CompanyContactAddressSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return a row when the answer is false" in {
         val userAnswers = UserAnswers(userAnswersId).set(CompanyContactAddressPage, false).success.value
-        val row = CompanyContactAddressSummary.row(userAnswers)
+        val row         = CompanyContactAddressSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the answer is not set" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = CompanyContactAddressSummary.row(userAnswers)
+        val row         = CompanyContactAddressSummary.row(userAnswers)
         row mustBe None
       }
     }

@@ -34,19 +34,19 @@ class ConfirmCompanyDetailsSummarySpec extends AnyFreeSpec with Matchers with Tr
     "row" - {
       "must return a row when the answer is true" in {
         val userAnswers = UserAnswers(userAnswersId).set(ConfirmCompanyDetailsPage, true).success.value
-        val row = ConfirmCompanyDetailsSummary.row(userAnswers)
+        val row         = ConfirmCompanyDetailsSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return a row when the answer is false" in {
         val userAnswers = UserAnswers(userAnswersId).set(ConfirmCompanyDetailsPage, false).success.value
-        val row = ConfirmCompanyDetailsSummary.row(userAnswers)
+        val row         = ConfirmCompanyDetailsSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain an answer" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = ConfirmCompanyDetailsSummary.row(userAnswers)
+        val row         = ConfirmCompanyDetailsSummary.row(userAnswers)
         row mustBe None
       }
     }

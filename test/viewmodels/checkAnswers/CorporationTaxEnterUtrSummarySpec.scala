@@ -34,13 +34,13 @@ class CorporationTaxEnterUtrSummarySpec extends AnyFreeSpec with Matchers with T
     "row" - {
       "must return a row when the page contains a UTR" in {
         val userAnswers = UserAnswers(userAnswersId).set(CorporationTaxEnterUtrPage, "1234567890").success.value
-        val row = CorporationTaxEnterUtrSummary.row(userAnswers)
+        val row         = CorporationTaxEnterUtrSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain a UTR" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = CorporationTaxEnterUtrSummary.row(userAnswers)
+        val row         = CorporationTaxEnterUtrSummary.row(userAnswers)
         row mustBe None
       }
     }

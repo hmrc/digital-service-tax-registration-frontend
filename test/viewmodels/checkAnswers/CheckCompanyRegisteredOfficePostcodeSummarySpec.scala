@@ -33,14 +33,15 @@ class CheckCompanyRegisteredOfficePostcodeSummarySpec extends AnyFreeSpec with M
   "CheckCompanyRegisteredOfficePostcodeSummary" - {
     "row" - {
       "must return a row when the answer is set" in {
-        val userAnswers = UserAnswers(userAnswersId).set(CheckCompanyRegisteredOfficePostcodePage, "NE11AA").success.value
-        val row = CheckCompanyRegisteredOfficePostcodeSummary.row(userAnswers)
+        val userAnswers =
+          UserAnswers(userAnswersId).set(CheckCompanyRegisteredOfficePostcodePage, "NE11AA").success.value
+        val row         = CheckCompanyRegisteredOfficePostcodeSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain an answer" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = CheckCompanyRegisteredOfficePostcodeSummary.row(userAnswers)
+        val row         = CheckCompanyRegisteredOfficePostcodeSummary.row(userAnswers)
         row mustBe None
       }
     }

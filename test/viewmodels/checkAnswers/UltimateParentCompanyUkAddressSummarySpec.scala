@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers
 
-import models.{UserAnswers, UkAddress}
+import models.{UkAddress, UserAnswers}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.TryValues
@@ -33,15 +33,15 @@ class UltimateParentCompanyUkAddressSummarySpec extends AnyFreeSpec with Matcher
   "UltimateParentCompanyUkAddressSummary" - {
     "row" - {
       "must return a row when the page contains an address" in {
-        val addr = UkAddress("10 Downing Street", Some("London"), Some("London"), None, "SW1A 2AA")
+        val addr        = UkAddress("10 Downing Street", Some("London"), Some("London"), None, "SW1A 2AA")
         val userAnswers = UserAnswers(userAnswersId).set(UltimateParentCompanyUkAddressPage, addr).success.value
-        val row = UltimateParentCompanyUkAddressSummary.row(userAnswers)
+        val row         = UltimateParentCompanyUkAddressSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain an address" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = UltimateParentCompanyUkAddressSummary.row(userAnswers)
+        val row         = UltimateParentCompanyUkAddressSummary.row(userAnswers)
         row mustBe None
       }
     }

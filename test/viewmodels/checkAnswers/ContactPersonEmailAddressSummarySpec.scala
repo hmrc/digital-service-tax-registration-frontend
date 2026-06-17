@@ -33,14 +33,15 @@ class ContactPersonEmailAddressSummarySpec extends AnyFreeSpec with Matchers wit
   "ContactPersonEmailAddressSummary" - {
     "row" - {
       "must return a row when the page contains an email" in {
-        val userAnswers = UserAnswers(userAnswersId).set(ContactPersonEmailAddressPage, "test@example.com").success.value
-        val row = ContactPersonEmailAddressSummary.row(userAnswers)
+        val userAnswers =
+          UserAnswers(userAnswersId).set(ContactPersonEmailAddressPage, "test@example.com").success.value
+        val row         = ContactPersonEmailAddressSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain an email" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = ContactPersonEmailAddressSummary.row(userAnswers)
+        val row         = ContactPersonEmailAddressSummary.row(userAnswers)
         row mustBe None
       }
     }

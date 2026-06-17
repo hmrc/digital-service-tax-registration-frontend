@@ -34,19 +34,19 @@ class UkRevenuesSummarySpec extends AnyFreeSpec with Matchers with TryValues {
     "row" - {
       "must return a row when the answer is true" in {
         val userAnswers = UserAnswers(userAnswersId).set(UkRevenuesPage, true).success.value
-        val row = UkRevenuesSummary.row(userAnswers)
+        val row         = UkRevenuesSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return a row when the answer is false" in {
         val userAnswers = UserAnswers(userAnswersId).set(UkRevenuesPage, false).success.value
-        val row = UkRevenuesSummary.row(userAnswers)
+        val row         = UkRevenuesSummary.row(userAnswers)
         row mustBe defined
       }
 
       "must return None when the page does not contain an answer" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = UkRevenuesSummary.row(userAnswers)
+        val row         = UkRevenuesSummary.row(userAnswers)
         row mustBe None
       }
     }

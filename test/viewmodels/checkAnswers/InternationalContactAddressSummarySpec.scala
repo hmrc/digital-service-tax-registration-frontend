@@ -30,13 +30,13 @@ class InternationalContactAddressSummarySpec extends SpecBase {
 
   implicit val messages: Messages = stubMessages()
 
-  private val userAnswersId = "id"
-  private val mockLocation: Location                    = mock[Location]
+  private val userAnswersId          = "id"
+  private val mockLocation: Location = mock[Location]
 
   "InternationalContactAddressSummary" - {
     "row" - {
       "must return a row when the page contains an address" in {
-        val addr = InternationalAddress("123 Main Street", Some("Paris"), Some("Paris"), None, "FR")
+        val addr        = InternationalAddress("123 Main Street", Some("Paris"), Some("Paris"), None, "FR")
         val userAnswers = UserAnswers(userAnswersId).set(InternationalContactAddressPage, addr).success.value
 
         when(mockLocation.name(ArgumentMatchers.eq(addr.countryCode))).thenReturn("France")
@@ -46,7 +46,7 @@ class InternationalContactAddressSummarySpec extends SpecBase {
 
       "must return None when the page does not contain an address" in {
         val userAnswers = UserAnswers(userAnswersId)
-        val row = InternationalContactAddressSummary.row(userAnswers, mockLocation)
+        val row         = InternationalContactAddressSummary.row(userAnswers, mockLocation)
         row mustBe None
       }
     }
