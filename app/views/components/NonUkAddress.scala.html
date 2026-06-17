@@ -24,7 +24,7 @@
     govukFieldset: GovukFieldset
 )
 
-@(form:Form[_], countries: Seq[SelectItem])(implicit messages: Messages)
+@(form:Form[?], countries: Seq[SelectItem])(implicit messages: Messages)
 
  @html = {
     @govukInput(

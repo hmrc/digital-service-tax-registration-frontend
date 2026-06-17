@@ -62,7 +62,7 @@ class UserAnswersSpec extends SpecBase {
           .success
           .value
 
-        val result = userAnswers.removeUltimateParentCompanyAnswers.success.value
+        val result = userAnswers.removeUltimateParentCompanyAnswers().success.value
 
         assert(result.get(CheckIfGroupPage).isDefined)
         assert(result.get(UltimateParentCompanyNamePage).isEmpty)

@@ -42,8 +42,7 @@ trait Formatters {
     invalidKey: String,
     lengthKey: String,
     regex: String,
-    length: Int,
-    args: Seq[String] = Seq.empty
+    length: Int
   ): Formatter[Option[String]] = new Formatter[Option[String]] {
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[String]] =

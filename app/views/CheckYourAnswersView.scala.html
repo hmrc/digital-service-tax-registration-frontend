@@ -23,7 +23,7 @@
     govukButton: GovukButton
 )
 
-@(lists: Map[String, SummaryList], childCompanyName: String, parentCompanyName: Option[String])(implicit request: Request[_], messages: Messages)
+@(lists: Map[String, SummaryList], childCompanyName: String, parentCompanyName: Option[String])(implicit request: Request[?], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkYourAnswers.title"))) {
 

@@ -21,7 +21,7 @@
     govukFieldset: GovukFieldset
 )
 
-@(form: Form[_])(implicit messages: Messages)
+@(form: Form[?])(implicit messages: Messages)
 
 @govukFieldset(Fieldset(
     html = html

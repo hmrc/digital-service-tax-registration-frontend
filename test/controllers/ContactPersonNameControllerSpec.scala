@@ -24,11 +24,12 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.ContactPersonNamePage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.ContactPersonNameView
 
@@ -38,10 +39,10 @@ class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactPersonNameFormProvider()
-  val form         = formProvider()
+  val formProvider                  = new ContactPersonNameFormProvider()
+  val form: Form[ContactPersonName] = formProvider()
 
-  lazy val contactPersonNameRoute = routes.ContactPersonNameController.onPageLoad(NormalMode).url
+  lazy val contactPersonNameRoute: String = routes.ContactPersonNameController.onPageLoad(NormalMode).url
 
   val userAnswers = UserAnswers(
     userAnswersId,
@@ -67,7 +68,7 @@ class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(using request, messages(application)).toString
       }
     }
 
@@ -83,7 +84,7 @@ class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(ContactPersonName("John", "Smith")), NormalMode)(
+        contentAsString(result) mustEqual view(form.fill(ContactPersonName("John", "Smith")), NormalMode)(using
           request,
           messages(application)
         ).toString
@@ -94,7 +95,7 @@ class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -132,7 +133,7 @@ class ContactPersonNameControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(using request, messages(application)).toString
       }
     }
 

@@ -63,7 +63,7 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[AccountingPeriodEndDateView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, isGroup = true)(
+        contentAsString(result) mustEqual view(form, NormalMode, isGroup = true)(using
           request,
           messages(application)
         ).toString
@@ -82,7 +82,7 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(LocalDate.of(2022, 9, 9)), NormalMode, isGroup = true)(
+        contentAsString(result) mustEqual view(form.fill(LocalDate.of(2022, 9, 9)), NormalMode, isGroup = true)(using
           request,
           messages(application)
         ).toString
@@ -93,7 +93,7 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Option(userAnswers))
@@ -133,7 +133,7 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, isGroup = true)(
+        contentAsString(result) mustEqual view(boundForm, NormalMode, isGroup = true)(using
           request,
           messages(application)
         ).toString
@@ -177,7 +177,7 @@ class AccountingPeriodEndDateControllerSpec extends SpecBase with MockitoSugar {
 
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
         val application =
           applicationBuilder(userAnswers = Option(emptyUserAnswers))

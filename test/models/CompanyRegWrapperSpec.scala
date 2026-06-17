@@ -71,7 +71,7 @@ class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks
 
         "for UK company when" - {
 
-          val specParams = Seq[(String, Settable[_])](
+          val specParams = Seq[(String, Settable[?])](
             ("'company name'", CompanyNamePage),
             ("'is address in the UK'", CheckCompanyRegisteredOfficeAddressPage),
             ("'UK address'", CompanyRegisteredOfficeUkAddressPage)
@@ -89,7 +89,7 @@ class CompanyRegWrapperSpec extends SpecBase with ScalaCheckDrivenPropertyChecks
 
         "for International company when" - {
 
-          val specParams = Seq[(String, Settable[_])](
+          val specParams = Seq[(String, Settable[?])](
             ("'company name'", CompanyNamePage),
             ("'is address in the UK'", CheckCompanyRegisteredOfficeAddressPage),
             (

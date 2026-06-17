@@ -37,7 +37,7 @@ object Address {
       (__ \ "line4").readNullable[String] and
       (__ \ "postalCode").readNullable[String] and
       (__ \ "countryCode").readNullable[String]
-  )(applyJson _)
+  )(applyJson)
 
   private def applyJson(
     line1: String,
@@ -59,7 +59,7 @@ object Address {
     typeNaming = JsonNaming {
       case name if name.contains("InternationalAddress") =>
         "uk.gov.hmrc.digitalservicestax.data.ForeignAddress"
-      case ukName                                        =>
+      case _                                             =>
         s"uk.gov.hmrc.digitalservicestax.data.UkAddress"
     }
   )

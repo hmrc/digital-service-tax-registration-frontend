@@ -55,7 +55,7 @@ class CheckYourAnswersController @Inject() (
           if (!isRegistrationCompleted) {
             Ok(view(list, childCompany, parentCompanyName))
           } else {
-            Redirect(routes.RegistrationController.registrationComplete)
+            Redirect(routes.RegistrationController.registrationComplete())
           }
         case _                                                               =>
           // $COVERAGE-OFF$
@@ -66,7 +66,7 @@ class CheckYourAnswersController @Inject() (
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    def redirect: Result = Redirect(routes.RegistrationController.registerAction)
+    def redirect: Result = Redirect(routes.RegistrationController.registerAction())
 
     checkYourAnswersService.buildRegistration
       .flatMap {
@@ -80,7 +80,7 @@ class CheckYourAnswersController @Inject() (
                   // $COVERAGE-OFF$
                   logger.warn("Failed to retrieve answers from cache, redirecting to application complete anyway")
                   // $COVERAGE-ON$
-                  Redirect(routes.RegistrationController.registrationComplete)
+                  Redirect(routes.RegistrationController.registrationComplete())
               }
             case _                   => redirect
           }

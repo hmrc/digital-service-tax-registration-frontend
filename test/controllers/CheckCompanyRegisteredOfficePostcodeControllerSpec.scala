@@ -40,7 +40,7 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
   val formProvider = new CheckCompanyRegisteredOfficePostcodeFormProvider()
   val form         = formProvider()
 
-  lazy val checkCompanyRegisteredOfficePostcodeRoute =
+  lazy val checkCompanyRegisteredOfficePostcodeRoute: String =
     routes.CheckCompanyOfficeRegisteredPostcodeController.onPageLoad(NormalMode).url
 
   "CheckCompanyOfficeRegisteredPostcode Controller" - {
@@ -57,7 +57,7 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
         val view = application.injector.instanceOf[CheckCompanyRegisteredOfficePostcodeView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(using request, messages(application)).toString
       }
     }
 
@@ -76,7 +76,7 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("SW3 5DA"), NormalMode)(
+        contentAsString(result) mustEqual view(form.fill("SW3 5DA"), NormalMode)(using
           request,
           messages(application)
         ).toString
@@ -87,7 +87,7 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -125,7 +125,7 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(using request, messages(application)).toString
       }
     }
 
@@ -145,7 +145,7 @@ class CheckCompanyRegisteredOfficePostcodeControllerSpec extends SpecBase with M
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(using request, messages(application)).toString
       }
     }
 

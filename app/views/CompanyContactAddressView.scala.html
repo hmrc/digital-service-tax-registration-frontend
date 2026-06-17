@@ -24,7 +24,7 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], addressLines: Seq[String], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[?], addressLines: Seq[String], mode: Mode)(implicit request: Request[?], messages: Messages)
 
 @content=@{
     HtmlContent(Html(addressLines.map(x => s"$x<br>").mkString))

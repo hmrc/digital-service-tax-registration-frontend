@@ -165,16 +165,16 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
         implicit val request: DataRequest[AnyContentAsEmpty.type] =
           DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
-        when(mockCyaService.getSummaryForView(any(), any()))
+        when(mockCyaService.getSummaryForView(using any(), any()))
           .thenReturn(Future.successful(Some(summaryLists)))
 
-        when(mockCyaService.getChildCompanyName(any()))
+        when(mockCyaService.getChildCompanyName(using any()))
           .thenReturn(Future.successful(Some(childCompanyName)))
 
-        when(mockCyaService.getParentCompanyName(any()))
+        when(mockCyaService.getParentCompanyName(using any()))
           .thenReturn(Future.successful(Some(parentCompanyName)))
 
-        when(mockCyaService.isRegistrationCompleted(any()))
+        when(mockCyaService.isRegistrationCompleted(using any()))
           .thenReturn(Future.successful(Some(false)))
 
         val result = controller.onPageLoad()(request)
@@ -189,16 +189,16 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
           implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
-          when(mockCyaService.getSummaryForView(any(), any()))
+          when(mockCyaService.getSummaryForView(using any(), any()))
             .thenReturn(Future.successful(None))
 
-          when(mockCyaService.getChildCompanyName(any()))
+          when(mockCyaService.getChildCompanyName(using any()))
             .thenReturn(Future.successful(Some(childCompanyName)))
 
-          when(mockCyaService.getParentCompanyName(any()))
+          when(mockCyaService.getParentCompanyName(using any()))
             .thenReturn(Future.successful(Some(parentCompanyName)))
 
-          when(mockCyaService.isRegistrationCompleted(any()))
+          when(mockCyaService.isRegistrationCompleted(using any()))
             .thenReturn(Future.successful(Some(false)))
 
           val result = controller.onPageLoad()(request)
@@ -211,16 +211,16 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
           implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
-          when(mockCyaService.getSummaryForView(any(), any()))
+          when(mockCyaService.getSummaryForView(using any(), any()))
             .thenReturn(Future.successful(Some(summaryLists)))
 
-          when(mockCyaService.getChildCompanyName(any()))
+          when(mockCyaService.getChildCompanyName(using any()))
             .thenReturn(Future.successful(None))
 
-          when(mockCyaService.getParentCompanyName(any()))
+          when(mockCyaService.getParentCompanyName(using any()))
             .thenReturn(Future.successful(Some(parentCompanyName)))
 
-          when(mockCyaService.isRegistrationCompleted(any()))
+          when(mockCyaService.isRegistrationCompleted(using any()))
             .thenReturn(Future.successful(Some(false)))
 
           val result = controller.onPageLoad()(request)
@@ -233,16 +233,16 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
           implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
-          when(mockCyaService.getSummaryForView(any(), any()))
+          when(mockCyaService.getSummaryForView(using any(), any()))
             .thenReturn(Future.successful(None))
 
-          when(mockCyaService.getChildCompanyName(any()))
+          when(mockCyaService.getChildCompanyName(using any()))
             .thenReturn(Future.successful(None))
 
-          when(mockCyaService.getParentCompanyName(any()))
+          when(mockCyaService.getParentCompanyName(using any()))
             .thenReturn(Future.successful(Some(parentCompanyName)))
 
-          when(mockCyaService.isRegistrationCompleted(any()))
+          when(mockCyaService.isRegistrationCompleted(using any()))
             .thenReturn(Future.successful(Some(false)))
 
           val result = controller.onPageLoad()(request)
@@ -265,10 +265,10 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
           val fakeCompanyName  = "Fake CompanyName"
           val fakeContactEmail = "fake.email.email.com"
 
-          when(mockCyaService.buildRegistration(any(), any()))
+          when(mockCyaService.buildRegistration(using any(), any()))
             .thenReturn(Future.successful(Some(mockRegistration)))
 
-          when(mockDstService.submitRegistration(eqTo(mockRegistration))(any(), any()))
+          when(mockDstService.submitRegistration(eqTo(mockRegistration))(using any(), any()))
             .thenReturn(Future.successful(HttpResponse(OK, "{}")))
 
           val result = controller.onSubmit()(request)
@@ -287,29 +287,29 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
             val mockRegistration = mock[Registration]
 
-            when(mockCyaService.buildRegistration(any(), any()))
+            when(mockCyaService.buildRegistration(using any(), any()))
               .thenReturn(Future.successful(Some(mockRegistration)))
 
-            when(mockDstService.submitRegistration(eqTo(mockRegistration))(any(), any()))
+            when(mockDstService.submitRegistration(eqTo(mockRegistration))(using any(), any()))
               .thenReturn(Future.successful(HttpResponse(BAD_REQUEST, "{}")))
 
             val result = controller.onSubmit()(request)
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustBe routes.RegistrationController.registerAction.url
+            redirectLocation(result).value mustBe routes.RegistrationController.registerAction().url
           }
 
           "when registration cannot be built from user answers" in {
 
             implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
-            when(mockCyaService.buildRegistration(any(), any()))
+            when(mockCyaService.buildRegistration(using any(), any()))
               .thenReturn(Future.successful(None))
 
             val result = controller.onSubmit()(request)
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustBe routes.RegistrationController.registerAction.url
+            redirectLocation(result).value mustBe routes.RegistrationController.registerAction().url
 
             verifyNoInteractions(mockDstService)
           }

@@ -39,17 +39,17 @@ class CheckYourAnswersService @Inject() (
   ec: ExecutionContext
 ) {
 
-  def getChildCompanyName(implicit request: DataRequest[_]): Future[Option[String]] =
+  def getChildCompanyName(implicit request: DataRequest[?]): Future[Option[String]] =
     retrieveFromUserAnswers(CompanyNamePage)
 
-  def getParentCompanyName(implicit request: DataRequest[_]): Future[Option[String]] =
+  def getParentCompanyName(implicit request: DataRequest[?]): Future[Option[String]] =
     retrieveFromUserAnswers(UltimateParentCompanyNamePage)
 
-  def isRegistrationCompleted(implicit request: DataRequest[_]): Future[Option[Boolean]] =
+  def isRegistrationCompleted(implicit request: DataRequest[?]): Future[Option[Boolean]] =
     sessionRepository.get(request.userId).map(_.flatMap(_.get(RegistrationCompletePage).orElse(Option(false))))
 
   def getSummaryForView(implicit
-    request: DataRequest[_],
+    request: DataRequest[?],
     messages: Messages
   ): Future[Option[Map[String, SummaryList]]] =
     sessionRepository.get(request.userId) map { userAnswersOpt =>
@@ -65,7 +65,7 @@ class CheckYourAnswersService @Inject() (
       }
     }
 
-  def buildRegistration(implicit request: DataRequest[_], hc: HeaderCarrier): Future[Option[Registration]] =
+  def buildRegistration(implicit request: DataRequest[?], hc: HeaderCarrier): Future[Option[Registration]] =
     sessionRepository.get(request.userId) flatMap { userAnswersOpt =>
       userAnswersOpt.fold(Future.successful[Option[Registration]](None)) { ua =>
         Registration.fromUserAnswers(ua, digitalServicesTaxService)
@@ -118,6 +118,6 @@ class CheckYourAnswersService @Inject() (
 
   private def retrieveFromUserAnswers[A](
     a: Gettable[A]
-  )(implicit request: DataRequest[_], reads: Reads[A]): Future[Option[A]] =
+  )(implicit request: DataRequest[?], reads: Reads[A]): Future[Option[A]] =
     sessionRepository.get(request.userId).map(_.flatMap(_.get[A](a)))
 }

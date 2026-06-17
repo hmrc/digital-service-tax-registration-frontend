@@ -501,7 +501,7 @@ class CheckYourAnswersServiceSpec
             }
 
           forAll(genRegistration) { registration =>
-            when(mockDstService.lookupCompany(any[HeaderCarrier], any[ExecutionContext]))
+            when(mockDstService.lookupCompany(using any[HeaderCarrier], any[ExecutionContext]))
               .thenReturn(Future.successful(Some(registration.companyReg)))
 
             val baseUserAnswers = UserAnswers(userAnswersId)

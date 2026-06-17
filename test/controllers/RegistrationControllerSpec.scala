@@ -30,14 +30,14 @@ class RegistrationControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.RegistrationController.registrationComplete.url)
+        val request = FakeRequest(GET, routes.RegistrationController.registrationComplete().url)
 
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[RegistrationCompleteView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view()(using request, messages(application)).toString
       }
     }
 
@@ -54,7 +54,7 @@ class RegistrationControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[RegistrationSentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("Fake Company", "fake.email@email.com")(
+        contentAsString(result) mustEqual view("Fake Company", "fake.email@email.com")(using
           request,
           messages(application)
         ).toString
@@ -66,7 +66,7 @@ class RegistrationControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.RegistrationController.registerAction.url)
+        val request = FakeRequest(GET, routes.RegistrationController.registerAction().url)
 
         val result = route(application, request).value
 

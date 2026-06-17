@@ -25,10 +25,11 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{CompanyNamePage, CompanyRegisteredOfficeUkAddressPage, ConfirmCompanyDetailsPage, UkRevenuesPage}
 import play.api.Application
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.ConfirmCompanyDetailsView
 
@@ -38,8 +39,8 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ConfirmCompanyDetailsFormProvider()
-  val form         = formProvider()
+  val formProvider        = new ConfirmCompanyDetailsFormProvider()
+  val form: Form[Boolean] = formProvider()
 
   lazy val confirmCompanyDetailsRoute: String = routes.ConfirmCompanyDetailsController.onPageLoad(NormalMode).url
 
@@ -70,7 +71,7 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[ConfirmCompanyDetailsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(company, location(application), form, NormalMode)(
+        contentAsString(result) mustEqual view(company, location(application), form, NormalMode)(using
           request,
           messages(application)
         ).toString
@@ -91,7 +92,7 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(company, location(application), form.fill(true), NormalMode)(
+        contentAsString(result) mustEqual view(company, location(application), form.fill(true), NormalMode)(using
           request,
           messages(application)
         ).toString
@@ -141,7 +142,7 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application: Application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -179,7 +180,7 @@ class ConfirmCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(company, location(application), boundForm, NormalMode)(
+        contentAsString(result) mustEqual view(company, location(application), boundForm, NormalMode)(using
           request,
           messages(application)
         ).toString

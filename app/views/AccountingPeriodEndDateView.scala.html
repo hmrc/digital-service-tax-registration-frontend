@@ -22,12 +22,11 @@
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
-    govukInput: GovukInput,
     govukButton: GovukButton,
     govukDateInput: GovukDateInput
 )
 
-@(form: Form[_], mode: Mode, isGroup: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[?], mode: Mode, isGroup: Boolean)(implicit request: Request[?], messages: Messages)
 
 @msg = @{if(isGroup) "group" else "company"}
 

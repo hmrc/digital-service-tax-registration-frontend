@@ -44,13 +44,13 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val liabilityStartDateRoute = routes.LiabilityStartDateController.onPageLoad(NormalMode).url
+  lazy val liabilityStartDateRoute: String = routes.LiabilityStartDateController.onPageLoad(NormalMode).url
 
   override val emptyUserAnswers = UserAnswers(userAnswersId)
 
-  def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
+  def getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, liabilityStartDateRoute)
 
   def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
@@ -70,13 +70,13 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val result = route(application, getRequest()).value
+        val result = route(application, getRequest).value
 
         val view = application.injector.instanceOf[LiabilityStartDateView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form(true), NormalMode, isGroup = true)(
-          getRequest(),
+        contentAsString(result) mustEqual view(form(true), NormalMode, isGroup = true)(using
+          getRequest,
           messages(application)
         ).toString
       }
@@ -97,11 +97,11 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val view = application.injector.instanceOf[LiabilityStartDateView]
 
-        val result = route(application, getRequest()).value
+        val result = route(application, getRequest).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form(false).fill(validAnswer), NormalMode, isGroup = false)(
-          getRequest(),
+        contentAsString(result) mustEqual view(form(false).fill(validAnswer), NormalMode, isGroup = false)(using
+          getRequest,
           messages(application)
         ).toString
       }
@@ -111,7 +111,7 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val userAnswers = UserAnswers(userAnswersId).set(CheckIfGroupPage, false).success.value
 
@@ -149,7 +149,7 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, isGroup = true)(
+        contentAsString(result) mustEqual view(boundForm, NormalMode, isGroup = true)(using
           request,
           messages(application)
         ).toString
@@ -163,7 +163,7 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         running(application) {
-          val result = route(application, getRequest()).value
+          val result = route(application, getRequest).value
 
           status(result) mustEqual SEE_OTHER
 
@@ -176,7 +176,7 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val result = route(application, getRequest()).value
+          val result = route(application, getRequest).value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
@@ -190,7 +190,7 @@ class LiabilityStartDateControllerSpec extends SpecBase with MockitoSugar {
 
         val mockSessionRepository = mock[SessionRepository]
 
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
         val application =
           applicationBuilder(userAnswers = Some(emptyUserAnswers))

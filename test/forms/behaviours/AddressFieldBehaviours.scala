@@ -61,7 +61,7 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
     testCountryField(form, location)
   }
 
-  private def testMandatoryAddressLine(form: Form[_], prefix: String): Unit = {
+  private def testMandatoryAddressLine(form: Form[?], prefix: String): Unit = {
 
     val fieldName = "line1"
 
@@ -95,7 +95,7 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
     }
   }
 
-  private def testOptionalAddressLine(form: Form[_], fieldName: String, prefix: String): Unit =
+  private def testOptionalAddressLine(form: Form[?], fieldName: String, prefix: String): Unit =
     s".$fieldName must" - {
 
       behave like fieldThatBindsValidData(

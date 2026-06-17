@@ -27,7 +27,6 @@ class GlobalRevenuesNotEligibleController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
   auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   view: GlobalRevenuesNotEligibleView

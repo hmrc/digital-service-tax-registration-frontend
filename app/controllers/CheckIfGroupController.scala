@@ -79,7 +79,10 @@ class CheckIfGroupController @Inject() (
     request: DataRequest[AnyContent]
   ): Future[UserAnswers] =
     Future.fromTry(
-      if (value || mode == NormalMode) Success(request.userAnswers)
-      else request.userAnswers.removeUltimateParentCompanyAnswers
+      if (value || mode == NormalMode) {
+        Success(request.userAnswers)
+      } else {
+        request.userAnswers.removeUltimateParentCompanyAnswers()
+      }
     )
 }

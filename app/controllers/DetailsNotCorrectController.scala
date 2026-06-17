@@ -16,12 +16,13 @@
 
 package controllers
 
-import controllers.actions._
-import javax.inject.Inject
+import controllers.actions.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DetailsNotCorrectView
+
+import javax.inject.Inject
 
 class DetailsNotCorrectController @Inject() (
   override val messagesApi: MessagesApi,

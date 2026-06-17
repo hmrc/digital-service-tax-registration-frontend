@@ -73,7 +73,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[CompanyContactAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, addressLines(companyOfficeRegisterEmptyAddress), NormalMode)(
+        contentAsString(result) mustEqual view(form, addressLines(companyOfficeRegisterEmptyAddress), NormalMode)(using
           request,
           messages(application)
         ).toString
@@ -103,7 +103,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
           form,
           addressLinesInternational(companyOfficeRegisterEmptyInternationalAddress),
           NormalMode
-        )(
+        )(using
           request,
           messages(application)
         ).toString
@@ -136,7 +136,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
           form.fill(true),
           addressLines(companyOfficeRegisterInformationAddress),
           NormalMode
-        )(
+        )(using
           request,
           messages(application)
         ).toString
@@ -147,7 +147,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -193,6 +193,7 @@ class CompanyContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual view(boundForm, addressLines(companyOfficeRegisterEmptyAddress), NormalMode)(
+          using
           request,
           messages(application)
         ).toString

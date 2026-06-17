@@ -31,7 +31,7 @@ object LiabilityStartDateSummary {
     answers.get(LiabilityStartDatePage).map { answer =>
       SummaryListRowViewModel(
         key = "liabilityStartDate.checkYourAnswersLabel",
-        value = ValueViewModel(answer.format(dateTimeFormat()(messages.lang))),
+        value = ValueViewModel(answer.format(dateTimeFormat()(using messages.lang))),
         actions = Seq(
           ActionItemViewModel("site.change", routes.LiabilityStartDateController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("liabilityStartDate.change.hidden"))

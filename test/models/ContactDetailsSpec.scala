@@ -26,7 +26,7 @@ class ContactDetailsSpec extends SpecBase {
 
     "when .getFromUserAnswers is called" - {
 
-      val specParams = Seq[(String, Settable[_])](
+      val specParams = Seq[(String, Settable[?])](
         ("name", ContactPersonNamePage),
         ("phone number", ContactPersonPhoneNumberPage),
         ("email address", ContactPersonEmailAddressPage)

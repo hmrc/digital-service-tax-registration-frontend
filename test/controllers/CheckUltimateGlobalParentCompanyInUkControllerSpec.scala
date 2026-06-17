@@ -24,10 +24,11 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{CheckUltimateGlobalParentCompanyInUkPage, UltimateParentCompanyNamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.CheckUltimateGlobalParentCompanyInUkView
 
@@ -37,10 +38,10 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CheckUltimateGlobalParentCompanyInUkFormProvider()
-  val form         = formProvider("companyname")
+  val formProvider        = new CheckUltimateGlobalParentCompanyInUkFormProvider()
+  val form: Form[Boolean] = formProvider("companyname")
 
-  lazy val checkUltimateGlobalParentCompanyInUkRoute =
+  lazy val checkUltimateGlobalParentCompanyInUkRoute: String =
     routes.CheckUltimateGlobalParentCompanyInUkController.onPageLoad(NormalMode).url
 
   "CheckUltimateGlobalParentCompanyInUk Controller" - {
@@ -58,7 +59,10 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
         val view = application.injector.instanceOf[CheckUltimateGlobalParentCompanyInUkView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, "companyname")(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, "companyname")(using
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -76,7 +80,10 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, "")(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, "")(using
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -84,7 +91,7 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -123,7 +130,7 @@ class CheckUltimateGlobalParentCompanyInUkControllerSpec extends SpecBase with M
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, "companyname")(
+        contentAsString(result) mustEqual view(boundForm, NormalMode, "companyname")(using
           request,
           messages(application)
         ).toString

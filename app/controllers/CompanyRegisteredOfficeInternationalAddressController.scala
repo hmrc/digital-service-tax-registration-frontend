@@ -85,6 +85,6 @@ class CompanyRegisteredOfficeInternationalAddressController @Inject() (
         )
   }
 
-  private def getViewOrRedirect(r: String => Result)(implicit request: DataRequest[_]): Result =
+  private def getViewOrRedirect(r: String => Result)(implicit request: DataRequest[?]): Result =
     request.userAnswers.get(CompanyNamePage).fold(Redirect(routes.JourneyRecoveryController.onPageLoad()))(r)
 }
