@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
 
         "for UK company when" - {
 
-          val specParams = Seq[(String, Settable[_])](
+          val specParams = Seq[(String, Settable[?])](
             ("'company name'", CompanyNamePage),
             ("'is address in the UK'", CheckCompanyRegisteredOfficeAddressPage),
             ("'UK address'", CompanyRegisteredOfficeUkAddressPage)
@@ -110,7 +110,7 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
 
         "for International company when" - {
 
-          val specParams = Seq[(String, Settable[_])](
+          val specParams = Seq[(String, Settable[?])](
             ("'company name'", CompanyNamePage),
             ("'is address in the UK'", CheckCompanyRegisteredOfficeAddressPage),
             (
@@ -156,7 +156,7 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
 
         "for UK company when" - {
 
-          val specParams = Seq[(String, Settable[_])](
+          val specParams = Seq[(String, Settable[?])](
             ("'company name'", UltimateParentCompanyNamePage),
             ("'is address in the UK'", CheckUltimateGlobalParentCompanyInUkPage),
             ("'UK address'", UltimateParentCompanyUkAddressPage)
@@ -174,7 +174,7 @@ class CompanySpec extends SpecBase with ScalaCheckDrivenPropertyChecks with Mode
 
         "for International company when" - {
 
-          val specParams = Seq[(String, Settable[_])](
+          val specParams = Seq[(String, Settable[?])](
             ("'company name'", UltimateParentCompanyNamePage),
             ("'is address in the UK'", CheckUltimateGlobalParentCompanyInUkPage),
             ("'International address'", UltimateParentCompanyInternationalAddressPage)

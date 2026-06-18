@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ final case class UserAnswers(
 ) {
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
-    Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)
+    Reads.optionNoError(using Reads.at(page.path)).reads(data).getOrElse(None)
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
 
@@ -44,7 +44,7 @@ final case class UserAnswers(
 
     updatedData.flatMap { d =>
       val updatedAnswers = copy(data = d)
-      page.cleanup(Some(value), updatedAnswers)
+      page.cleanup(updatedAnswers)
     }
   }
 
@@ -59,15 +59,15 @@ final case class UserAnswers(
 
     updatedData.flatMap { d =>
       val updatedAnswers = copy(data = d)
-      page.cleanup(None, updatedAnswers)
+      page.cleanup(updatedAnswers)
     }
   }
 
   def removeIfSet[A](page: QuestionPage[A])(implicit reads: Reads[A]): Try[UserAnswers] =
     get(page).fold(Try(this))(_ => remove(page))
 
-  def removeUltimateParentCompanyAnswers: Try[UserAnswers] =
-    Seq[Settable[_]](
+  def removeUltimateParentCompanyAnswers(): Try[UserAnswers] =
+    Seq[Settable[?]](
       UltimateParentCompanyNamePage,
       CheckUltimateGlobalParentCompanyInUkPage,
       UltimateParentCompanyUkAddressPage,
@@ -88,8 +88,8 @@ object UserAnswers {
     (
       (__ \ "_id").read[String] and
         (__ \ "data").read[JsObject] and
-        (__ \ "lastUpdated").read(MongoJavatimeFormats.instantFormat)
-    )(UserAnswers.apply _)
+        (__ \ "lastUpdated").read(using MongoJavatimeFormats.instantFormat)
+    )(UserAnswers.apply)
   }
 
   val writes: OWrites[UserAnswers] = {
@@ -99,7 +99,7 @@ object UserAnswers {
     (
       (__ \ "_id").write[String] and
         (__ \ "data").write[JsObject] and
-        (__ \ "lastUpdated").write(MongoJavatimeFormats.instantFormat)
+        (__ \ "lastUpdated").write(using MongoJavatimeFormats.instantFormat)
     )(ua => (ua.id, ua.data, ua.lastUpdated))
   }
 

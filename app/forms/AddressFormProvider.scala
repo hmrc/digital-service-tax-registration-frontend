@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,21 +23,31 @@ import play.api.data.Forms.{mapping, optional}
 
 sealed trait AddressFormProvider extends AddressMappings {
   val errorKeyPrefix: String
-  def createForm: Form[_ <: Address]
+  def createForm: Form[? <: Address]
 }
 
 trait UkAddressFormProvider extends AddressFormProvider {
 
   override val errorKeyPrefix: String = "ukAddress"
 
-  override def createForm: Form[UkAddress] = Form[UkAddress](
+  override def createForm: Form[UkAddress] = Form(
     mapping(
       "line1" -> addressLineMapping("line1"),
       "line2" -> optional(addressLineMapping("line2")),
       "line3" -> optional(addressLineMapping("line3")),
       "line4" -> optional(addressLineMapping("line4")),
       postcodeMapping
-    )(UkAddress.apply)(UkAddress.unapply)
+    )(UkAddress.apply)(ua =>
+      Some(
+        (
+          ua.line1,
+          ua.line2,
+          ua.line3,
+          ua.line4,
+          ua.postalCode
+        )
+      )
+    )
   )
 }
 
@@ -54,6 +64,16 @@ trait InternationalAddressFormProvider extends AddressFormProvider {
       "line3" -> optional(addressLineMapping("line3")),
       "line4" -> optional(addressLineMapping("line4")),
       countryMapping(location)
-    )(InternationalAddress.apply)(InternationalAddress.unapply)
+    )(InternationalAddress.apply)(ia =>
+      Some(
+        (
+          ia.line1,
+          ia.line2,
+          ia.line3,
+          ia.line4,
+          ia.countryCode
+        )
+      )
+    )
   )
 }

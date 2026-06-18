@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,10 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, companyName)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, companyName)(using
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -87,7 +90,7 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
           form.fill(address),
           NormalMode,
           companyName
-        )(request, messages(application)).toString
+        )(using request, messages(application)).toString
       }
     }
 
@@ -95,7 +98,7 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -139,7 +142,7 @@ class CompanyRegisteredOfficeUkAddressControllerSpec extends SpecBase with Mocki
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, companyName)(
+        contentAsString(result) mustEqual view(boundForm, NormalMode, companyName)(using
           request,
           messages(application)
         ).toString

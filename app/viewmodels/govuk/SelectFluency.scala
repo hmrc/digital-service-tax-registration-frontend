@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ trait SelectFluency {
       Select(
         id = field.id,
         name = field.name,
-        items = items map (item => item copy (selected = field.value.isDefined && field.value == item.value)),
+        items = items map (item => item.copy(selected = field.value.isDefined && field.value == item.value)),
         label = label,
         errorMessage = errorMessage(field)
       )
@@ -46,16 +46,16 @@ trait SelectFluency {
   implicit class FluentSelect(select: Select) {
 
     def withHint(hint: Hint): Select =
-      select copy (hint = Some(hint))
+      select.copy(hint = Some(hint))
 
     def describedBy(value: String): Select =
-      select copy (describedBy = Some(value))
+      select.copy(describedBy = Some(value))
 
     def withCssClass(newClass: String): Select =
-      select copy (classes = s"${select.classes} $newClass")
+      select.copy(classes = s"${select.classes} $newClass")
 
     def withAttribute(attribute: (String, String)): Select =
-      select copy (attributes = select.attributes + attribute)
+      select.copy(attributes = select.attributes + attribute)
   }
 
   object SelectItemViewModel {
@@ -70,9 +70,9 @@ trait SelectFluency {
   implicit class FluentSelectItem(item: SelectItem) {
 
     def disabled: SelectItem =
-      item copy (disabled = true)
+      item.copy(disabled = true)
 
     def withAttribute(attribute: (String, String)): SelectItem =
-      item copy (attributes = item.attributes + attribute)
+      item.copy(attributes = item.attributes + attribute)
   }
 }

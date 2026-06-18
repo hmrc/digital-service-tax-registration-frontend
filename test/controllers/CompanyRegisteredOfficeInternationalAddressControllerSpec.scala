@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ class CompanyRegisteredOfficeInternationalAddressControllerSpec extends SpecBase
           location.countrySelectList(form(location).data, location.countryListWithoutGB),
           NormalMode,
           companyName
-        )(request, messages(application)).toString
+        )(using request, messages(application)).toString
       }
     }
 
@@ -103,7 +103,7 @@ class CompanyRegisteredOfficeInternationalAddressControllerSpec extends SpecBase
           location.countrySelectList(form(location).data, location.countryListWithoutGB),
           NormalMode,
           companyName
-        )(request, messages(application)).toString
+        )(using request, messages(application)).toString
       }
     }
 
@@ -111,7 +111,7 @@ class CompanyRegisteredOfficeInternationalAddressControllerSpec extends SpecBase
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
@@ -161,7 +161,7 @@ class CompanyRegisteredOfficeInternationalAddressControllerSpec extends SpecBase
           location.countrySelectList(boundForm.data, location.countryListWithoutGB),
           NormalMode,
           companyName
-        )(
+        )(using
           request,
           messages(application)
         ).toString

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
     testCountryField(form, location)
   }
 
-  private def testMandatoryAddressLine(form: Form[_], prefix: String): Unit = {
+  private def testMandatoryAddressLine(form: Form[?], prefix: String): Unit = {
 
     val fieldName = "line1"
 
@@ -95,7 +95,7 @@ trait AddressFieldBehaviours extends StringFieldBehaviours {
     }
   }
 
-  private def testOptionalAddressLine(form: Form[_], fieldName: String, prefix: String): Unit =
+  private def testOptionalAddressLine(form: Form[?], fieldName: String, prefix: String): Unit =
     s".$fieldName must" - {
 
       behave like fieldThatBindsValidData(

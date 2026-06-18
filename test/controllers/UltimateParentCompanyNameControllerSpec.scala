@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,11 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.UltimateParentCompanyNamePage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.UltimateParentCompanyNameView
 
@@ -37,10 +38,11 @@ class UltimateParentCompanyNameControllerSpec extends SpecBase with MockitoSugar
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new UltimateParentCompanyNameFormProvider()
-  val form         = formProvider()
+  val formProvider       = new UltimateParentCompanyNameFormProvider()
+  val form: Form[String] = formProvider()
 
-  lazy val ultimateParentCompanyNameRoute = routes.UltimateParentCompanyNameController.onPageLoad(NormalMode).url
+  lazy val ultimateParentCompanyNameRoute: String =
+    routes.UltimateParentCompanyNameController.onPageLoad(NormalMode).url
 
   "UltimateParentCompanyName Controller" - {
 
@@ -56,7 +58,7 @@ class UltimateParentCompanyNameControllerSpec extends SpecBase with MockitoSugar
         val view = application.injector.instanceOf[UltimateParentCompanyNameView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(using request, messages(application)).toString
       }
     }
 
@@ -74,7 +76,10 @@ class UltimateParentCompanyNameControllerSpec extends SpecBase with MockitoSugar
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(using
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -82,7 +87,7 @@ class UltimateParentCompanyNameControllerSpec extends SpecBase with MockitoSugar
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -120,7 +125,7 @@ class UltimateParentCompanyNameControllerSpec extends SpecBase with MockitoSugar
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(using request, messages(application)).toString
       }
     }
 

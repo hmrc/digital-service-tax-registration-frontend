@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ class DigitalServicesTaxServiceSpec
       "must return an instance of CompanyRegWrapper when the connector returns Some" in {
 
         forAll(genCompanyRegWrapper) { wrapper =>
-          when(mockConnector.lookupCompany(any[HeaderCarrier], any[ExecutionContext]))
+          when(mockConnector.lookupCompany(using any[HeaderCarrier], any[ExecutionContext]))
             .thenReturn(Future.successful(Some(wrapper)))
 
           serviceUnderTest.lookupCompany.futureValue mustBe Some(wrapper)
@@ -60,7 +60,7 @@ class DigitalServicesTaxServiceSpec
 
       "must return None when the connect returns None" in {
 
-        when(mockConnector.lookupCompany(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockConnector.lookupCompany(using any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(None))
 
         serviceUnderTest.lookupCompany.futureValue mustBe None
@@ -74,7 +74,7 @@ class DigitalServicesTaxServiceSpec
         forAll(genPostcode, genCompanyRegWrapper.suchThat(_.utr.nonEmpty)) { (postcode, wrapper) =>
           val utr = wrapper.utr.value
 
-          when(mockConnector.lookupCompany(eqTo(utr), eqTo(postcode))(any[HeaderCarrier], any[ExecutionContext]))
+          when(mockConnector.lookupCompany(eqTo(utr), eqTo(postcode))(using any[HeaderCarrier], any[ExecutionContext]))
             .thenReturn(Future.successful(Some(wrapper)))
 
           serviceUnderTest.lookupCompany(utr, postcode).futureValue mustBe Some(wrapper)
@@ -83,7 +83,7 @@ class DigitalServicesTaxServiceSpec
 
       "must return None when the connect returns None" in {
 
-        when(mockConnector.lookupCompany(any[String], any[String])(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockConnector.lookupCompany(any[String], any[String])(using any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(None))
 
         serviceUnderTest.lookupCompany("111111111", "TE35ST").futureValue mustBe None
@@ -95,7 +95,7 @@ class DigitalServicesTaxServiceSpec
       "must return an instance of Company when the connect returns Some" in {
 
         forAll(genCompany) { company =>
-          when(mockConnector.lookupCompany(any[HeaderCarrier], any[ExecutionContext]))
+          when(mockConnector.lookupCompany(using any[HeaderCarrier], any[ExecutionContext]))
             .thenReturn(Future.successful(Some(CompanyRegWrapper(company, None, None))))
 
           serviceUnderTest.getCompany.futureValue mustBe Some(company)
@@ -104,7 +104,7 @@ class DigitalServicesTaxServiceSpec
 
       "must return None when the connect returns None" in {
 
-        when(mockConnector.lookupCompany(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockConnector.lookupCompany(using any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(None))
 
         serviceUnderTest.getCompany.futureValue mustBe None
@@ -120,7 +120,7 @@ class DigitalServicesTaxServiceSpec
           forAll(genRegistration) { reg =>
             val response = HttpResponse(OK, "Success")
 
-            when(mockConnector.submitRegistration(eqTo(reg))(any(), any()))
+            when(mockConnector.submitRegistration(eqTo(reg))(using any(), any()))
               .thenReturn(Future.successful(response))
 
             serviceUnderTest.submitRegistration(reg).futureValue mustBe response
@@ -133,7 +133,7 @@ class DigitalServicesTaxServiceSpec
             (reg, status) =>
               val response = HttpResponse(status, "Error")
 
-              when(mockConnector.submitRegistration(eqTo(reg))(any(), any()))
+              when(mockConnector.submitRegistration(eqTo(reg))(using any(), any()))
                 .thenReturn(Future.successful(response))
 
               serviceUnderTest.submitRegistration(reg).futureValue mustBe response

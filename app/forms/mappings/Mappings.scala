@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +26,15 @@ import java.time.LocalDate
 trait Mappings extends Formatters with Constraints {
 
   protected def text(errorKey: String = "error.required", args: Seq[String] = Seq.empty): FieldMapping[String] =
-    of(stringFormatter(errorKey, args))
+    of(using stringFormatter(errorKey, args))
 
   protected def optionalText(
     invalidKey: String = "error.invalid",
     lengthKey: String = "error.length",
     regex: String,
-    size: Int,
-    args: Seq[String] = Seq.empty
+    size: Int
   ): FieldMapping[Option[String]] =
-    of(optionalStringFormatter(invalidKey, lengthKey, regex, size, args))
+    of(using optionalStringFormatter(invalidKey, lengthKey, regex, size))
 
   protected def int(
     requiredKey: String = "error.required",
@@ -43,21 +42,21 @@ trait Mappings extends Formatters with Constraints {
     nonNumericKey: String = "error.nonNumeric",
     args: Seq[String] = Seq.empty
   ): FieldMapping[Int] =
-    of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey, args))
+    of(using intFormatter(requiredKey, wholeNumberKey, nonNumericKey, args))
 
   protected def boolean(
     requiredKey: String = "error.required",
     invalidKey: String = "error.boolean",
     args: Seq[String] = Seq.empty
   ): FieldMapping[Boolean] =
-    of(booleanFormatter(requiredKey, invalidKey, args))
+    of(using booleanFormatter(requiredKey, invalidKey, args))
 
   protected def enumerable[A](
     requiredKey: String = "error.required",
     invalidKey: String = "error.invalid",
     args: Seq[String] = Seq.empty
   )(implicit ev: Enumerable[A]): FieldMapping[A] =
-    of(enumerableFormatter[A](requiredKey, invalidKey, args))
+    of(using enumerableFormatter[A](requiredKey, invalidKey, args))
 
   protected def localDate(
     invalidKey: String,
@@ -66,5 +65,5 @@ trait Mappings extends Formatters with Constraints {
     requiredKey: String,
     args: Seq[String] = Seq.empty
   )(implicit messages: Messages): FieldMapping[LocalDate] =
-    of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
+    of(using new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
 }

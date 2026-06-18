@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ object Address {
       (__ \ "line4").readNullable[String] and
       (__ \ "postalCode").readNullable[String] and
       (__ \ "countryCode").readNullable[String]
-  )(applyJson _)
+  )(applyJson)
 
   private def applyJson(
     line1: String,
@@ -59,7 +59,7 @@ object Address {
     typeNaming = JsonNaming {
       case name if name.contains("InternationalAddress") =>
         "uk.gov.hmrc.digitalservicestax.data.ForeignAddress"
-      case ukName                                        =>
+      case _                                             =>
         s"uk.gov.hmrc.digitalservicestax.data.UkAddress"
     }
   )

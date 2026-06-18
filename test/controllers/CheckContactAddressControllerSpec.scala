@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[CheckContactAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(using request, messages(application)).toString
       }
     }
 
@@ -76,7 +76,10 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(using
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -89,16 +92,16 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
         val ukAddress = UkAddress("123 Test Street", None, None, None, "TE5 5ST")
 
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-        when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(any()))
+        when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(using any()))
           .thenReturn(Some(ukAddress))
 
         when(
-          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(any())
+          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(using any())
         ).thenReturn(None)
 
-        when(mockUserAnswers.set(any(), any())(any()))
+        when(mockUserAnswers.set(any(), any())(using any()))
           .thenReturn(Try(mockUserAnswers))
 
         val application =
@@ -119,7 +122,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          verify(mockUserAnswers).set(eqTo(ContactUkAddressPage), eqTo(ukAddress))(any())
+          verify(mockUserAnswers).set(eqTo(ContactUkAddressPage), eqTo(ukAddress))(using any())
         }
       }
 
@@ -130,16 +133,16 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
         val internationalAddress = InternationalAddress("123 Test Street", None, None, None, "US")
 
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-        when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(any()))
+        when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(using any()))
           .thenReturn(None)
 
         when(
-          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(any())
+          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(using any())
         ).thenReturn(Some(internationalAddress))
 
-        when(mockUserAnswers.set(any(), any())(any()))
+        when(mockUserAnswers.set(any(), any())(using any()))
           .thenReturn(Try(mockUserAnswers))
 
         val application =
@@ -160,7 +163,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          verify(mockUserAnswers).set(eqTo(InternationalContactAddressPage), eqTo(internationalAddress))(any())
+          verify(mockUserAnswers).set(eqTo(InternationalContactAddressPage), eqTo(internationalAddress))(using any())
         }
       }
 
@@ -169,16 +172,16 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val mockSessionRepository = mock[SessionRepository]
         val mockUserAnswers       = mock[UserAnswers]
 
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-        when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(any()))
+        when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(using any()))
           .thenReturn(None)
 
         when(
-          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(any())
+          mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(using any())
         ).thenReturn(None)
 
-        when(mockUserAnswers.set(any(), any())(any()))
+        when(mockUserAnswers.set(any(), any())(using any()))
           .thenReturn(Try(mockUserAnswers))
 
         val application =
@@ -199,8 +202,8 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          verify(mockUserAnswers, never()).set(eqTo(InternationalContactAddressPage), any)(any())
-          verify(mockUserAnswers, never()).set(eqTo(ContactUkAddressPage), any)(any())
+          verify(mockUserAnswers, never()).set(eqTo(InternationalContactAddressPage), any)(using any())
+          verify(mockUserAnswers, never()).set(eqTo(ContactUkAddressPage), any)(using any())
         }
       }
     }
@@ -213,17 +216,17 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
       val internationalAddress =
         InternationalAddress("123 Test Street", None, None, None, "US")
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(any()))
+      when(mockUserAnswers.get(eqTo(CompanyRegisteredOfficeUkAddressPage))(using any()))
         .thenReturn(None)
 
       when(
-        mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(any())
+        mockUserAnswers.get(eqTo(CompanyRegisteredOfficeInternationalAddressPage))(using any())
       )
         .thenReturn(Some(internationalAddress))
 
-      when(mockUserAnswers.set(any(), any())(any()))
+      when(mockUserAnswers.set(any(), any())(using any()))
         .thenReturn(Try(mockUserAnswers))
 
       val application =
@@ -243,7 +246,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
-        verify(mockUserAnswers).set(eqTo(CheckContactAddressPage), eqTo(false))(any())
+        verify(mockUserAnswers).set(eqTo(CheckContactAddressPage), eqTo(false))(using any())
       }
     }
 
@@ -263,7 +266,7 @@ class CheckContactAddressControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(using request, messages(application)).toString
       }
     }
   }

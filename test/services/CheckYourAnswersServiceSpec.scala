@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -501,7 +501,7 @@ class CheckYourAnswersServiceSpec
             }
 
           forAll(genRegistration) { registration =>
-            when(mockDstService.lookupCompany(any[HeaderCarrier], any[ExecutionContext]))
+            when(mockDstService.lookupCompany(using any[HeaderCarrier], any[ExecutionContext]))
               .thenReturn(Future.successful(Some(registration.companyReg)))
 
             val baseUserAnswers = UserAnswers(userAnswersId)

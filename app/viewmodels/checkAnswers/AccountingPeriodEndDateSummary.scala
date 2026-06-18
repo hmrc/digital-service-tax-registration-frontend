@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ object AccountingPeriodEndDateSummary {
     answers.get(AccountingPeriodEndDatePage).map { answer =>
       SummaryListRowViewModel(
         key = "accounting-period-end-date.checkYourAnswersLabel",
-        value = ValueViewModel(answer.format(dateTimeFormat()(messages.lang))),
+        value = ValueViewModel(answer.format(dateTimeFormat()(using messages.lang))),
         actions = Seq(
           ActionItemViewModel("site.change", routes.AccountingPeriodEndDateController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("accounting-period-end-date.change.hidden"))

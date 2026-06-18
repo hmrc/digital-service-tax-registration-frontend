@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import play.api.data.{Form, FormError}
 
 trait StringFieldBehaviours extends FieldBehaviours {
 
-  def fieldWithMaxLength(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
+  def fieldWithMaxLength(form: Form[?], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
     s"not bind strings longer than $maxLength characters" in {
 
       forAll(stringsLongerThan(maxLength) -> "longString") { (string: String) =>
@@ -31,7 +31,7 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
 
   def fieldWithMaxLengthGeneratingFromRegex(
-    form: Form[_],
+    form: Form[?],
     fieldName: String,
     maxLength: Int,
     regex: String,
@@ -46,20 +46,20 @@ trait StringFieldBehaviours extends FieldBehaviours {
     }
 
   def fieldWithInValidData(
-    form: Form[_],
+    form: Form[?],
     fieldName: String,
     invalidDataGenerator: Gen[String],
     invalidDataError: FormError
   ): Unit =
     s"not bind invalid characters" in {
-      forAll(invalidDataGenerator -> "inValidDataItem") { dataItem: String =>
+      forAll(invalidDataGenerator -> "inValidDataItem") { (dataItem: String) =>
         val result = form.bind(Map(fieldName -> dataItem)).apply(fieldName)
         result.errors must contain only invalidDataError
       }
     }
 
   def fieldWithRegexpWithGenerator(
-    form: Form[_],
+    form: Form[?],
     fieldName: String,
     regexp: String,
     generator: Gen[String],

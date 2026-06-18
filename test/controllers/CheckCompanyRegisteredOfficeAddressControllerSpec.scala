@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,11 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.CheckCompanyRegisteredOfficeAddressPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.CheckCompanyRegisteredOfficeAddressView
 
@@ -37,10 +38,10 @@ class CheckCompanyRegisteredOfficeAddressControllerSpec extends SpecBase with Mo
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CheckCompanyRegisteredOfficeAddressFormProvider()
-  val form         = formProvider()
+  val formProvider        = new CheckCompanyRegisteredOfficeAddressFormProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val checkCompanyRegisteredOfficeAddressRoute =
+  lazy val checkCompanyRegisteredOfficeAddressRoute: String =
     routes.CheckCompanyRegisteredOfficeAddressController.onPageLoad(NormalMode).url
 
   "CheckCompanyRegisteredOfficeAddress Controller" - {
@@ -57,7 +58,7 @@ class CheckCompanyRegisteredOfficeAddressControllerSpec extends SpecBase with Mo
         val view = application.injector.instanceOf[CheckCompanyRegisteredOfficeAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(using request, messages(application)).toString
       }
     }
 
@@ -75,7 +76,10 @@ class CheckCompanyRegisteredOfficeAddressControllerSpec extends SpecBase with Mo
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(using
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -83,7 +87,7 @@ class CheckCompanyRegisteredOfficeAddressControllerSpec extends SpecBase with Mo
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -121,7 +125,7 @@ class CheckCompanyRegisteredOfficeAddressControllerSpec extends SpecBase with Mo
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(using request, messages(application)).toString
       }
     }
 

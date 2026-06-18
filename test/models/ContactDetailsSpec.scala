@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ class ContactDetailsSpec extends SpecBase {
 
     "when .getFromUserAnswers is called" - {
 
-      val specParams = Seq[(String, Settable[_])](
+      val specParams = Seq[(String, Settable[?])](
         ("name", ContactPersonNamePage),
         ("phone number", ContactPersonPhoneNumberPage),
         ("email address", ContactPersonEmailAddressPage)

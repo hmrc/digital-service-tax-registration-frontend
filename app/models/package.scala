@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ package object models {
 
         case (first :: second :: rest, oldValue) =>
           Reads
-            .optionNoError(Reads.at[JsValue](JsPath(first :: Nil)))
+            .optionNoError(using Reads.at[JsValue](JsPath(first :: Nil)))
             .reads(oldValue)
             .flatMap { opt =>
               opt
@@ -121,7 +121,7 @@ package object models {
         case ((_: KeyPathNode) :: Nil, _)                                              => JsError(s"cannot remove a key on $jsValue")
         case (first :: second :: rest, oldValue)                                       =>
           Reads
-            .optionNoError(Reads.at[JsValue](JsPath(first :: Nil)))
+            .optionNoError(using Reads.at[JsValue](JsPath(first :: Nil)))
             .reads(oldValue)
             .flatMap { (opt: Option[JsValue]) =>
               opt

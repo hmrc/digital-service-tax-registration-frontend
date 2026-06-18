@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,11 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{ContactPersonNamePage, ContactPersonPhoneNumberPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.ContactPersonPhoneNumberView
 
@@ -37,8 +38,8 @@ class ContactPersonPhoneNumberControllerSpec extends SpecBase with MockitoSugar 
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactPersonPhoneNumberFormProvider()
-  val form         = formProvider()
+  val formProvider       = new ContactPersonPhoneNumberFormProvider()
+  val form: Form[String] = formProvider()
 
   val contactName: ContactPersonName = ContactPersonName("John", "Smith")
 
@@ -47,7 +48,7 @@ class ContactPersonPhoneNumberControllerSpec extends SpecBase with MockitoSugar 
 
   val validPhoneNumber = "01234567890"
 
-  lazy val contactPersonPhoneNumberRoute = routes.ContactPersonPhoneNumberController.onPageLoad(NormalMode).url
+  lazy val contactPersonPhoneNumberRoute: String = routes.ContactPersonPhoneNumberController.onPageLoad(NormalMode).url
 
   "ContactPersonPhoneNumber Controller" - {
 
@@ -65,7 +66,7 @@ class ContactPersonPhoneNumberControllerSpec extends SpecBase with MockitoSugar 
           val view = application.injector.instanceOf[ContactPersonPhoneNumberView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, contactName.fullName, NormalMode)(
+          contentAsString(result) mustEqual view(form, contactName.fullName, NormalMode)(using
             request,
             messages(application)
           ).toString
@@ -104,7 +105,7 @@ class ContactPersonPhoneNumberControllerSpec extends SpecBase with MockitoSugar 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(validPhoneNumber), contactName.fullName, NormalMode)(
+        contentAsString(result) mustEqual view(form.fill(validPhoneNumber), contactName.fullName, NormalMode)(using
           request,
           messages(application)
         ).toString
@@ -115,7 +116,7 @@ class ContactPersonPhoneNumberControllerSpec extends SpecBase with MockitoSugar 
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -153,7 +154,7 @@ class ContactPersonPhoneNumberControllerSpec extends SpecBase with MockitoSugar 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, contactName.fullName, NormalMode)(
+        contentAsString(result) mustEqual view(boundForm, contactName.fullName, NormalMode)(using
           request,
           messages(application)
         ).toString

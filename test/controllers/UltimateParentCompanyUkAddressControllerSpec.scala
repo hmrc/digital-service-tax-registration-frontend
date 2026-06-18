@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,15 @@ import base.SpecBase
 import forms.UltimateParentCompanyUkAddressFormProvider
 import models.{InternationalAddress, NormalMode, UkAddress, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.UltimateParentCompanyUkAddressView
 
@@ -38,10 +39,10 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new UltimateParentCompanyUkAddressFormProvider()
-  val form         = formProvider()
+  val formProvider          = new UltimateParentCompanyUkAddressFormProvider()
+  val form: Form[UkAddress] = formProvider()
 
-  lazy val ultimateParentCompanyUkAddressRoute =
+  lazy val ultimateParentCompanyUkAddressRoute: String =
     routes.UltimateParentCompanyUkAddressController.onPageLoad(NormalMode).url
 
   private val ultimateParentCompanyName: String = "UltimateParentName"
@@ -49,7 +50,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
   private val addressLine = "123 Test Street"
   private val postcode    = "BT15GB"
 
-  val userAnswers = UserAnswers(userAnswersId)
+  val userAnswers: UserAnswers = UserAnswers(userAnswersId)
     .set(UltimateParentCompanyUkAddressPage, UkAddress(addressLine, None, None, None, postcode))
     .success
     .value
@@ -75,7 +76,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, ultimateParentCompanyName)(
+        contentAsString(result) mustEqual view(form, NormalMode, ultimateParentCompanyName)(using
           request,
           messages(application)
         ).toString
@@ -112,7 +113,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
           form.fill(UkAddress(addressLine, None, None, None, postcode)),
           NormalMode,
           ultimateParentCompanyName
-        )(request, messages(application)).toString
+        )(using request, messages(application)).toString
       }
     }
 
@@ -120,7 +121,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -147,17 +148,17 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
       val mockSessionRepository = mock[SessionRepository]
       val mockUserAnswers       = mock[UserAnswers]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      when(mockUserAnswers.removeIfSet(any())(any()))
+      when(mockUserAnswers.removeIfSet(any())(using any()))
         .thenCallRealMethod()
 
-      when(mockUserAnswers.get(eqTo(UltimateParentCompanyInternationalAddressPage))(any()))
+      when(mockUserAnswers.get(eqTo(UltimateParentCompanyInternationalAddressPage))(using any()))
         .thenReturn(
           Some(InternationalAddress(addressLine, None, None, None, "US"))
         )
 
-      when(mockUserAnswers.set(any(), any())(any()))
+      when(mockUserAnswers.set(any(), any())(using any()))
         .thenReturn(Try(mockUserAnswers))
 
       when(mockUserAnswers.remove(eqTo(UltimateParentCompanyInternationalAddressPage)))
@@ -201,7 +202,7 @@ class UltimateParentCompanyUkAddressControllerSpec extends SpecBase with Mockito
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(using request, messages(application)).toString
       }
     }
 

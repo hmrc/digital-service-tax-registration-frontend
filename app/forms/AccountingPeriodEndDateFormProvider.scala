@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,9 +51,9 @@ class AccountingPeriodEndDateFormProvider @Inject() extends Mappings {
   private def maxAccountingPeriodEndDate(liabilityStartDate: LocalDate, args: Any*): Constraint[LocalDate] =
     Constraint {
       case ap if liabilityStartDate == DST_EPOCH && ap.isAfter(liabilityStartDate.maxDate) =>
-        Invalid(s"$accountingPeriodEndDateKey.fixed-maximum-date", args: _*)
+        Invalid(s"$accountingPeriodEndDateKey.fixed-maximum-date", args*)
       case ap if ap.isAfter(liabilityStartDate.maxDate)                                    =>
-        Invalid(s"$accountingPeriodEndDateKey.maximum-date", args: _*)
+        Invalid(s"$accountingPeriodEndDateKey.maximum-date", args*)
       case _                                                                               => Valid
     }
 }

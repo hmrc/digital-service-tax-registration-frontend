@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,6 +88,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form(location), selectOptions, ultimateParentCompanyName, NormalMode)(
+          using
           request,
           messages(application)
         ).toString
@@ -130,7 +131,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
             selectOptions,
             ultimateParentCompanyName,
             NormalMode
-          )(request, messages(application)).toString
+          )(using request, messages(application)).toString
       }
     }
 
@@ -138,7 +139,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -165,18 +166,18 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
       val mockSessionRepository = mock[SessionRepository]
       val mockUserAnswers       = mock[UserAnswers]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-      when(mockUserAnswers.removeIfSet(any())(any()))
+      when(mockUserAnswers.removeIfSet(any())(using any()))
         .thenCallRealMethod()
 
-      when(mockUserAnswers.get(eqTo(UltimateParentCompanyUkAddressPage))(any()))
+      when(mockUserAnswers.get(eqTo(UltimateParentCompanyUkAddressPage))(using any()))
         .thenReturn(Some(UkAddress("123 Test Street", None, None, None, "TE5 5ST")))
 
       when(mockUserAnswers.remove(eqTo(UltimateParentCompanyUkAddressPage)))
         .thenReturn(Try(mockUserAnswers))
 
-      when(mockUserAnswers.set(any(), any())(any()))
+      when(mockUserAnswers.set(any(), any())(using any()))
         .thenReturn(Try(mockUserAnswers))
 
       val application =
@@ -223,7 +224,7 @@ class UltimateParentCompanyInternationalAddressControllerSpec extends SpecBase w
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, selectOptions, ultimateParentCompanyName, NormalMode)(
+        contentAsString(result) mustEqual view(boundForm, selectOptions, ultimateParentCompanyName, NormalMode)(using
           request,
           messages(application)
         ).toString

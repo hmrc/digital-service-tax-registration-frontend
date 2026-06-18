@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[CheckIfGroupView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(using request, messages(application)).toString
       }
     }
 
@@ -76,7 +76,10 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(using
+          request,
+          messages(application)
+        ).toString
       }
     }
 
@@ -84,7 +87,7 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -114,10 +117,10 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
 
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.set(any(), any())(any()))
+        when(mockUserAnswers.set(any(), any())(using any()))
           .thenReturn(Success(mockUserAnswers))
 
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
         val application =
           applicationBuilder(userAnswers = Some(mockUserAnswers))
@@ -137,7 +140,7 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          verify(mockUserAnswers, times(0)).removeUltimateParentCompanyAnswers
+          verify(mockUserAnswers, times(0)).removeUltimateParentCompanyAnswers()
           verify(mockUserAnswers, times(0)).remove(UltimateParentCompanyNamePage)
           verify(mockUserAnswers, times(0)).remove(CheckUltimateGlobalParentCompanyInUkPage)
           verify(mockUserAnswers, times(0)).remove(UltimateParentCompanyUkAddressPage)
@@ -151,16 +154,16 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
 
         val mockUserAnswers = mock[UserAnswers]
 
-        when(mockUserAnswers.set(any(), any())(any()))
+        when(mockUserAnswers.set(any(), any())(using any()))
           .thenReturn(Success(mockUserAnswers))
 
         when(mockUserAnswers.remove(any()))
           .thenReturn(Success(mockUserAnswers))
 
-        when(mockUserAnswers.removeUltimateParentCompanyAnswers)
+        when(mockUserAnswers.removeUltimateParentCompanyAnswers())
           .thenCallRealMethod()
 
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
         val application =
           applicationBuilder(userAnswers = Some(mockUserAnswers))
@@ -180,7 +183,7 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          verify(mockUserAnswers).removeUltimateParentCompanyAnswers
+          verify(mockUserAnswers).removeUltimateParentCompanyAnswers()
           verify(mockUserAnswers).remove(UltimateParentCompanyNamePage)
           verify(mockUserAnswers).remove(CheckUltimateGlobalParentCompanyInUkPage)
           verify(mockUserAnswers).remove(UltimateParentCompanyUkAddressPage)
@@ -205,7 +208,7 @@ class CheckIfGroupControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(using request, messages(application)).toString
       }
     }
   }

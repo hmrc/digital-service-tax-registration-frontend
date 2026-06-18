@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -208,14 +208,12 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val mockAuthConnector: AuthConnector = mock[AuthConnector]
           val retrieval: AuthRetrievals        = Some("Int-7e341-48319ddb53")
 
-          when(appConfig.dstNewRegistrationFrontendEnableFlag) thenReturn true
+          when(appConfig.dstNewRegistrationFrontendEnableFlag).thenReturn(true)
 
           when(
             mockAuthConnector
-              .authorise[AuthRetrievals](any(), any())(any(), any())
-          ) thenReturn Future.successful(
-            retrieval
-          )
+              .authorise[AuthRetrievals](any(), any())(using any(), any())
+          ).thenReturn(Future.successful(retrieval))
 
           val action     = new AuthenticatedIdentifierAction(
             mockAuthConnector,
@@ -245,17 +243,15 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val mockAuthConnector: AuthConnector = mock[AuthConnector]
           val retrieval: AuthRetrievals        = Some("Int-7e341-48319ddb53")
 
-          when(appConfig.dstNewRegistrationFrontendEnableFlag) thenReturn false
+          when(appConfig.dstNewRegistrationFrontendEnableFlag).thenReturn(false)
           when(
             appConfig.dstFrontendRegistrationUrl
-          ) thenReturn "http://localhost:1234/oldReg"
+          ).thenReturn("http://localhost:1234/oldReg")
 
           when(
             mockAuthConnector
-              .authorise[AuthRetrievals](any(), any())(any(), any())
-          ) thenReturn Future.successful(
-            retrieval
-          )
+              .authorise[AuthRetrievals](any(), any())(using any(), any())
+          ).thenReturn(Future.successful(retrieval))
 
           val action     = new AuthenticatedIdentifierAction(
             mockAuthConnector,
