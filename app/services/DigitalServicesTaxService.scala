@@ -17,7 +17,8 @@
 package services
 
 import connectors.DigitalServicesTaxConnector
-import models.{Company, CompanyRegWrapper, Registration}
+import models.{Company, CompanyRegWrapper, Registration, RegistrationJourneyState}
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import javax.inject.Inject
@@ -36,6 +37,29 @@ class DigitalServicesTaxService @Inject() (backendConnector: DigitalServicesTaxC
     ec: ExecutionContext
   ): Future[Option[CompanyRegWrapper]] =
     backendConnector.lookupCompany(utr, postcode)
+
+  def lookupPendingRegistrationExists(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
+    backendConnector.lookupPendingRegistrationExists.map {
+      case resp if resp.status == OK => true
+      case _                         => false
+    }
+
+  def lookupRegistration(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Registration]] =
+    backendConnector.lookupRegistration
+
+  def getRegistrationJourneyState(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[RegistrationJourneyState] =
+    for {
+      pendingRegistrationExists <- lookupPendingRegistrationExists
+      registration              <- lookupRegistration
+    } yield (pendingRegistrationExists, registration) match {
+      case (true, _)                                              => RegistrationJourneyState.Pending
+      case (false, Some(reg)) if reg.registrationNumber.isDefined => RegistrationJourneyState.Existing
+      case (false, Some(_))                                       => RegistrationJourneyState.Pending
+      case _                                                      => RegistrationJourneyState.New
+    }
 
   def submitRegistration(
     registration: Registration

@@ -16,22 +16,33 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions.{Auth, IdentifierAction}
 import models.NormalMode
+import models.RegistrationJourneyState
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.DigitalServicesTaxService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   identify: IdentifierAction,
-  auth: Auth
-) extends FrontendBaseController
+  auth: Auth,
+  service: DigitalServicesTaxService,
+  appConfig: FrontendAppConfig
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (auth andThen identify) { _ =>
-    Redirect(routes.GlobalRevenuesController.onPageLoad(NormalMode))
+  def onPageLoad(): Action[AnyContent] = (auth andThen identify).async { implicit request =>
+    service.getRegistrationJourneyState.map {
+      case RegistrationJourneyState.Pending  => Redirect(routes.RegistrationController.registrationPending())
+      case RegistrationJourneyState.Existing => Redirect(appConfig.dstReturnsUrl)
+      case RegistrationJourneyState.New      => Redirect(routes.GlobalRevenuesController.onPageLoad(NormalMode))
+    }
   }
 }

@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import models.{CompanyRegWrapper, Registration}
 import play.api.libs.json.Json
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.HttpReadsInstances.{readEitherOf, readFromJson}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
@@ -45,6 +45,18 @@ class DigitalServicesTaxConnector @Inject() (http: HttpClientV2, appConfig: Fron
     val url: URL = url"$backendUrl/lookup-company/$utr/$postcode"
     http.get(url).execute[Option[CompanyRegWrapper]]
   }
+
+  def lookupPendingRegistrationExists(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[HttpResponse] =
+    http.get(url"$backendUrl/pending-registration").execute[HttpResponse]
+
+  def lookupRegistration(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[Option[Registration]] =
+    http.get(url"$backendUrl/registration").execute[Option[Registration]]
 
   def submitRegistration(reg: Registration)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
     http

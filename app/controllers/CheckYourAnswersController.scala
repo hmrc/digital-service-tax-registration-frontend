@@ -17,7 +17,9 @@
 package controllers
 
 import com.google.inject.Inject
+import config.FrontendAppConfig
 import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.RegistrationJourneyState
 import pages.{CompanyNamePage, ContactPersonEmailAddressPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -37,6 +39,7 @@ class CheckYourAnswersController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   checkYourAnswersService: CheckYourAnswersService,
   service: DigitalServicesTaxService,
+  appConfig: FrontendAppConfig,
   view: CheckYourAnswersView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -68,23 +71,35 @@ class CheckYourAnswersController @Inject() (
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     def redirect: Result = Redirect(routes.RegistrationController.registerAction())
 
-    checkYourAnswersService.buildRegistration
-      .flatMap {
-        _.fold(Future.successful(redirect)) {
-          service.submitRegistration(_) map {
-            case s if s.status == OK =>
-              (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
-                case (Some(companyName), Some(contactPersonEmailAddressPage)) =>
-                  Redirect(routes.RegistrationController.registrationSent(companyName, contactPersonEmailAddressPage))
-                case _                                                        =>
-                  // $COVERAGE-OFF$
-                  logger.warn("Failed to retrieve answers from cache, redirecting to application complete anyway")
-                  // $COVERAGE-ON$
-                  Redirect(routes.RegistrationController.registrationComplete())
-              }
-            case _                   => redirect
-          }
+    def redirectToPendingRegistration: Result = Redirect(routes.RegistrationController.registrationPending())
+
+    def redirectToExistingRegistration: Result = Redirect(appConfig.dstReturnsUrl)
+
+    def proceedToSubmit: Future[Result] = checkYourAnswersService.buildRegistration.flatMap {
+      _.fold(Future.successful(redirect)) {
+        service.submitRegistration(_) map {
+          case s if s.status == OK =>
+            (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
+              case (Some(companyName), Some(contactPersonEmailAddressPage)) =>
+                Redirect(routes.RegistrationController.registrationSent(companyName, contactPersonEmailAddressPage))
+              case _                                                        =>
+                // $COVERAGE-OFF$
+                logger.warn("Failed to retrieve answers from cache, redirecting to application complete anyway")
+                // $COVERAGE-ON$
+                Redirect(routes.RegistrationController.registrationComplete())
+            }
+          case _                   => redirect
         }
       }
+    }
+
+    for {
+      registrationJourneyState <- service.getRegistrationJourneyState
+      result                   <- registrationJourneyState match {
+                                    case RegistrationJourneyState.Pending  => Future.successful(redirectToPendingRegistration)
+                                    case RegistrationJourneyState.Existing => Future.successful(redirectToExistingRegistration)
+                                    case RegistrationJourneyState.New      => proceedToSubmit
+                                  }
+    } yield result
   }
 }
