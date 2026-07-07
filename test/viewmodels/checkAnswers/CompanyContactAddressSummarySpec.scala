@@ -16,13 +16,13 @@
 
 package viewmodels.checkAnswers
 
-import models.{UkAddress, UserAnswers}
+import models.UserAnswers
+import org.scalatest.TryValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import pages.CompanyContactAddressPage
 import play.api.i18n.Messages
 import play.api.test.Helpers.stubMessages
-import org.scalatest.TryValues
-import pages.CompanyContactAddressPage
 
 class CompanyContactAddressSummarySpec extends AnyFreeSpec with Matchers with TryValues {
 

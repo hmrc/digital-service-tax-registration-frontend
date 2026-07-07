@@ -17,8 +17,9 @@
 package controllers
 
 import base.SpecBase
+import config.FrontendAppConfig
 import controllers.actions.{DataRequiredActionImpl, FakeAuthorisedAction, FakeDataRetrievalAction, FakeIdentifierAction}
-import models.{Location, Registration, UserAnswers}
+import models.{Location, Registration, RegistrationJourneyState, UserAnswers}
 import models.requests.DataRequest
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verifyNoInteractions, when}
@@ -96,6 +97,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
   val mockCyaService: CheckYourAnswersService   = mock[CheckYourAnswersService]
   val mockDstService: DigitalServicesTaxService = mock[DigitalServicesTaxService]
+  val mockAppConfig: FrontendAppConfig          = mock[FrontendAppConfig]
 
   val view: CheckYourAnswersView = inject[CheckYourAnswersView]
 
@@ -108,6 +110,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
     Helpers.stubMessagesControllerComponents(),
     mockCyaService,
     mockDstService,
+    mockAppConfig,
     view
   )
 
@@ -153,6 +156,11 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
   override def beforeEach(): Unit = {
     reset(mockDstService)
     reset(mockCyaService)
+    reset(mockAppConfig)
+
+    when(mockAppConfig.dstReturnsUrl)
+      .thenReturn("http://localhost:8743/digital-services-tax-returns/")
+
     super.beforeEach()
   }
 
@@ -265,6 +273,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
           val fakeCompanyName  = "Fake CompanyName"
           val fakeContactEmail = "fake.email.email.com"
 
+          when(mockDstService.getRegistrationJourneyState(using any(), any()))
+            .thenReturn(Future.successful(RegistrationJourneyState.New))
+
           when(mockCyaService.buildRegistration(using any(), any()))
             .thenReturn(Future.successful(Some(mockRegistration)))
 
@@ -287,6 +298,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
             val mockRegistration = mock[Registration]
 
+            when(mockDstService.getRegistrationJourneyState(using any(), any()))
+              .thenReturn(Future.successful(RegistrationJourneyState.New))
+
             when(mockCyaService.buildRegistration(using any(), any()))
               .thenReturn(Future.successful(Some(mockRegistration)))
 
@@ -303,6 +317,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
             implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
+            when(mockDstService.getRegistrationJourneyState(using any(), any()))
+              .thenReturn(Future.successful(RegistrationJourneyState.New))
+
             when(mockCyaService.buildRegistration(using any(), any()))
               .thenReturn(Future.successful(None))
 
@@ -310,9 +327,37 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
             status(result) mustEqual SEE_OTHER
             redirectLocation(result).value mustBe routes.RegistrationController.registerAction().url
-
-            verifyNoInteractions(mockDstService)
           }
+        }
+
+        "to registration pending when journey state is pending" in {
+
+          implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+
+          when(mockDstService.getRegistrationJourneyState(using any(), any()))
+            .thenReturn(Future.successful(RegistrationJourneyState.Pending))
+
+          val result = controller.onSubmit()(request)
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustBe routes.RegistrationController.registrationPending().url
+
+          verifyNoInteractions(mockCyaService)
+        }
+
+        "to existing registration frontend when journey state is existing" in {
+
+          implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+
+          when(mockDstService.getRegistrationJourneyState(using any(), any()))
+            .thenReturn(Future.successful(RegistrationJourneyState.Existing))
+
+          val result = controller.onSubmit()(request)
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustBe "http://localhost:8743/digital-services-tax-returns/"
+
+          verifyNoInteractions(mockCyaService)
         }
       }
     }

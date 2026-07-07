@@ -17,7 +17,7 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.http.Fault
 import generators.ModelGenerators
 import org.scalatest.OptionValues
@@ -27,7 +27,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.Application
-import play.api.http.Status.OK
+import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
@@ -99,6 +99,95 @@ class DigitalServicesTaxConnectorISpec
 
         an[Exception] mustBe thrownBy {
           connector.lookupCompany.futureValue
+        }
+      }
+    }
+
+    "when .lookupPendingRegistrationExists is called" - {
+
+      val url = "/digital-services-tax/pending-registration"
+
+      def app: Application =
+        new GuiceApplicationBuilder()
+          .configure("microservice.services.digital-services-tax.port" -> server.port)
+          .build()
+
+      lazy val connector: DigitalServicesTaxConnector = app.injector.instanceOf[DigitalServicesTaxConnector]
+
+      "must return expected object when 200 is received" in {
+
+          server.stubFor(
+            WireMock.get(url)
+              .willReturn(
+                ok("{}")
+              )
+          )
+
+          connector.lookupPendingRegistrationExists.futureValue.status mustBe OK
+      }
+
+      "must return None when 404 is received" in {
+
+        server.stubFor(
+          WireMock.get(url)
+            .willReturn(
+              notFound()
+            )
+        )
+
+        connector.lookupPendingRegistrationExists.futureValue.status mustBe NOT_FOUND
+      }
+    }
+
+    "when .lookupRegistration is called" - {
+
+      val url = "/digital-services-tax/registration"
+
+      def app: Application =
+        new GuiceApplicationBuilder()
+          .configure("microservice.services.digital-services-tax.port" -> server.port)
+          .build()
+
+      lazy val connector: DigitalServicesTaxConnector = app.injector.instanceOf[DigitalServicesTaxConnector]
+
+      "must return expected object when 200 is received" in {
+
+        forAll(genRegistration) { registration =>
+
+          server.stubFor(
+            WireMock.get(url)
+              .willReturn(
+                ok(Json.toJson(registration).toString())
+              )
+          )
+
+          connector.lookupRegistration.futureValue mustBe Some(registration)
+        }
+      }
+
+      "must return None when 404 is received" in {
+
+        server.stubFor(
+          WireMock.get(url)
+            .willReturn(
+              notFound()
+            )
+        )
+
+        connector.lookupRegistration.futureValue mustBe None
+      }
+
+      "must throw when 500 is received" in {
+
+        server.stubFor(
+          WireMock.get(url)
+            .willReturn(
+              serverError()
+            )
+        )
+
+        an[Exception] mustBe thrownBy {
+          connector.lookupRegistration.futureValue
         }
       }
     }

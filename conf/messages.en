@@ -354,6 +354,13 @@ incorrect-account-credRole.errorLine4 = We aim to respond within 15 working days
 incorrect-account-credRole.link = Find out how to add a team member to your business tax account from Gov.uk (opens in a new tab)
 incorrect-account-credRole.email = ccgdstmailbox@hmrc.gov.uk
 
+registration-pending.title = We have received your registration for the Digital Services Tax
+registration-pending.send-email = We will send your Digital Services Tax registration number to your contact email address within 5 working days.
+registration-pending.not-received = If you do not receive this registration number, contact your HMRC Customer Compliance Manager (CCM).
+registration-pending.ccm-content = If you do not know who your CCM is, or do not have one, email
+registration-pending.ccm-email = mailto:ccgdstmailbox@hmrc.gov.uk
+registration-pending.ccm-link = ccgdstmailbox@hmrc.gov.uk
+
 registration-complete.title = Application Complete
 registration-complete.heading = Application Complete
 registration-complete.p1 = Your session has been cleared because you completed your application.

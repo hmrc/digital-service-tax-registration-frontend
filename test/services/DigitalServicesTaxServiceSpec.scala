@@ -19,7 +19,7 @@ package services
 import base.SpecBase
 import connectors.DigitalServicesTaxConnector
 import generators.ModelGenerators
-import models.CompanyRegWrapper
+import models.{CompanyRegWrapper, RegistrationJourneyState}
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.when
 import org.scalacheck.Gen
@@ -139,6 +139,57 @@ class DigitalServicesTaxServiceSpec
               serviceUnderTest.submitRegistration(reg).futureValue mustBe response
           }
         }
+      }
+    }
+
+    "when .getRegistrationJourneyState is called" - {
+
+      "must return Pending when pending registration exists" in {
+
+        when(mockConnector.lookupPendingRegistrationExists(using any[HeaderCarrier], any[ExecutionContext]))
+          .thenReturn(Future.successful(HttpResponse(OK, "")))
+
+        when(mockConnector.lookupRegistration(using any[HeaderCarrier], any[ExecutionContext]))
+          .thenReturn(Future.successful(None))
+
+        serviceUnderTest.getRegistrationJourneyState.futureValue mustBe RegistrationJourneyState.Pending
+      }
+
+      "must return Existing when registration exists with registration number and there is no pending registration" in {
+
+        forAll(genRegistration.map(_.copy(registrationNumber = Some("DST-123456")))) { registration =>
+          when(mockConnector.lookupPendingRegistrationExists(using any[HeaderCarrier], any[ExecutionContext]))
+            .thenReturn(Future.successful(HttpResponse(NOT_FOUND, "")))
+
+          when(mockConnector.lookupRegistration(using any[HeaderCarrier], any[ExecutionContext]))
+            .thenReturn(Future.successful(Some(registration)))
+
+          serviceUnderTest.getRegistrationJourneyState.futureValue mustBe RegistrationJourneyState.Existing
+        }
+      }
+
+      "must return Pending when registration exists without registration number and there is no pending registration" in {
+
+        forAll(genRegistration.map(_.copy(registrationNumber = None))) { registration =>
+          when(mockConnector.lookupPendingRegistrationExists(using any[HeaderCarrier], any[ExecutionContext]))
+            .thenReturn(Future.successful(HttpResponse(NOT_FOUND, "")))
+
+          when(mockConnector.lookupRegistration(using any[HeaderCarrier], any[ExecutionContext]))
+            .thenReturn(Future.successful(Some(registration)))
+
+          serviceUnderTest.getRegistrationJourneyState.futureValue mustBe RegistrationJourneyState.Pending
+        }
+      }
+
+      "must return New when there is no pending or existing registration" in {
+
+        when(mockConnector.lookupPendingRegistrationExists(using any[HeaderCarrier], any[ExecutionContext]))
+          .thenReturn(Future.successful(HttpResponse(NOT_FOUND, "")))
+
+        when(mockConnector.lookupRegistration(using any[HeaderCarrier], any[ExecutionContext]))
+          .thenReturn(Future.successful(None))
+
+        serviceUnderTest.getRegistrationJourneyState.futureValue mustBe RegistrationJourneyState.New
       }
     }
   }

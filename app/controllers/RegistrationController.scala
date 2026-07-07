@@ -22,7 +22,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{RegistrationCompleteView, RegistrationSentView}
+import views.html.{RegistrationCompleteView, RegistrationPendingView, RegistrationSentView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,6 +36,7 @@ class RegistrationController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   registrationCompleteView: RegistrationCompleteView,
   registrationSentView: RegistrationSentView,
+  registrationPendingView: RegistrationPendingView,
   sessionRepository: SessionRepository
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -56,5 +57,10 @@ class RegistrationController @Inject() (
   def registrationComplete(): Action[AnyContent] = (identify andThen getData) { implicit request =>
     sessionRepository.clear(request.userId)
     Ok(registrationCompleteView())
+  }
+
+  def registrationPending(): Action[AnyContent] = (identify andThen getData) { implicit request =>
+    sessionRepository.clear(request.userId)
+    Ok(registrationPendingView())
   }
 }
