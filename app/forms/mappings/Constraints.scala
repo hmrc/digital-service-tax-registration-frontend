@@ -16,8 +16,7 @@
 
 package forms.mappings
 
-import forms.mappings.Constraints.postcodeRegex
-import org.apache.commons.validator.routines.EmailValidator
+import forms.mappings.Constraints.{emailRegex, postcodeRegex}
 
 import java.time.LocalDate
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
@@ -131,7 +130,7 @@ trait Constraints {
 
   protected def emailAddress(errorKey: String): Constraint[String] =
     Constraint { ea =>
-      if (EmailValidator.getInstance().isValid(ea)) {
+      if (ea.matches(emailRegex)) {
         Valid
       } else {
         Invalid(errorKey)
@@ -141,6 +140,8 @@ trait Constraints {
 
 object Constraints {
   val postcodeRegex: String = """^[a-zA-Z]{1,2}[0-9][0-9a-zA-Z]?\s?[0-9][a-zA-Z]{2}$"""
+  val emailRegex: String    =
+    """^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]{0,63}+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"""
   object CompanyName {
     val companyNameRegex: Regex = """^[a-zA-Z0-9 '&.-]{1,105}$""".r
     val maxLength               = 105
