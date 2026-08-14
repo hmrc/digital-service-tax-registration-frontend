@@ -33,7 +33,7 @@ lazy val microservice = (project in file("."))
     ),
     PlayKeys.playDefaultPort := 8744,
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;" +
-      ".*Routes.*;.*viewmodels.govuk.*;.*views.html.*;",
+      ".*Routes.*;.*viewmodels.govuk.*;.*views.html.*;.*app.config.*;",
     ScoverageKeys.coverageMinimumStmtTotal := 78,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,

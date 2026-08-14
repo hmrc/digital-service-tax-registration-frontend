@@ -16,8 +16,9 @@
 
 package repositories
 
+import config.FakeEncrypterDecrypter
 import config.FrontendAppConfig
-import models.UserAnswers
+import models.{SensitiveWrapper, UserAnswers, UserAnswersEncrypted}
 import org.mockito.Mockito.when
 import org.mongodb.scala.model.Filters
 import org.scalactic.source.Position
@@ -28,6 +29,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.MDC
 import play.api.libs.json.Json
+import uk.gov.hmrc.crypto.{Decrypter, Encrypter}
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 import uk.gov.hmrc.play.bootstrap.dispatchers.MDCPropagatingExecutorService
 
@@ -40,7 +42,7 @@ import scala.language.postfixOps
 class SessionRepositorySpec
   extends AnyFreeSpec
     with Matchers
-    with DefaultPlayMongoRepositorySupport[UserAnswers]
+    with DefaultPlayMongoRepositorySupport[UserAnswersEncrypted]
     with ScalaFutures
     with IntegrationPatience
     with OptionValues
@@ -50,23 +52,29 @@ class SessionRepositorySpec
   private val stubClock: Clock = Clock.fixed(instant, ZoneId.systemDefault)
 
   private val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
+  private val userAnswersEncrypted =
+    UserAnswersEncrypted(userAnswers.id, SensitiveWrapper(userAnswers.data), userAnswers.lastUpdated)
 
   private val mockAppConfig = mock[FrontendAppConfig]
   when(mockAppConfig.cacheTtl).thenReturn(1L)
 
+  private val fakeCrypto: Encrypter & Decrypter = new FakeEncrypterDecrypter()
+
   protected override val repository: SessionRepository = new SessionRepository(
     mongoComponent = mongoComponent,
     appConfig      = mockAppConfig,
-    clock          = stubClock
+    clock          = stubClock,
+    crypto         = fakeCrypto
   )(using scala.concurrent.ExecutionContext.Implicits.global)
 
   ".set" - {
 
     "must set the last updated time on the supplied user answers to `now`, and save them" in {
 
-      val expectedResult = userAnswers.copy(lastUpdated = instant)
+      val expectedResult =
+        UserAnswersEncrypted(userAnswers.id, SensitiveWrapper(userAnswers.data), instant)
 
-      val setResult     = repository.set(userAnswers).futureValue
+      repository.set(userAnswers).futureValue mustEqual true
       val updatedRecord = find(Filters.equal("_id", userAnswers.id)).futureValue.headOption.value
 
       updatedRecord mustEqual expectedResult
@@ -81,7 +89,7 @@ class SessionRepositorySpec
 
       "must update the lastUpdated time and get the record" in {
 
-        insert(userAnswers).futureValue
+        insert(userAnswersEncrypted).futureValue
 
         val result         = repository.get(userAnswers.id).futureValue
         val expectedResult = userAnswers.copy(lastUpdated = instant)
@@ -105,9 +113,9 @@ class SessionRepositorySpec
 
     "must remove a record" in {
 
-      insert(userAnswers).futureValue
+      insert(userAnswersEncrypted).futureValue
 
-      val result = repository.clear(userAnswers.id).futureValue
+      repository.clear(userAnswers.id).futureValue mustEqual true
 
       repository.get(userAnswers.id).futureValue must not be defined
     }
@@ -127,11 +135,12 @@ class SessionRepositorySpec
 
       "must update its lastUpdated to `now` and return true" in {
 
-        insert(userAnswers).futureValue
+        insert(userAnswersEncrypted).futureValue
 
-        val result = repository.keepAlive(userAnswers.id).futureValue
+        repository.keepAlive(userAnswers.id).futureValue mustEqual true
 
-        val expectedUpdatedAnswers = userAnswers.copy(lastUpdated = instant)
+        val expectedUpdatedAnswers =
+          UserAnswersEncrypted(userAnswers.id, SensitiveWrapper(userAnswers.data), instant)
 
         val updatedAnswers = find(Filters.equal("_id", userAnswers.id)).futureValue.headOption.value
         updatedAnswers.mustEqual(expectedUpdatedAnswers)
