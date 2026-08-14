@@ -25,13 +25,13 @@ case class SensitiveWrapper[T](override val decryptedValue: T) extends Sensitive
 object SensitiveWrapper {
 
   implicit def reads[T](implicit
-                        reads: Reads[T],
-                        crypto: Encrypter & Decrypter
-                       ): Reads[SensitiveWrapper[T]] = sensitiveDecrypter(SensitiveWrapper[T])
+    reads: Reads[T],
+    crypto: Encrypter & Decrypter
+  ): Reads[SensitiveWrapper[T]] = sensitiveDecrypter(SensitiveWrapper[T])
 
   implicit def writes[T](implicit
-                         writes: Writes[T],
-                         crypto: Encrypter & Decrypter
-                        ): Writes[SensitiveWrapper[T]] = sensitiveEncrypter
+    writes: Writes[T],
+    crypto: Encrypter & Decrypter
+  ): Writes[SensitiveWrapper[T]] = sensitiveEncrypter
 
 }

@@ -23,19 +23,18 @@ import javax.inject.{Inject, Provider, Singleton}
 
 @Singleton
 class CryptoProvider @Inject() (
-                                 configuration: Configuration,
-                                 fakeEncrypterDecrypter: FakeEncrypterDecrypter
-                               ) extends Provider[Encrypter & Decrypter] {
+  configuration: Configuration,
+  fakeEncrypterDecrypter: FakeEncrypterDecrypter
+) extends Provider[Encrypter & Decrypter] {
 
   private val mongodbEncryptionEnabled = configuration
     .getOptional[Boolean]("mongodb.encryption.enabled")
     .getOrElse(false)
 
-  override def get(): Encrypter & Decrypter = {
+  override def get(): Encrypter & Decrypter =
     if (mongodbEncryptionEnabled) {
       SymmetricCryptoFactory.aesGcmCryptoFromConfig(baseConfigKey = "mongodb.encryption", configuration.underlying)
     } else {
       fakeEncrypterDecrypter
     }
-  }
 }

@@ -20,13 +20,12 @@ import play.api.inject.Binding
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.crypto.{Decrypter, Encrypter}
 
-class CryptoProviderModule
-  extends play.api.inject.Module {
+class CryptoProviderModule extends play.api.inject.Module {
 
   override def bindings(
-                         environment: Environment,
-                         configuration: Configuration
-                       ): Seq[Binding[?]] = Seq(
+    environment: Environment,
+    configuration: Configuration
+  ): Seq[Binding[?]] = Seq(
     bind[Encrypter & Decrypter].toProvider[CryptoProvider]
   )
 
