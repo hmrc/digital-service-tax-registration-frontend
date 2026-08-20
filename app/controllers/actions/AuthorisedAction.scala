@@ -56,7 +56,7 @@ class AuthorisedAction @Inject() (
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     val retrieval                  = allEnrolments and credentialRole and internalId and affinityGroup
 
-    authorised(AuthProviders(GovernmentGateway) and Organisation and User).retrieve(retrieval) { // CODE REFACTOR
+    authorised(Organisation and User).retrieve(retrieval) { // CODE REFACTOR
       case enrolments ~ _ ~ id ~ _ =>
         val internalIdString = id.getOrElse(throw new RuntimeException("No Internal ID found for user"))
         val internalId       = InternalId(internalIdString) // REVISIT REGEX VALIDATED STRING
