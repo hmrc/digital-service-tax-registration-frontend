@@ -149,7 +149,7 @@ corporationTaxEnterUtr.error.invalid = Enter the company’s Corporation Tax Uni
 corporationTaxEnterUtr.change.hidden = CorporationTaxEnterUtr
 corporationTaxEnterUtr.heading.info = \
     <p class="govuk-body">It will be on tax returns and other letters about Corporation Tax. It might be called ‘reference’, ‘UTR’ or ‘official use’.</p>\
-    <a target=_blank class="govuk-link" href="{0}">Ask for a copy of your Corporation Tax UTR (opens in a new tab)</a>
+    <a target=_blank class="govuk-link" href="{0}">Ask for a copy of your Corporation Tax UTR (opens in new tab)</a>
 
 checkContactAddress.error.required = Select yes if your contact address is in the UK
 checkContactAddress.title = Is your contact address in the UK?
@@ -351,7 +351,7 @@ incorrect-account-credRole.errorLine1 = You must be an administrator of your org
 incorrect-account-credRole.errorLine2 = To become an administrator, speak to an existing administrator for your organisation.
 incorrect-account-credRole.errorLine3 = If your organisation does not have an administrator, contact the Digital Services Tax support team.
 incorrect-account-credRole.errorLine4 = We aim to respond within 15 working days.
-incorrect-account-credRole.link = Find out how to add a team member to your business tax account from Gov.uk (opens in a new tab)
+incorrect-account-credRole.link = Find out how to add a team member to your business tax account from Gov.uk (opens in new tab)
 incorrect-account-credRole.email = ccgdstmailbox@hmrc.gov.uk
 
 registration-pending.title = We have received your registration for the Digital Services Tax
@@ -374,7 +374,7 @@ registration-sent.what-happens-next.title=What happens next
 registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to {0} in the next 24 hours.
 registration-sent.help-using-this-service.title=Help using this service
 registration-sent.print-save=Print or save this page
-registration-sent.help-using-this-service.p1=For help with payments and returns, <a target=_blank href="{0}" class="govuk-link">check the Digital Services Tax guidance (opens in a new tab)</a>.
+registration-sent.help-using-this-service.p1=For help with payments and returns, <a target=_blank href="{0}" class="govuk-link">check the Digital Services Tax guidance (opens in new tab)</a>.
 registration-sent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
 registration-sent.help-using-this-service.list.1=do not receive your registration number
 registration-sent.help-using-this-service.list.2=need to change your registered details
