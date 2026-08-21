@@ -17,11 +17,21 @@
 package controllers
 
 import base.SpecBase
+import pages.{CompanyNamePage, ContactPersonEmailAddressPage}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.{RegistrationCompleteView, RegistrationSentView}
+import models.UserAnswers
 
 class RegistrationControllerSpec extends SpecBase {
+
+  val userAnswers: UserAnswers = UserAnswers(userAnswersId)
+    .set(CompanyNamePage, "Fake Company")
+    .success
+    .value
+    .set(ContactPersonEmailAddressPage, "fake.email@email.com")
+    .success
+    .value
 
   "Registration Controller" - {
 
@@ -43,11 +53,11 @@ class RegistrationControllerSpec extends SpecBase {
 
     "must return OK and the correct registration sent view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(GET, routes.RegistrationController.registrationSent("Fake Company", "fake.email@email.com").url)
+          FakeRequest(GET, routes.RegistrationController.registrationSent().url)
 
         val result = route(application, request).value
 

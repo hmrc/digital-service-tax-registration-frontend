@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import pages.RegistrationCompletePage
+import pages.{CompanyNamePage, ContactPersonEmailAddressPage, RegistrationCompletePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,12 +46,17 @@ class RegistrationController @Inject() (
     Redirect(routes.JourneyRecoveryController.onPageLoad())
   }
 
-  def registrationSent(companyName: String, contactPersonalEmailAddress: String): Action[AnyContent] =
+  def registrationSent(): Action[AnyContent] =
     (identify andThen getData andThen requireData).async { implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCompletePage, true))
         _              <- sessionRepository.set(updatedAnswers)
-      } yield Ok(registrationSentView(companyName, contactPersonalEmailAddress))
+      } yield (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
+        case (Some(companyName), Some(contactPersonEmailAddress)) =>
+          Ok(registrationSentView(companyName, contactPersonEmailAddress))
+        case _                                                    =>
+          Redirect(routes.RegistrationController.registrationComplete())
+      }
     }
 
   def registrationComplete(): Action[AnyContent] = (identify andThen getData) { implicit request =>
