@@ -40,7 +40,7 @@ This will start all the required services.
     * Enrolment Key: IR-CT
     * Identifier Name: UTR
     * Identifier Value: 1111111000
-* Then enter a redirect url: http://localhost:8740/digital-services-tax
+* Then enter a redirect url: http://localhost:8744/digital-services-tax-registration
 * Press **Submit**.
 
 ## Running the tests
