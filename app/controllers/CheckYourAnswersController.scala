@@ -78,16 +78,7 @@ class CheckYourAnswersController @Inject() (
     def proceedToSubmit: Future[Result] = checkYourAnswersService.buildRegistration.flatMap {
       _.fold(Future.successful(redirect)) {
         service.submitRegistration(_) map {
-          case s if s.status == OK =>
-            (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
-              case (Some(companyName), Some(contactPersonEmailAddressPage)) =>
-                Redirect(routes.RegistrationController.registrationSent(companyName, contactPersonEmailAddressPage))
-              case _                                                        =>
-                // $COVERAGE-OFF$
-                logger.warn("Failed to retrieve answers from cache, redirecting to application complete anyway")
-                // $COVERAGE-ON$
-                Redirect(routes.RegistrationController.registrationComplete())
-            }
+          case s if s.status == OK => Redirect(routes.RegistrationController.registrationSent())
           case _                   => redirect
         }
       }

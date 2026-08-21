@@ -25,7 +25,7 @@ govukPanel : GovukPanel
 
 
 
-@layout(pageTitle = titleNoForm(messages("registration-sent.title"))) {
+@layout(pageTitle = titleNoForm(messages("registration-sent.title")), showBackLink = false) {
 
     @govukPanel(Panel(
     title = HtmlContent(messages("registration-sent.heading")),

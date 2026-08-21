@@ -286,7 +286,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value must startWith(
-            routes.RegistrationController.registrationSent(fakeCompanyName, fakeContactEmail).toString.split("\\?")(0)
+            routes.RegistrationController.registrationSent().toString.split("\\?")(0)
           )
         }
 
