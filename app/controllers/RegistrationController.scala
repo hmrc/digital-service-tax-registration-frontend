@@ -50,14 +50,12 @@ class RegistrationController @Inject() (
     (identify andThen getData andThen requireData).async { implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCompletePage, true))
-        _ <- sessionRepository.set(updatedAnswers)
-      } yield {
-        (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
-          case (Some(companyName), Some(contactPersonEmailAddress)) =>
-            Ok(registrationSentView(companyName, contactPersonEmailAddress))
-          case _ =>
-            Redirect(routes.RegistrationController.registrationComplete())
-        }
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
+        case (Some(companyName), Some(contactPersonEmailAddress)) =>
+          Ok(registrationSentView(companyName, contactPersonEmailAddress))
+        case _                                                    =>
+          Redirect(routes.RegistrationController.registrationComplete())
       }
     }
 

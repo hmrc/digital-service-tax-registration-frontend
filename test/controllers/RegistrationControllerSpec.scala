@@ -26,8 +26,12 @@ import models.UserAnswers
 class RegistrationControllerSpec extends SpecBase {
 
   val userAnswers: UserAnswers = UserAnswers(userAnswersId)
-    .set(CompanyNamePage, "Fake Company").success.value
-    .set(ContactPersonEmailAddressPage, "fake.email@email.com").success.value
+    .set(CompanyNamePage, "Fake Company")
+    .success
+    .value
+    .set(ContactPersonEmailAddressPage, "fake.email@email.com")
+    .success
+    .value
 
   "Registration Controller" - {
 
