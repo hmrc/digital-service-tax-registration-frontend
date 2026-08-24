@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.GlobalRevenuesFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
@@ -37,7 +37,6 @@ class GlobalRevenuesController @Inject() (
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
-  auth: Auth,
   formProvider: GlobalRevenuesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: GlobalRevenuesView
@@ -47,7 +46,7 @@ class GlobalRevenuesController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.userId)).get(GlobalRevenuesPage) match {
       case None        => form
       case Some(value) => form.fill(value)

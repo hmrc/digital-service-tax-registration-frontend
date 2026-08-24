@@ -16,10 +16,8 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.LiabilityStartDateFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.{CheckIfGroupPage, LiabilityStartDatePage}
@@ -29,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.LiabilityStartDateView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class LiabilityStartDateController @Inject() (
@@ -38,7 +37,6 @@ class LiabilityStartDateController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   formProvider: LiabilityStartDateFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: LiabilityStartDateView
@@ -46,13 +44,12 @@ class LiabilityStartDateController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      (request.userAnswers.get(CheckIfGroupPage), request.userAnswers.get(LiabilityStartDatePage)) match {
-        case (Some(isGroup), Some(date)) => Ok(view(formProvider(isGroup).fill(date), mode, isGroup))
-        case (Some(isGroup), None)       => Ok(view(formProvider(isGroup), mode, isGroup))
-        case _                           => Redirect(routes.JourneyRecoveryController.onPageLoad())
-      }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    (request.userAnswers.get(CheckIfGroupPage), request.userAnswers.get(LiabilityStartDatePage)) match {
+      case (Some(isGroup), Some(date)) => Ok(view(formProvider(isGroup).fill(date), mode, isGroup))
+      case (Some(isGroup), None)       => Ok(view(formProvider(isGroup), mode, isGroup))
+      case _                           => Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

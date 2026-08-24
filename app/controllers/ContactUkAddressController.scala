@@ -16,9 +16,8 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.ContactUkAddressFormProvider
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.ContactUkAddressPage
@@ -28,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ContactUkAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContactUkAddressController @Inject() (
@@ -37,7 +37,6 @@ class ContactUkAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   formProvider: ContactUkAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ContactUkAddressView
@@ -47,14 +46,13 @@ class ContactUkAddressController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(ContactUkAddressPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(ContactUkAddressPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

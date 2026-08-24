@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.CompanyRegisteredOfficeUkAddressFormProvider
 import models.Mode
 import models.requests.DataRequest
@@ -38,7 +38,6 @@ class CompanyRegisteredOfficeUkAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   formProvider: CompanyRegisteredOfficeUkAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CompanyRegisteredOfficeUkAddressView
@@ -48,11 +47,10 @@ class CompanyRegisteredOfficeUkAddressController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      getViewOrRedirect { name =>
-        Ok(view(request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage).fold(form)(form.fill), mode, name))
-      }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    getViewOrRedirect { name =>
+      Ok(view(request.userAnswers.get(CompanyRegisteredOfficeUkAddressPage).fold(form)(form.fill), mode, name))
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
