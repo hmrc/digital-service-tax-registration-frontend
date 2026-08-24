@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import config.FrontendAppConfig
-import controllers.actions.{FakeAuthorisedAction, FakeIdentifierAction}
+import controllers.actions.FakeIdentifierAction
 import models.NormalMode
 import models.RegistrationJourneyState
 import org.mockito.ArgumentMatchers.any
@@ -44,7 +44,6 @@ class IndexControllerSpec extends SpecBase with MockitoSugar with Injecting {
   val controller = new IndexController(
     Helpers.stubMessagesControllerComponents(),
     inject[FakeIdentifierAction],
-    inject[FakeAuthorisedAction],
     mockService,
     mockAppConfig
   )

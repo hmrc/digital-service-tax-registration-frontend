@@ -16,8 +16,8 @@
 
 package controllers
 
-import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import pages.RegistrationCompletePage
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import pages.{CompanyNamePage, ContactPersonEmailAddressPage, RegistrationCompletePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -32,7 +32,6 @@ class RegistrationController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   registrationCompleteView: RegistrationCompleteView,
   registrationSentView: RegistrationSentView,
@@ -42,16 +41,21 @@ class RegistrationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def registerAction(): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
+  def registerAction(): Action[AnyContent] = (identify andThen getData andThen requireData) {
     Redirect(routes.JourneyRecoveryController.onPageLoad())
   }
 
-  def registrationSent(companyName: String, contactPersonalEmailAddress: String): Action[AnyContent] =
+  def registrationSent(): Action[AnyContent] =
     (identify andThen getData andThen requireData).async { implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCompletePage, true))
         _              <- sessionRepository.set(updatedAnswers)
-      } yield Ok(registrationSentView(companyName, contactPersonalEmailAddress))
+      } yield (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
+        case (Some(companyName), Some(contactPersonEmailAddress)) =>
+          Ok(registrationSentView(companyName, contactPersonEmailAddress))
+        case _                                                    =>
+          Redirect(routes.RegistrationController.registrationComplete())
+      }
     }
 
   def registrationComplete(): Action[AnyContent] = (identify andThen getData) { implicit request =>

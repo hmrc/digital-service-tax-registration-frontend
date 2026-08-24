@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.CheckIfGroupFormProvider
 import models.requests.DataRequest
 import models.{Mode, NormalMode, UserAnswers}
@@ -40,7 +40,6 @@ class CheckIfGroupController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   formProvider: CheckIfGroupFormProvider,
   view: CheckIfGroupView
@@ -50,14 +49,13 @@ class CheckIfGroupController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(CheckIfGroupPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(CheckIfGroupPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

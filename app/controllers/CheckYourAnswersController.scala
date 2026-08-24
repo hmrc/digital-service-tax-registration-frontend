@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import controllers.actions.{Auth, DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.RegistrationJourneyState
 import pages.{CompanyNamePage, ContactPersonEmailAddressPage}
 import play.api.Logging
@@ -35,7 +35,6 @@ class CheckYourAnswersController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   val controllerComponents: MessagesControllerComponents,
   checkYourAnswersService: CheckYourAnswersService,
   service: DigitalServicesTaxService,
@@ -46,26 +45,25 @@ class CheckYourAnswersController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad(): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData).async {
-    implicit request =>
-      for {
-        summaryLists            <- checkYourAnswersService.getSummaryForView
-        childCompanyName        <- checkYourAnswersService.getChildCompanyName
-        parentCompanyName       <- checkYourAnswersService.getParentCompanyName
-        isRegistrationCompleted <- checkYourAnswersService.isRegistrationCompleted
-      } yield (summaryLists, childCompanyName, isRegistrationCompleted) match {
-        case (Some(list), Some(childCompany), Some(isRegistrationCompleted)) =>
-          if (!isRegistrationCompleted) {
-            Ok(view(list, childCompany, parentCompanyName))
-          } else {
-            Redirect(routes.RegistrationController.registrationComplete())
-          }
-        case _                                                               =>
-          // $COVERAGE-OFF$
-          logger.warn("Failed to retrieve answers from cache, redirecting to journey recovery")
-          // $COVERAGE-ON$
-          Redirect(routes.JourneyRecoveryController.onPageLoad())
-      }
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    for {
+      summaryLists            <- checkYourAnswersService.getSummaryForView
+      childCompanyName        <- checkYourAnswersService.getChildCompanyName
+      parentCompanyName       <- checkYourAnswersService.getParentCompanyName
+      isRegistrationCompleted <- checkYourAnswersService.isRegistrationCompleted
+    } yield (summaryLists, childCompanyName, isRegistrationCompleted) match {
+      case (Some(list), Some(childCompany), Some(isRegistrationCompleted)) =>
+        if (!isRegistrationCompleted) {
+          Ok(view(list, childCompany, parentCompanyName))
+        } else {
+          Redirect(routes.RegistrationController.registrationComplete())
+        }
+      case _                                                               =>
+        // $COVERAGE-OFF$
+        logger.warn("Failed to retrieve answers from cache, redirecting to journey recovery")
+        // $COVERAGE-ON$
+        Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -78,16 +76,7 @@ class CheckYourAnswersController @Inject() (
     def proceedToSubmit: Future[Result] = checkYourAnswersService.buildRegistration.flatMap {
       _.fold(Future.successful(redirect)) {
         service.submitRegistration(_) map {
-          case s if s.status == OK =>
-            (request.userAnswers.get(CompanyNamePage), request.userAnswers.get(ContactPersonEmailAddressPage)) match {
-              case (Some(companyName), Some(contactPersonEmailAddressPage)) =>
-                Redirect(routes.RegistrationController.registrationSent(companyName, contactPersonEmailAddressPage))
-              case _                                                        =>
-                // $COVERAGE-OFF$
-                logger.warn("Failed to retrieve answers from cache, redirecting to application complete anyway")
-                // $COVERAGE-ON$
-                Redirect(routes.RegistrationController.registrationComplete())
-            }
+          case s if s.status == OK => Redirect(routes.RegistrationController.registrationSent())
           case _                   => redirect
         }
       }

@@ -16,10 +16,8 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.CheckUltimateGlobalParentCompanyInUkFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.{CheckUltimateGlobalParentCompanyInUkPage, UltimateParentCompanyNamePage}
@@ -29,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CheckUltimateGlobalParentCompanyInUkView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckUltimateGlobalParentCompanyInUkController @Inject() (
@@ -38,7 +37,6 @@ class CheckUltimateGlobalParentCompanyInUkController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   formProvider: CheckUltimateGlobalParentCompanyInUkFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CheckUltimateGlobalParentCompanyInUkView
@@ -47,7 +45,7 @@ class CheckUltimateGlobalParentCompanyInUkController @Inject() (
     with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (auth andThen identify andThen getData andThen requireData) { implicit request =>
+    (identify andThen getData andThen requireData) { implicit request =>
       val ultimateCompanyName: String =
         request.userAnswers.get(UltimateParentCompanyNamePage).getOrElse("")
 

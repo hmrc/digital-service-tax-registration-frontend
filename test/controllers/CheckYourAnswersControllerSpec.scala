@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import config.FrontendAppConfig
-import controllers.actions.{DataRequiredActionImpl, FakeAuthorisedAction, FakeDataRetrievalAction, FakeIdentifierAction}
+import controllers.actions.{DataRequiredActionImpl, FakeDataRetrievalAction, FakeIdentifierAction}
 import models.{Location, Registration, RegistrationJourneyState, UserAnswers}
 import models.requests.DataRequest
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
@@ -106,7 +106,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
     inject[FakeIdentifierAction],
     new FakeDataRetrievalAction(Some(userAnswers)),
     new DataRequiredActionImpl,
-    inject[FakeAuthorisedAction],
     Helpers.stubMessagesControllerComponents(),
     mockCyaService,
     mockDstService,
@@ -286,7 +285,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value must startWith(
-            routes.RegistrationController.registrationSent(fakeCompanyName, fakeContactEmail).toString.split("\\?")(0)
+            routes.RegistrationController.registrationSent().toString.split("\\?")(0)
           )
         }
 

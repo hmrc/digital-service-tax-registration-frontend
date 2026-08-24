@@ -16,11 +16,9 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import controllers.routes
 import forms.ContactPersonPhoneNumberFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
@@ -31,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ContactPersonPhoneNumberView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContactPersonPhoneNumberController @Inject() (
@@ -40,7 +39,6 @@ class ContactPersonPhoneNumberController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   formProvider: ContactPersonPhoneNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ContactPersonPhoneNumberView
@@ -50,12 +48,11 @@ class ContactPersonPhoneNumberController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(ContactPersonPhoneNumberPage).fold(form)(form.fill)
-      getNameOrRedirect { name =>
-        Ok(view(preparedForm, name, mode))
-      }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(ContactPersonPhoneNumberPage).fold(form)(form.fill)
+    getNameOrRedirect { name =>
+      Ok(view(preparedForm, name, mode))
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

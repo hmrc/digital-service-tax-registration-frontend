@@ -16,10 +16,8 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.InternationalContactAddressFormProvider
-
-import javax.inject.Inject
 import models.{InternationalAddress, Location, Mode}
 import navigation.Navigator
 import pages.InternationalContactAddressPage
@@ -30,6 +28,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.InternationalContactAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class InternationalContactAddressController @Inject() (
@@ -39,7 +38,6 @@ class InternationalContactAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   location: Location,
   formProvider: InternationalContactAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -50,14 +48,13 @@ class InternationalContactAddressController @Inject() (
 
   val form: Form[InternationalAddress] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm, location.countrySelectList(form.data, location.countryListWithoutGB), mode))
+    Ok(view(preparedForm, location.countrySelectList(form.data, location.countryListWithoutGB), mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {

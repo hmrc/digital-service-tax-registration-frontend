@@ -16,10 +16,10 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.CompanyContactAddressFormProvider
-import models.{Location, Mode}
 import models.requests.DataRequest
+import models.{Location, Mode}
 import navigation.Navigator
 import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage}
 import play.api.data.Form
@@ -39,7 +39,6 @@ class CompanyContactAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   formProvider: CompanyContactAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CompanyContactAddressView,
@@ -50,13 +49,12 @@ class CompanyContactAddressController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(CompanyContactAddressPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-      renderPage(mode, preparedForm, Ok)
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(CompanyContactAddressPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
+    renderPage(mode, preparedForm, Ok)
   }
 
   private def renderPage(mode: Mode, form: Form[Boolean], status: Status)(implicit request: DataRequest[AnyContent]) =
