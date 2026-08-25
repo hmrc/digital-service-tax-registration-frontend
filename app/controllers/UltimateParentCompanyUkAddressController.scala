@@ -16,12 +16,10 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.UltimateParentCompanyUkAddressFormProvider
-
-import javax.inject.Inject
-import models.{Mode, UkAddress}
 import models.requests.DataRequest
+import models.{Mode, UkAddress}
 import navigation.Navigator
 import pages.{UltimateParentCompanyInternationalAddressPage, UltimateParentCompanyNamePage, UltimateParentCompanyUkAddressPage}
 import play.api.data.Form
@@ -31,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.UltimateParentCompanyUkAddressView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UltimateParentCompanyUkAddressController @Inject() (
@@ -40,7 +39,6 @@ class UltimateParentCompanyUkAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   formProvider: UltimateParentCompanyUkAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: UltimateParentCompanyUkAddressView
@@ -50,14 +48,13 @@ class UltimateParentCompanyUkAddressController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(UltimateParentCompanyUkAddressPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(UltimateParentCompanyUkAddressPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      renderPage(mode, preparedForm, Ok)
+    renderPage(mode, preparedForm, Ok)
   }
 
   private def renderPage(mode: Mode, form: Form[UkAddress], status: Status)(implicit

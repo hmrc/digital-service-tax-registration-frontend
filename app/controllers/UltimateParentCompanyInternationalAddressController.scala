@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.InternationalContactAddressFormProvider
 import models.requests.DataRequest
 import models.{InternationalAddress, Location, Mode}
@@ -39,7 +39,6 @@ class UltimateParentCompanyInternationalAddressController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  auth: Auth,
   location: Location,
   formProvider: InternationalContactAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -50,13 +49,12 @@ class UltimateParentCompanyInternationalAddressController @Inject() (
 
   val form: Form[InternationalAddress] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (auth andThen identify andThen getData andThen requireData) {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(UltimateParentCompanyInternationalAddressPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-      renderPage(mode, preparedForm, Ok)
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers.get(UltimateParentCompanyInternationalAddressPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
+    renderPage(mode, preparedForm, Ok)
   }
 
   private def renderPage(mode: Mode, form: Form[InternationalAddress], status: Status)(implicit
