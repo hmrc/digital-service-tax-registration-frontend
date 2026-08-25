@@ -36,12 +36,8 @@ This will start all the required services.
 * Visit http://localhost:9949/auth-login-stub/gg-sign-in
 * You may need to add some user details to the form:
 #### DST Registration journey
-    * Affinity Group: Organisation
-    * Enrolment Key: IR-CT
-    * Identifier Name: UTR
-    * Identifier Value: 1111111000
-* Then enter a redirect url: http://localhost:8744/digital-services-tax-registration
-* Press **Submit**.
+
+Test data can be found in the team's Confluence area.
 
 ## Running the tests
 
