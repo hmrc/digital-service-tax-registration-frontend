@@ -269,8 +269,6 @@ class CheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with Bef
           implicit val request: DataRequest[AnyContent] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
 
           val mockRegistration = mock[Registration]
-          val fakeCompanyName  = "Fake CompanyName"
-          val fakeContactEmail = "fake.email.email.com"
 
           when(mockDstService.getRegistrationJourneyState(using any(), any()))
             .thenReturn(Future.successful(RegistrationJourneyState.New))

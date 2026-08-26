@@ -116,7 +116,7 @@ checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOffice
 companyRegisteredOfficeAddressPostcode.title = What is the postcode of the company’s registered office address?
 companyRegisteredOfficeAddressPostcode.heading = What is the postcode of the company’s registered office address?
 companyRegisteredOfficeAddressPostcode.heading.hint = Your company details
-company.registeredOffice.postcode.required = Enter the postcode of the company's registered office address
+company.registeredOffice.postcode.required = Enter the postcode of the company’s registered office address
 companyRegisteredOfficePostcode.checkYourAnswersLabel = checkCompanyRegisteredOfficePostcode
 companyRegisteredOfficePostcode.change.hidden = CheckCompanyRegisteredOfficePostcode
 error.invalid.postcode = Enter a real postcode
@@ -137,7 +137,7 @@ checkUtr.checkYourAnswersLabel = checkUtr
 checkUtr.error.required = Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
 checkUtr.change.hidden = CheckUtr
 
-corporationTaxEnterUtr.title = Company's Corporation Tax Unique Taxpayer Reference (UTR)
+corporationTaxEnterUtr.title = Company’s Corporation Tax Unique Taxpayer Reference (UTR)
 corporationTaxEnterUtr.heading = Company’s Corporation Tax Unique Taxpayer Reference (UTR)
 corporationTaxEnterUtr.heading.hint= Your company details
 corporationTaxEnterUtr.subheading.hint = \
@@ -316,8 +316,8 @@ accounting-period-end-date.two-required=The end date of the {2}’s first accoun
 accounting-period-end-date.checkYourAnswersLabel = First accounting period end date
 accounting-period-end-date.change.hidden = accounting period end date
 
-contactPersonEmailAddress.title = What is {0}'s email address?
-contactPersonEmailAddress.heading = What is {0}'s email address?
+contactPersonEmailAddress.title = What is {0}’s email address?
+contactPersonEmailAddress.heading = What is {0}’s email address?
 contactPersonEmailAddress.hint = We will only use this email address to send confirmation of your registration.
 contactPersonEmailAddress.checkYourAnswersLabel = Email address
 contactPersonEmailAddress.error.required = Enter an email address
@@ -335,7 +335,7 @@ detailsNotCorrect.title = What you need to do if your company details are incorr
 detailsNotCorrect.heading = What you need to do if your company details are incorrect
 detailsNotCorrect.p1 = Make sure the user ID you entered is correct and try signing in again.
 detailsNotCorrect.p2 = If you still need to update your company details, you need to 
-detailsNotCorrect.linkText = tell Companies House about the change to your company
+detailsNotCorrect.linkText = tell Companies House about the change to your company (opens in new tab)
 detailsNotCorrect.button = Finish and sign out
 
 incorrect-account-affinity.title = You cannot use this service
