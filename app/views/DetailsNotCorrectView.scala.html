@@ -26,12 +26,15 @@
 
 @()(implicit request: Request[?], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("detailsNotCorrect.title"))) {
+@layout(
+    pageTitle = titleNoForm(messages("detailsNotCorrect.title")),
+    showBackLink = false
+) {
 
     <h1 class="govuk-heading-l">@messages("detailsNotCorrect.heading")</h1>
 
     <p class="govuk-body">@messages("detailsNotCorrect.p1")</p>
-    <p class="govuk-body govuk-!-padding-bottom-4">@messages("detailsNotCorrect.p2") <a class="govuk-link" href="@appConfig.companiesHouseLink">@messages("detailsNotCorrect.linkText")</a>.</p>
+    <p class="govuk-body govuk-!-padding-bottom-4">@messages("detailsNotCorrect.p2") <a target="_blank" class="govuk-link" href="@appConfig.companiesHouseLink">@messages("detailsNotCorrect.linkText")</a>.</p>
 
     @govukButton(
         ButtonViewModel(messages("detailsNotCorrect.button")).asLink(controllers.auth.routes.AuthController.signOut().url)
