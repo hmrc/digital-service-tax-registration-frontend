@@ -113,8 +113,8 @@ checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel = checkCompanyRegister
 checkCompanyRegisteredOfficeAddress.error.required = Select yes if the registered office address of the company is in the UK
 checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOfficeAddress
 
-companyRegisteredOfficeAddressPostcode.title = What is the postcode of the company’s Registered Office address?
-companyRegisteredOfficeAddressPostcode.heading = What is the postcode of the company’s Registered Office address?
+companyRegisteredOfficeAddressPostcode.title = What is the postcode of the company’s registered office address?
+companyRegisteredOfficeAddressPostcode.heading = What is the postcode of the company’s registered office address?
 companyRegisteredOfficeAddressPostcode.heading.hint = Your company details
 company.registeredOffice.postcode.required = Enter the postcode of the company's registered office address
 companyRegisteredOfficePostcode.checkYourAnswersLabel = checkCompanyRegisteredOfficePostcode
@@ -192,14 +192,14 @@ ukAddress.error.postcode.invalid = Enter a real postcode
 companyRegisteredOfficeUkAddress.title = Where is the registered office address of {0}?
 companyRegisteredOfficeUkAddress.heading = Where is the registered office address of {0}?
 companyRegisteredOfficeUkAddress.subHeading =Your company details
-companyRegisteredOfficeUkAddress.checkYourAnswersLabel = Registered Office address
+companyRegisteredOfficeUkAddress.checkYourAnswersLabel = Registered office address
 companyRegisteredOfficeUkAddress.buildingorstreet.change.hidden = buildingorstreet
 companyRegisteredOfficeUkAddress.buildingorstreet2.change.hidden = buildingorstreet2
 
 companyRegisteredOfficeInternationalAddress.title = Where is the registered office address of {0}?
 companyRegisteredOfficeInternationalAddress.heading = Where is the registered office address of {0}?
 companyRegisteredOfficeInternationalAddress.subHeading =Your company details
-companyRegisteredOfficeInternationalAddress.checkYourAnswersLabel = Registered Office address
+companyRegisteredOfficeInternationalAddress.checkYourAnswersLabel = Registered office address
 companyRegisteredOfficeInternationalAddress.buildingorstreet.change.hidden = buildingorstreet
 companyRegisteredOfficeInternationalAddress.buildingorstreet2.change.hidden = buildingorstreet2
 
@@ -250,13 +250,13 @@ ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
 
 ultimateParentCompanyInternationalAddress.title = What is the registered office address of {0}?
 ultimateParentCompanyInternationalAddress.heading = What is the registered office address of {0}?
-ultimateParentCompanyInternationalAddress.checkYourAnswersLabel = Registered Office address
+ultimateParentCompanyInternationalAddress.checkYourAnswersLabel = Registered office address
 
 ultimateParentCompanyUkAddress.title = What is the registered office address of {0}?
 ultimateParentCompanyUkAddress.heading = What is the registered office address of {0}?
 ultimateParentCompanyUkAddress.buildingOrStreet.change.hidden = buildingOrStreet
 ultimateParentCompanyUkAddress.postcode.change.hidden = postcode
-ultimateParentCompanyUkAddress.checkYourAnswersLabel = Registered Office address
+ultimateParentCompanyUkAddress.checkYourAnswersLabel = Registered office address
 checkUltimateGlobalParentCompanyInUk.title = Ultimate parent company details
 checkUltimateGlobalParentCompanyInUk.heading = Is the registered office address of {0} in the UK?
 checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = checkUltimateGlobalParentCompanyInUk
