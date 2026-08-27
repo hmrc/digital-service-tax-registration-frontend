@@ -55,7 +55,7 @@
 }
 
 @additionalScripts = {
-    <script src='@controllers.routes.Assets.versioned("javascripts/application.js")' @CSPNonce.attr></script>
+    <script src='@controllers.routes.Assets.versioned("javascripts/app.js")' @CSPNonce.attr></script>
 }
 
 @beforeContent = {
@@ -79,7 +79,6 @@
     headerBlock = Some(hmrcStandardHeader(
         serviceUrl  = Some(routes.IndexController.onPageLoad().url),
         signOutUrl  = if(showSignOut) Some(controllers.auth.routes.AuthController.signOut().url) else None,
-        phaseBanner = Some(alphaBanner(appConfig.feedbackUrl)),
         isWelshTranslationAvailable = appConfig.languageTranslationEnabled,
         displayHmrcBanner = false,
     )),
