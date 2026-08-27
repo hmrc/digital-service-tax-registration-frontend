@@ -58,10 +58,10 @@ ultimate.parent.company.details.caption=Ultimate parent company details
 label.thisSection = This section is:
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
-journeyRecovery.continue.guidance = [Add content to explain how to proceed.]
+journeyRecovery.continue.guidance = Try again later.
 journeyRecovery.startAgain.title = Sorry, there is a problem with the service
 journeyRecovery.startAgain.heading = Sorry, there is a problem with the service
-journeyRecovery.startAgain.guidance = [Add content to explain why the user needs to start again.]
+journeyRecovery.startAgain.guidance = Try again later.
 
 signedOut.title = For your security, we signed you out
 signedOut.heading = For your security, we signed you out
@@ -79,25 +79,12 @@ globalRevenues.change.hidden = GlobalRevenues
 
 globalRevenuesNotEligible.title = Global revenues not eligible
 globalRevenuesNotEligible.heading = You do not need to register
-globalRevenuesNotEligible.p1=This is because your annual global revenues from search engines, \
-  social media platforms or online marketplaces are not more than £500 million.
-globalRevenuesNotEligible.change-answers=If this is not correct, \
-  <a class="govuk-link" href="{0}">\
-  go back and change your answers\
-  </a>.
-globalRevenuesNotEligible.when-to-register=Find out about <a class="govuk-link" href="{0}">when to register for Digital Services Tax</a>.
+globalRevenuesNotEligible.p1=This is because your annual global revenues from search engines, social media platforms or online marketplaces are not more than £500 million.
+globalRevenuesNotEligible.change-answers=If this is not correct, <a class="govuk-link" href="{0}">go back and change your answers</a>.
+globalRevenuesNotEligible.when-to-register=Find out about <a target=_blank class="govuk-link" href="{0}">when to register for Digital Services Tax (opens in new tab)</a>.
 globalRevenuesNotEligible.tax-return.heading=If you need to file a Self Assessment tax return
 globalRevenuesNotEligible.tax-return.p1=You need to use a different service.
-globalRevenuesNotEligible.tax-return.p2=Find out how to \
-  <a class="govuk-link" href="{0}">\
-  file your Self Assessment tax return online\
-  </a>.
-globalRevenuesNotEligible.other-services-links.heading=Other services
-globalRevenuesNotEligible.other-services-links.link.1=Register for Self Assessment
-globalRevenuesNotEligible.other-services-links.link.2=File your Self Assessment tax return online
-globalRevenuesNotEligible.other-services-links.link.3=Update your personal details
-globalRevenuesNotEligible.other-services-links.link.4=Contact us about VAT
-globalRevenuesNotEligible.other-services-links.link.5=Contact us about Income Tax
+globalRevenuesNotEligible.tax-return.p2=Find out how to <a target=_blank class="govuk-link" href="{0}">file your Self Assessment tax return online (opens in new tab)</a>.
 
 ukRevenues.title = Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?
 ukRevenues.heading = Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?
@@ -220,7 +207,7 @@ checkIfGroup.hint = <p>Two or more companies can register as a single taxable pe
 internationalContactAddress.title = What is your contact address?
 internationalContactAddress.heading = What is your contact address?
 internationalContactAddress.caption=Contact person’s details
-internationalContactAddress.checkYourAnswersLabel = InternationalContactAddress
+internationalContactAddress.checkYourAnswersLabel = Contact address
 
 internationalAddress.line1 = Address line 1
 internationalAddress.line2 = Address line 2 (optional)
