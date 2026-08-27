@@ -42,6 +42,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   val loginUrl: String             = configuration.get[String]("urls.login")
   val loginContinueUrl: String     = configuration.get[String]("urls.loginContinue")
   val signOutUrl: String           = configuration.get[String]("urls.signOut")
+  val timedOutUrl: String          = configuration.get[String]("urls.timedOut")
   val findLostUtr: String          = configuration.get[String]("urls.findLostUtr")
   val vatRegisteringGroups: String = configuration.get[String]("urls.vatRegisteringGroups")
 
