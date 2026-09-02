@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.*
 import forms.ContactUkAddressFormProvider
-import models.Mode
+import models.{CheckMode, Mode}
 import navigation.Navigator
 import pages.ContactUkAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -49,7 +49,12 @@ class ContactUkAddressController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(ContactUkAddressPage) match {
       case None        => form
-      case Some(value) => form.fill(value)
+      case Some(value) =>
+        if (mode == CheckMode) {
+          form.fill(value)
+        } else {
+          form
+        }
     }
 
     Ok(view(preparedForm, mode))

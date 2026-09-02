@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.*
 import forms.InternationalContactAddressFormProvider
-import models.{InternationalAddress, Location, Mode}
+import models.{CheckMode, InternationalAddress, Location, Mode}
 import navigation.Navigator
 import pages.InternationalContactAddressPage
 import play.api.data.Form
@@ -51,7 +51,12 @@ class InternationalContactAddressController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {
       case None        => form
-      case Some(value) => form.fill(value)
+      case Some(value) =>
+        if (mode == CheckMode) {
+          form.fill(value)
+        } else {
+          form
+        }
     }
 
     Ok(view(preparedForm, location.countrySelectList(form.data, location.countryListWithoutGB), mode))

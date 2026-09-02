@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.InternationalContactAddressFormProvider
-import models.{InternationalAddress, Location, NormalMode, UserAnswers}
+import models.{CheckMode, InternationalAddress, Location, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import uk.gov.hmrc.govukfrontend.views.viewmodels.select.SelectItem
 import views.html.InternationalContactAddressView
@@ -90,9 +90,34 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must not populate the view on a GET in Normal mode" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, internationalContactAddressRoute)
+
+        val location = application.injector.instanceOf[Location]
+        val view     = application.injector.instanceOf[InternationalContactAddressView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(
+            form(location),
+            selectOptions,
+            NormalMode
+          )(using request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET in Check mode when the question has previously been answered" in {
+
+      val application                              = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val internationalContactAddressRoute: String =
+        routes.InternationalContactAddressController.onPageLoad(CheckMode).url
 
       running(application) {
         val request = FakeRequest(GET, internationalContactAddressRoute)
@@ -109,7 +134,7 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
             form(location)
               .fill(InternationalAddress("value 1", Some("value 2"), Some("value 3"), Some("value 4"), countryCode)),
             selectOptions,
-            NormalMode
+            CheckMode
           )(using request, messages(application)).toString
       }
     }
