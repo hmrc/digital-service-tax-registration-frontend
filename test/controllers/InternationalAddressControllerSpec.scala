@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.InternationalContactAddressPage
+import pages.{ContactAddressConfirmedPage, InternationalContactAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -66,6 +66,11 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       countryCode
     )
   ).success
+    .value
+
+  val confirmedUserAnswers: UserAnswers = userAnswers
+    .set(ContactAddressConfirmedPage, true)
+    .success
     .value
 
   "InternationalContactAddress Controller" - {
@@ -113,9 +118,9 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must populate the view correctly on a GET in Check mode when the question has previously been answered" in {
+    "must populate the view correctly on a GET when the address is confirmed" in {
 
-      val application                              = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application                              = applicationBuilder(userAnswers = Some(confirmedUserAnswers)).build()
       val internationalContactAddressRoute: String =
         routes.InternationalContactAddressController.onPageLoad(CheckMode).url
 
@@ -136,6 +141,30 @@ class InternationalAddressControllerSpec extends SpecBase with MockitoSugar {
             selectOptions,
             CheckMode
           )(using request, messages(application)).toString
+      }
+    }
+
+    "must not populate the view on a GET in Check mode when the address is not confirmed" in {
+
+      val application                                        = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val internationalContactAddressRouteInEditMode: String =
+        routes.InternationalContactAddressController.onPageLoad(CheckMode).url
+
+      running(application) {
+        val request = FakeRequest(GET, internationalContactAddressRouteInEditMode)
+
+        val location = application.injector.instanceOf[Location]
+        val view     = application.injector.instanceOf[InternationalContactAddressView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual view(
+          form(location),
+          selectOptions,
+          CheckMode
+        )(using request, messages(application)).toString
       }
     }
 

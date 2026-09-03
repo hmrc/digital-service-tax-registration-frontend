@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.ContactUkAddressPage
+import pages.{ContactAddressConfirmedPage, ContactUkAddressPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -48,6 +48,11 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
     .success
     .value
 
+  val confirmedUserAnswers: UserAnswers = userAnswers
+    .set(ContactAddressConfirmedPage, true)
+    .success
+    .value
+
   "ContactUkAddress Controller" - {
 
     "must return OK and the correct view for a GET" in {
@@ -66,9 +71,9 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must populate the view correctly on a GET in Check mode when the question has previously been answered" in {
+    "must populate the view correctly on a GET when the address is confirmed" in {
 
-      val application                             = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application                             = applicationBuilder(userAnswers = Some(confirmedUserAnswers)).build()
       val contactUkAddressRouteInEditMode: String = routes.ContactUkAddressController.onPageLoad(CheckMode).url
 
       running(application) {
@@ -86,7 +91,7 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must not populate the view on a GET in Normal mode" in {
+    "must not populate the view on a GET when the address is not confirmed" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -101,6 +106,26 @@ class ContactUkAddressControllerSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustEqual view(
           form,
           NormalMode
+        )(using request, messages(application)).toString()
+      }
+    }
+
+    "must not populate the view on a GET in Check mode when the address is not confirmed" in {
+
+      val application                             = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val contactUkAddressRouteInEditMode: String = routes.ContactUkAddressController.onPageLoad(CheckMode).url
+
+      running(application) {
+        val request = FakeRequest(GET, contactUkAddressRouteInEditMode)
+
+        val view = application.injector.instanceOf[ContactUkAddressView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(
+          form,
+          CheckMode
         )(using request, messages(application)).toString()
       }
     }

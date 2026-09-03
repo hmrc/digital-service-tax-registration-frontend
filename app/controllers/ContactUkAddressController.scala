@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.ContactUkAddressFormProvider
 import models.{CheckMode, Mode}
 import navigation.Navigator
-import pages.ContactUkAddressPage
+import pages.{ContactAddressConfirmedPage, ContactUkAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -50,10 +50,9 @@ class ContactUkAddressController @Inject() (
     val preparedForm = request.userAnswers.get(ContactUkAddressPage) match {
       case None        => form
       case Some(value) =>
-        if (mode == CheckMode) {
-          form.fill(value)
-        } else {
-          form
+        request.userAnswers.get(ContactAddressConfirmedPage) match {
+          case Some(true) => form.fill(value)
+          case _          => form
         }
     }
 
@@ -68,8 +67,9 @@ class ContactUkAddressController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactUkAddressPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
+              updatedContactAddressAnswer <- Future.fromTry(request.userAnswers.set(ContactUkAddressPage, value))
+              updatedAnswers              <- Future.fromTry(updatedContactAddressAnswer.set(ContactAddressConfirmedPage, true))
+              _                           <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(ContactUkAddressPage, mode, updatedAnswers))
         )
   }

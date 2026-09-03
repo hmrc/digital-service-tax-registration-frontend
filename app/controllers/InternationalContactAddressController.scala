@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.InternationalContactAddressFormProvider
 import models.{CheckMode, InternationalAddress, Location, Mode}
 import navigation.Navigator
-import pages.InternationalContactAddressPage
+import pages.{ContactAddressConfirmedPage, InternationalContactAddressPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -52,10 +52,9 @@ class InternationalContactAddressController @Inject() (
     val preparedForm = request.userAnswers.get(InternationalContactAddressPage) match {
       case None        => form
       case Some(value) =>
-        if (mode == CheckMode) {
-          form.fill(value)
-        } else {
-          form
+        request.userAnswers.get(ContactAddressConfirmedPage) match {
+          case Some(true) => form.fill(value)
+          case _          => form
         }
     }
 
@@ -75,8 +74,10 @@ class InternationalContactAddressController @Inject() (
             ),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(InternationalContactAddressPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
+              updatedContactAddressAnswer <-
+                Future.fromTry(request.userAnswers.set(InternationalContactAddressPage, value))
+              updatedAnswers              <- Future.fromTry(updatedContactAddressAnswer.set(ContactAddressConfirmedPage, true))
+              _                           <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(InternationalContactAddressPage, mode, updatedAnswers))
         )
   }
