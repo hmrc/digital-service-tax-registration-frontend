@@ -14,8 +14,11 @@
  * limitations under the License.
  *@
 
+@import views.html.components.FeedbackLink
+
 @this(
-        layout: templates.Layout
+        layout: templates.Layout,
+        feedbackLink: FeedbackLink
 )
 
 @()(implicit request: Request[?], messages: Messages)
@@ -34,4 +37,5 @@
     <a href="@controllers.auth.routes.AuthController.signOut()" class="button govuk-button" role="button">
         @messages("signedOut.finish-and-sign-out")
     </a>
+    @feedbackLink()
 }
