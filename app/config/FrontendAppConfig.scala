@@ -30,11 +30,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
 
   private val contactHost                  = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "digital-service-tax-registration-frontend"
-  private val dstReturnsFrontendBaseUrl    = servicesConfig.baseUrl("digital-services-tax-returns-frontend")
   val dstBackendBaseUrl: String            = servicesConfig.baseUrl("digital-services-tax")
-  val dstFrontendBaseUrl: String           = servicesConfig.baseUrl("digital-services-tax-frontend")
-  val dstFrontendRegistrationUrl: String   = dstFrontendBaseUrl + "/digital-services-tax/register/"
-  val dstReturnsUrl: String                = dstReturnsFrontendBaseUrl + "/digital-services-tax-returns/returnsDashboard"
+  val dstFrontendRegistrationUrl: String   = configuration.get[String]("urls.dstFrontend")
+  val dstReturnsUrl: String                = configuration.get[String]("urls.dstReturnsFrontend")
 
   def feedbackUrl(implicit request: RequestHeader): String =
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
