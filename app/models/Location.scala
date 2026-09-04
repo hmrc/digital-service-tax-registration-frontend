@@ -27,7 +27,7 @@ import scala.util.matching.Regex
 @Singleton
 class Location @Inject() (env: Environment, appConfig: FrontendAppConfig) {
 
-  private val alphaTwoCodeRegex: Regex = "^([A-Z]{2}|[A-Z]{2}-[A-Z0-9]{2})$".r
+  private val alphaTwoCodeRegex: Regex = "^([A-Z]{2})$".r
   private val countryCode_GB           = "GB"
 
   def locations: List[Country] =
