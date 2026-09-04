@@ -15,10 +15,12 @@
  *@
 
 @import views.html.helper.CSPNonce
+@import views.html.components.FeedbackLink
 
 @this(
-layout: templates.Layout,
-govukPanel : GovukPanel
+    layout: templates.Layout,
+    feedbackLink: FeedbackLink,
+    govukPanel : GovukPanel
 )
 
 @(companyName: String, email: String)(implicit request: Request[?], messages: Messages)
@@ -74,9 +76,8 @@ govukPanel : GovukPanel
         )
     </p>
 
-    <h2 class="govuk-heading-m">@messages("common.feedback.title")</h2>
-    <p class="govuk-body">@messages("common.feedback.p1")</p>
-    <p class="govuk-body">
-        <a class="govuk-link" href="@controllers.auth.routes.AuthController.signOut()">@messages("common.feedback.link")</a> @messages("common.feedback.p2")
-    </p>
+    <br>
+
+    @feedbackLink()
+
 }
