@@ -21,7 +21,7 @@ import forms.CompanyContactAddressFormProvider
 import models.requests.DataRequest
 import models.{Location, Mode}
 import navigation.Navigator
-import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage}
+import pages.{CheckCompanyRegisteredOfficeAddressPage, CompanyContactAddressPage, CompanyRegisteredOfficeInternationalAddressPage, CompanyRegisteredOfficeUkAddressPage, ContactAddressConfirmedPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -80,8 +80,9 @@ class CompanyContactAddressController @Inject() (
           formWithErrors => Future.successful(renderPage(mode, formWithErrors, BadRequest)),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CompanyContactAddressPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
+              updatedContactAddressAnswer <- Future.fromTry(request.userAnswers.set(CompanyContactAddressPage, value))
+              updatedAnswers              <- Future.fromTry(updatedContactAddressAnswer.set(ContactAddressConfirmedPage, value))
+              _                           <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(CompanyContactAddressPage, mode, updatedAnswers))
         )
   }
