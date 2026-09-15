@@ -16,6 +16,7 @@
 
 @import viewmodels.LegendSize
 @import config.FrontendAppConfig
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(
     layout: templates.Layout,
@@ -37,12 +38,24 @@
 
         <h2 class="govuk-caption-l hmrc-caption-l"><span class="govuk-visually-hidden">@messages("label.thisSection")</span>@messages("checkIfGroup.heading.hint")</h2>
 
+        <h1 class="govuk-heading-l">@messages("checkIfGroup.heading")</h1>
+
+        <p class="govuk-body">@messages("checkIfGroup.p1")</p>
+
+        <p class="govuk-body">@messages("checkIfGroup.p2")</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>@messages("checkIfGroup.li1")</li>
+          <li>@messages("checkIfGroup.li2")</li>
+        </ul>
+
+        <p class="govuk-body">@messages("checkIfGroup.p3") <a target="_blank" class="govuk-link" href="@appConfig.vatRegisteringGroups">@messages("checkIfGroup.linkText")</a>.</p>
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("checkIfGroup.heading")).asPageHeading(LegendSize.Large)
+                legend = LegendViewModel(messages("checkIfGroup.h2")).asPageHeading(LegendSize.Large)
             )
-            .withHint(HintViewModel(HtmlContent(messages("checkIfGroup.hint", appConfig.vatRegisteringGroups))))
+            .inline()
         )
 
         @govukButton(
