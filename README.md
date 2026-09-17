@@ -31,11 +31,14 @@ This will start all the required services.
 
 ### Locally
 
-`sbt 'run 8740'` or `./run.sh`
+`sbt run`
 
 * Visit http://localhost:9949/auth-login-stub/gg-sign-in
 * You may need to add some user details to the form:
 #### DST Registration journey
+
+Local Host Redirect URL:
+http://localhost:8744/digital-services-tax-registration
 
 Test data can be found in the team's Confluence area.
 
