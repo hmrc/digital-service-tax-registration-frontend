@@ -53,7 +53,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("checkIfGroup.h2")).asPageHeading(LegendSize.Large)
+                legend = LegendViewModel(messages("checkIfGroup.h2")).withCssClass("govuk-fieldset__legend--m"),
             )
             .inline()
         )
