@@ -18,24 +18,31 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.LiabilityStartDatePage
+import pages.{CheckIfGroupPage, LiabilityStartDatePage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.DateTimeFormats.dateTimeFormat
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
 object LiabilityStartDateSummary {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
+
+    //todo - work in progress DDCYLS-9232
+    val msg = {
+      if (answers.get(CheckIfGroupPage).getOrElse(false)) "group" else "company"
+    }
+
     answers.get(LiabilityStartDatePage).map { answer =>
       SummaryListRowViewModel(
         key = "liabilityStartDate.checkYourAnswersLabel",
         value = ValueViewModel(answer.format(dateTimeFormat()(using messages.lang))),
         actions = Seq(
           ActionItemViewModel("site.change", routes.LiabilityStartDateController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("liabilityStartDate.change.hidden"))
+            .withVisuallyHiddenText(messages("liabilityStartDate.change.hidden", msg))
         )
       )
     }
+  }
 }

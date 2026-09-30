@@ -75,7 +75,7 @@ globalRevenues.title = Does the group you are registering have annual global rev
 globalRevenues.heading = Does the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million?
 globalRevenues.checkYourAnswersLabel = globalRevenues
 globalRevenues.error.required = Select yes if the group you are registering have annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million
-globalRevenues.change.hidden = GlobalRevenues
+globalRevenues.change.hidden = if the group has annual global revenues from search engines, social media platforms or online marketplaces of more than £500 million
 
 globalRevenuesNotEligible.title = Global revenues not eligible
 globalRevenuesNotEligible.heading = You do not need to register
@@ -90,7 +90,7 @@ ukRevenues.title = Does the group you are registering have annual revenues from 
 ukRevenues.heading = Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?
 ukRevenues.error.required = Select yes if the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million
 ukRevenues.checkYourAnswersLabel = ukRevenues
-ukRevenues.change.hidden = UkRevenues
+ukRevenues.change.hidden = if the group has annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million
 ukRevenuesNotEligible.p1 = This is because your annual revenues from search engine, social media or online marketplace activities linked to UK users are not more than £25 million.
 
 checkCompanyRegisteredOfficeAddress.title = Is the company’s registered office address in the UK?
@@ -98,14 +98,14 @@ checkCompanyRegisteredOfficeAddress.heading = Is the company’s registered offi
 checkCompanyRegisteredOfficeAddress.heading.hint= Your company details
 checkCompanyRegisteredOfficeAddress.checkYourAnswersLabel = checkCompanyRegisteredOfficeAddress
 checkCompanyRegisteredOfficeAddress.error.required = Select yes if the registered office address of the company is in the UK
-checkCompanyRegisteredOfficeAddress.change.hidden = CheckCompanyRegisteredOfficeAddress
+checkCompanyRegisteredOfficeAddress.change.hidden = if the company’s registered office address is in the UK
 
 companyRegisteredOfficeAddressPostcode.title = What is the postcode of the company’s registered office address?
 companyRegisteredOfficeAddressPostcode.heading = What is the postcode of the company’s registered office address?
 companyRegisteredOfficeAddressPostcode.heading.hint = Your company details
 company.registeredOffice.postcode.required = Enter the postcode of the company’s registered office address
 companyRegisteredOfficePostcode.checkYourAnswersLabel = checkCompanyRegisteredOfficePostcode
-companyRegisteredOfficePostcode.change.hidden = CheckCompanyRegisteredOfficePostcode
+companyRegisteredOfficePostcode.change.hidden = company’s registered office address
 error.invalid.postcode = Enter a real postcode
 
 companyName.title = What is the name of the company you want to register?
@@ -116,13 +116,13 @@ companyName.checkYourAnswersLabel = Company name
 companyName.error.required = Enter the name of the company you want to register
 companyName.error.length = The name of the company must be 105 characters or fewer
 companyName.error.invalid = The name of the company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
-companyName.change.hidden = CompanyName
+companyName.change.hidden = company name
 
 checkUtr.title = Your company details
 checkUtr.heading = Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
 checkUtr.checkYourAnswersLabel = checkUtr
 checkUtr.error.required = Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
-checkUtr.change.hidden = CheckUtr
+checkUtr.change.hidden = if the company has a Corporation Tax Unique Taxpayer Reference
 
 corporationTaxEnterUtr.title = Company’s Corporation Tax Unique Taxpayer Reference (UTR)
 corporationTaxEnterUtr.heading = Company’s Corporation Tax Unique Taxpayer Reference (UTR)
@@ -133,7 +133,7 @@ corporationTaxEnterUtr.subheading.hint = \
 corporationTaxEnterUtr.checkYourAnswersLabel = corporationTaxEnterUtr
 corporationTaxEnterUtr.error.required = Enter the company’s Corporation Tax Unique Taxpayer Reference
 corporationTaxEnterUtr.error.invalid = Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
-corporationTaxEnterUtr.change.hidden = CorporationTaxEnterUtr
+corporationTaxEnterUtr.change.hidden = company’s Corporation Tax Unique Taxpayer Reference
 corporationTaxEnterUtr.heading.info = \
     <p class="govuk-body">It will be on tax returns and other letters about Corporation Tax. It might be called ‘reference’, ‘UTR’ or ‘official use’.</p>\
     <a target=_blank class="govuk-link" href="{0}">Ask for a copy of your Corporation Tax UTR (opens in new tab)</a>
@@ -142,7 +142,7 @@ checkContactAddress.error.required = Select yes if your contact address is in th
 checkContactAddress.title = Is your contact address in the UK?
 checkContactAddress.heading = Is your contact address in the UK?
 checkContactAddress.checkYourAnswersLabel = checkContactAddress
-checkContactAddress.change.hidden = CheckContactAddress
+checkContactAddress.change.hidden = if your contact address is in the UK
 checkContactAddress.heading.hint = Your company details
 
 companyContactAddress.title = Can we use this address to contact you about your Digital Services Tax?
@@ -151,13 +151,12 @@ companyContactAddress.heading.hint = Your company details
 companyContactAddress.site.no = No - I want to enter a different address
 companyContactAddress.checkYourAnswersLabel = companyContactAddress
 companyContactAddress.error.required = Select yes if we can use this address to contact you about your Digital Services Tax
-companyContactAddress.change.hidden = CompanyContactAddress
+companyContactAddress.change.hidden = if we can use this address to contact you about your Digital Services Tax
 
 contactUkAddress.title = What is your contact address
 contactUkAddress.heading = What is your contact address?
 contactUkAddress.checkYourAnswersLabel = Contact address
-contactUkAddress.line1.change.hidden = Building or street
-contactUkAddress.postcode.change.hidden = Postcode
+contactUkAddress.change.hidden = contact address
 
 ukAddress.line1 = Building or street
 ukAddress.line2 = Building or street line 2 (optional)
@@ -182,6 +181,7 @@ companyRegisteredOfficeUkAddress.subHeading =Your company details
 companyRegisteredOfficeUkAddress.checkYourAnswersLabel = Registered office address
 companyRegisteredOfficeUkAddress.buildingorstreet.change.hidden = buildingorstreet
 companyRegisteredOfficeUkAddress.buildingorstreet2.change.hidden = buildingorstreet2
+companyRegisteredOfficeUkAddress.change.hidden = company’s registered office address
 
 companyRegisteredOfficeInternationalAddress.title = Where is the registered office address of {0}?
 companyRegisteredOfficeInternationalAddress.heading = Where is the registered office address of {0}?
@@ -189,9 +189,10 @@ companyRegisteredOfficeInternationalAddress.subHeading =Your company details
 companyRegisteredOfficeInternationalAddress.checkYourAnswersLabel = Registered office address
 companyRegisteredOfficeInternationalAddress.buildingorstreet.change.hidden = buildingorstreet
 companyRegisteredOfficeInternationalAddress.buildingorstreet2.change.hidden = buildingorstreet2
+companyRegisteredOfficeInternationalAddress.change.hidden = company’s registered office address
 
 checkIfGroup.checkYourAnswersLabel = Is the company you are registering part of a group?
-checkIfGroup.change.hidden = CheckIfGroup
+checkIfGroup.change.hidden = if the company is part of a group
 checkIfGroup.title = Tell us if the company is part of a group
 checkIfGroup.heading = Tell us if the company is part of a group
 checkIfGroup.heading.hint = Your company details
@@ -233,7 +234,7 @@ ultimateParentCompanyName.checkYourAnswersLabel = Company name
 ultimateParentCompanyName.error.required = Enter the name of the group’s ultimate parent company
 ultimateParentCompanyName.error.length = Name of group’s ultimate global parent company must be 105 characters or fewer
 ultimateParentCompanyName.error.invalid=Name of group’s ultimate global parent company must only include letters a to z, numbers,hyphens, apostrophes, ampersands (&), and spaces
-ultimateParentCompanyName.change.hidden = UltimateParentCompanyName
+ultimateParentCompanyName.change.hidden = name of the group’s ultimate global parent company
 
 ultimateParentCompanyInternationalAddress.title = What is the registered office address of {0}?
 ultimateParentCompanyInternationalAddress.heading = What is the registered office address of {0}?
@@ -241,15 +242,14 @@ ultimateParentCompanyInternationalAddress.checkYourAnswersLabel = Registered off
 
 ultimateParentCompanyUkAddress.title = What is the registered office address of {0}?
 ultimateParentCompanyUkAddress.heading = What is the registered office address of {0}?
-ultimateParentCompanyUkAddress.buildingOrStreet.change.hidden = buildingOrStreet
-ultimateParentCompanyUkAddress.postcode.change.hidden = postcode
+ultimateParentCompanyUkAddress.change.hidden = ultimate global parent company’s registered office address
 ultimateParentCompanyUkAddress.checkYourAnswersLabel = Registered office address
 checkUltimateGlobalParentCompanyInUk.title = Ultimate parent company details
 checkUltimateGlobalParentCompanyInUk.heading = Is the registered office address of {0} in the UK?
 checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = checkUltimateGlobalParentCompanyInUk
 checkUltimateGlobalParentCompanyInUk.error.required = Select yes if the registered office address of {0} is in the UK
 checkUltimateGlobalParentCompanyInUk.checkYourAnswersLabel = Is the registered office address in the UK?
-checkUltimateGlobalParentCompanyInUk.change.hidden = CheckUltimateGlobalParentCompanyInUk
+checkUltimateGlobalParentCompanyInUk.change.hidden = ultimate global parent company’s registered office address
 
 liabilityStartDate.title = When did the {0} become liable for Digital Services Tax?
 liabilityStartDate.heading = When did the {0} become liable for Digital Services Tax?
@@ -262,12 +262,13 @@ liabilityStartDate.maximum.date = The date the {0} became liable for Digital Ser
 liabilityStartDate.heading.hint = Accounting period details
 liabilityStartDate.hint = For example, 31 7 2020.
 liabilityStartDate.checkYourAnswersLabel = Liability start date
-liabilityStartDate.change.hidden = LiabilityStartDate
+liabilityStartDate.change.hidden = when the {0} became liable for Digital Services Tax
 
 contactPersonName.title = Who can we contact if we need to discuss your registration?
 contactPersonName.heading = Who can we contact if we need to discuss your registration?
 contactPersonName.firstName = First name
 contactPersonName.firstName.change.hidden = First name
+contactPersonName.change.hidden = contact name
 contactPersonName.error.firstName.required = Enter the contact person’s first name
 contactPersonName.error.firstName.length = Contact person’s first name must be 35 characters or fewer
 contactPersonName.error.firstName.invalid = First name must only include letters a to z, apostrophes, ampersands, hyphens and spaces
@@ -285,7 +286,7 @@ contactPersonPhoneNumber.checkYourAnswersLabel = Phone number
 contactPersonPhoneNumber.error.required = Enter a phone number
 contactPersonPhoneNumber.error.length = Phone number must be 24 characters or fewer
 contactPersonPhoneNumber.error.invalid = Enter a phone number, like 01632 960 001, 07700 900 982 or 0044 808 157 0192
-contactPersonPhoneNumber.change.hidden = ContactPersonPhoneNumber
+contactPersonPhoneNumber.change.hidden = contact phone number
 
 accounting-period-end-date.heading=What is the end date of the {0}’s first accounting period for Digital Services Tax?
 accounting-period-end-date.heading.hint=Accounting period details
@@ -301,7 +302,7 @@ accounting-period-end-date.empty=Enter the end date of the {0}’s first account
 accounting-period-end-date.required=The end date of the {1}’s first accounting period for Digital Services Tax must include a {0}
 accounting-period-end-date.two-required=The end date of the {2}’s first accounting period for Digital Services Tax must include a {0} and {1}
 accounting-period-end-date.checkYourAnswersLabel = First accounting period end date
-accounting-period-end-date.change.hidden = accounting period end date
+accounting-period-end-date.change.hidden = first accounting period end date
 
 contactPersonEmailAddress.title = What is {0}’s email address?
 contactPersonEmailAddress.heading = What is {0}’s email address?
@@ -309,14 +310,14 @@ contactPersonEmailAddress.hint = We will only use this email address to send con
 contactPersonEmailAddress.checkYourAnswersLabel = Email address
 contactPersonEmailAddress.error.required = Enter an email address
 contactPersonEmailAddress.error.invalid = Enter an email address in the correct format, like name@example.com
-contactPersonEmailAddress.change.hidden = ContactPersonEmail
+contactPersonEmailAddress.change.hidden = contact email address
 
 confirmCompanyDetails.title = Is this the company you want to register as the responsible member?
 confirmCompanyDetails.heading = Is this the company you want to register as the responsible member?
 confirmCompanyDetails.hint = If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
 confirmCompanyDetails.checkYourAnswersLabel = registerCompany
 confirmCompanyDetails.error.required = Select yes if this is the company you want to register as the responsible member
-confirmCompanyDetails.change.hidden = RegisterCompany
+confirmCompanyDetails.change.hidden = if this is the company you want to register as the responsible member
 
 detailsNotCorrect.title = What you need to do if your company details are incorrect
 detailsNotCorrect.heading = What you need to do if your company details are incorrect
