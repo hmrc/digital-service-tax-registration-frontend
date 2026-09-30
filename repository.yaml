@@ -1,6 +1,9 @@
+digital-service: Digital Services Tax
+serviceNowMapping: SNSVC0005435
 repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DDBBADF71
 type: service
 service-type: frontend
 tags: []
 test-repositories:
   - digital-service-tax-registration-ui-test
+  - digital-services-tax-performance-tests
