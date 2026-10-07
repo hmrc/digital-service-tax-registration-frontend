@@ -14,8 +14,12 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
-    layout: templates.Layout
+    layout: templates.Layout,
+    govukButton: GovukButton,
+    appConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[?], messages: Messages)
@@ -29,4 +33,12 @@
 
     <p class="govuk-body">@messages("unauthorised.signOut.reason")</p>
     <p class="govuk-body">@messages("unauthorised.signIn.reason")</p>
+
+    <p class="govuk-body">
+        @govukButton(
+        ButtonViewModel(messages("site.signIn")).asLink(appConfig.loginUrl)
+        )
+    </p>
+
+
 }
