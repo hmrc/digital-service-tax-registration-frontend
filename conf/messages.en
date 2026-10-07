@@ -68,8 +68,8 @@ signedOut.heading = For your security, we signed you out
 signedOut.guidance = We saved your answers for 15 minutes.
 signedOut.finish-and-sign-out=Finish and sign out
 
-unauthorised.title = You can’t access this service with this account
-unauthorised.heading = You can’t access this service with this account
+unauthorised.title = You cannot use this service
+unauthorised.heading = You cannot use this service
 unauthorised.signOut.reason = You signed in with the HMRC sign in details for an individual or agent. We have signed you out.
 unauthorised.signIn.reason = To use this service, sign in with the HMRC sign in details for the company that is registered for the Digital Services Tax.
 
