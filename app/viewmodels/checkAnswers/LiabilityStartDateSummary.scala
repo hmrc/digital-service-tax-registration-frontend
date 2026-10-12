@@ -29,10 +29,8 @@ object LiabilityStartDateSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
 
-    //todo - work in progress DDCYLS-9232
-    val msg = {
+    val msg =
       if (answers.get(CheckIfGroupPage).getOrElse(false)) "group" else "company"
-    }
 
     answers.get(LiabilityStartDatePage).map { answer =>
       SummaryListRowViewModel(
