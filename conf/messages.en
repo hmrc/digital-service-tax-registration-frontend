@@ -351,10 +351,10 @@ registration-pending.ccm-content = If you do not know who your CCM is, or do not
 registration-pending.ccm-email = mailto:ccgdstmailbox@hmrc.gov.uk
 registration-pending.ccm-link = ccgdstmailbox@hmrc.gov.uk
 
-registration-complete.title = Application Complete
-registration-complete.heading = Application Complete
+registration-complete.title = Application complete
+registration-complete.heading = Application complete
 registration-complete.p1 = Your session has been cleared because you completed your application.
-registration-complete.button = Start Again
+registration-complete.button = Start again
 
 registration-sent.heading=Registration sent
 registration-sent.title=Registration sent
