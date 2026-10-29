@@ -25,7 +25,7 @@ The whole service can be started with:
 
 or specifically for only the frontend
 
-`sm2 --start DST_FRONTEND`
+`sm2 --start DST_REGISTRATION_FRONTEND`
 
 This will start all the required services.
 
